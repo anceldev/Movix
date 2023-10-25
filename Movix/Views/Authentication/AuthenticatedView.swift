@@ -62,18 +62,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                         MainView()
                             .environmentObject(viewModel)
                     }
-                    /*Text("You are logged in")
-                    Button("Tap here to view your profile") {
-                        //
-                        presentingHomeView.toggle()
-                    }*/
                 }
-                /*.sheet(isPresented: $presentingHomeView, content: {
-                    NavigationStack {
-                        MainView()
-                            .environmentObject(viewModel)
-                    }
-                })*/
             }
         }
     }

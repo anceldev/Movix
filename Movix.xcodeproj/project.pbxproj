@@ -20,6 +20,7 @@
 		B42F51552AE97C5C00B2D2B6 /* AuthenticatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F51542AE97C5C00B2D2B6 /* AuthenticatedView.swift */; };
 		B42F51572AE984D900B2D2B6 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F51562AE984D900B2D2B6 /* AuthenticationView.swift */; };
 		B42F51592AE9B36600B2D2B6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F51582AE9B36600B2D2B6 /* HomeView.swift */; };
+		B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */; };
 		B46D7F882AE5CC7700256F7F /* MovixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F872AE5CC7700256F7F /* MovixApp.swift */; };
 		B46D7F8A2AE5CC7700256F7F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F892AE5CC7700256F7F /* MainView.swift */; };
 		B46D7F8C2AE5CC7800256F7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 		B42F51542AE97C5C00B2D2B6 /* AuthenticatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedView.swift; sourceTree = "<group>"; };
 		B42F51562AE984D900B2D2B6 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		B42F51582AE9B36600B2D2B6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFillViewModifier.swift; sourceTree = "<group>"; };
 		B46D7F842AE5CC7700256F7F /* Movix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46D7F872AE5CC7700256F7F /* MovixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovixApp.swift; sourceTree = "<group>"; };
 		B46D7F892AE5CC7700256F7F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,14 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		B42F515A2AE9D08F00B2D2B6 /* Aux&Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */,
+			);
+			path = "Aux&Helpers";
+			sourceTree = "<group>";
+		};
 		B46D7F7B2AE5CC7700256F7F = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +176,7 @@
 		B46D7F972AE5CCA700256F7F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B42F515A2AE9D08F00B2D2B6 /* Aux&Helpers */,
 				B42F51512AE9705900B2D2B6 /* Authentication */,
 				B46D7F892AE5CC7700256F7F /* MainView.swift */,
 				B42F51582AE9B36600B2D2B6 /* HomeView.swift */,
@@ -322,6 +333,7 @@
 				B42F51572AE984D900B2D2B6 /* AuthenticationView.swift in Sources */,
 				B42F51592AE9B36600B2D2B6 /* HomeView.swift in Sources */,
 				B4036E9D2AE6D8EF001E2819 /* Movie.swift in Sources */,
+				B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */,
 				B4036EAC2AE6E11D001E2819 /* MovieDetailTab.swift in Sources */,
 				B46D7FA02AE5D60B00256F7F /* FriendsList.swift in Sources */,
 				B4036EAA2AE6E0DC001E2819 /* MovieGeneralTab.swift in Sources */,
