@@ -10,96 +10,133 @@ import SwiftUI
 struct ProfileView: View {
     
     private var user = Account.testAccount
+    @EnvironmentObject var viewModel: AuthenticationViewModel
+    @Environment(\.dismiss) var dismiss
+    
+    @State var presentingConfirmationDialog = false
+    
+    private func deleteAccount() {
+        Task {
+            if await viewModel.deleteAccount() == true {
+                dismiss()
+            }
+        }
+    }
+    private func signOut() {
+        viewModel.signOut()
+    }
     
     var body: some View {
-        NavigationStack{
-            VStack {
-                PhotoView(image: user.profileImage)
-                Text(user.details.name)
-                    .font(.title2)
-                    .foregroundStyle(.white)
-                Text(user.details.email)
-                    .foregroundStyle(.textGray)
-                VStack{
-                    List {
-                        Section(header: Text("Account Settings").font(.subheadline).bold()){
-                            NavigationLink {
-                                PersonalDetails()
-                            } label: {
-                                HStack{
-                                    Image(systemName: "square.and.pencil")
-                                    Text("Personal details")
+        if viewModel.authenticationState == .authenticated {
+            NavigationStack{
+                VStack {
+                    PhotoView(image: user.profileImage)
+                    Text(user.details.name)
+                        .font(.title2)
+                        .foregroundStyle(.white)
+                    Text(user.details.email)
+                        .foregroundStyle(.textGray)
+                    VStack{
+                        List {
+                            Section(header: Text("Account Settings").font(.subheadline).bold()){
+                                NavigationLink {
+                                    PersonalDetails()
+                                } label: {
+                                    HStack{
+                                        Image(systemName: "square.and.pencil")
+                                        Text("Personal details")
+                                    }
+                                }
+                                NavigationLink{
+                                    FriendsList()
+                                } label: {
+                                    Image(systemName: "person.2")
+                                    Text("Friends")
+                                }
+                                NavigationLink {
+                                    Text("Notifications")
+                                } label: {
+                                    Image(systemName: "bell")
+                                    Text("Notifications")
+                                }
+                                NavigationLink {
+                                    Text("My devices")
+                                } label: {
+                                    Image(systemName: "macbook.and.iphone")
+                                    Text("My devices")
+                                }
+                                NavigationLink {
+                                    Text("History")
+                                } label: {
+                                    Image(systemName: "clock.arrow.circlepath")
+                                    Text("History")
                                 }
                             }
-                            NavigationLink{
-                                FriendsList()
-                            } label: {
-                                Image(systemName: "person.2")
-                                Text("Friends")
+                            .listRowBackground(Color.secondBlack)
+                            
+                            Section(header: Text("Subscriptions").font(.subheadline).bold()){
+                                NavigationLink {
+                                    Text("Payment")
+                                } label: {
+                                    Image(systemName: "creditcard")
+                                    Text("Payment")
+                                }
+                                NavigationLink {
+                                    Text("Checks")
+                                } label: {
+                                    Image(systemName: "newspaper")
+                                    Text("Checks")
+                                }
                             }
-                            NavigationLink {
-                                Text("Notifications")
-                            } label: {
-                                Image(systemName: "bell")
-                                Text("Notifications")
+                            .listRowBackground(Color.secondBlack)
+                            Section(header: Text("More info and support").font(.subheadline).bold()) {
+                                NavigationLink {
+                                    Text("Support")
+                                } label: {
+                                    Image(systemName: "lifepreserver")
+                                    Text("Support")
+                                }
+                                NavigationLink {
+                                    Text("Info")
+                                } label: {
+                                    Image(systemName: "info.circle")
+                                    Text("About")
+                                }
                             }
-                            NavigationLink {
-                                Text("My devices")
-                            } label: {
-                                Image(systemName: "macbook.and.iphone")
-                                Text("My devices")
+                            .listRowBackground(Color.secondBlack)
+                            Section("Exit"){
+                                Button(role: .cancel , action: {
+                                    viewModel.reset()
+                                    signOut()
+                                }, label: {
+                                    Text("Sign Out")
+                                })
+                                Button(role: .destructive, action: { presentingConfirmationDialog.toggle()}) {
+                                    Text("Delete Account")
+                                        .foregroundStyle(.red)
+                                }
                             }
-                            NavigationLink {
-                                Text("History")
-                            } label: {
-                                Image(systemName: "clock.arrow.circlepath")
-                                Text("History")
-                            }
+                            .listRowBackground(Color.secondBlack)
                         }
-                        .listRowBackground(Color.secondBlack)
-                        
-                        Section(header: Text("Subscriptions").font(.subheadline).bold()){
-                            NavigationLink {
-                                Text("Payment")
-                            } label: {
-                                Image(systemName: "creditcard")
-                                Text("Payment")
-                            }
-                            NavigationLink {
-                                Text("Checks")
-                            } label: {
-                                Image(systemName: "newspaper")
-                                Text("Checks")
-                            }
+                        .foregroundStyle(.white)
+                        .scrollContentBackground(.hidden)
+                        .confirmationDialog("Deleting your account is permanent. Do you want to delete your account?", isPresented: $presentingConfirmationDialog, titleVisibility: .visible) {
+                            Button("Delete Account", role: .destructive, action: deleteAccount)
+                            Button("Cancel", role: .cancel, action: {})
                         }
-                        .listRowBackground(Color.secondBlack)
-                        Section(header: Text("More info and support").font(.subheadline).bold()) {
-                            NavigationLink {
-                                Text("Support")
-                            } label: {
-                                Image(systemName: "lifepreserver")
-                                Text("Support")
-                            }
-                            NavigationLink {
-                                Text("Info")
-                            } label: {
-                                Image(systemName: "info.circle")
-                                Text("About")
-                            }
-                        }
-                        .listRowBackground(Color.secondBlack)
                     }
-                    .foregroundStyle(.white)
-                    
-                    .scrollContentBackground(.hidden)
                 }
+                .background(.blackApp)
             }
-            .background(.blackApp)
         }
-        .ignoresSafeArea()
+        else {
+            MainView()
+                .environmentObject(viewModel)
+        }
     }
 }
 
 #Preview {
     ProfileView()
+        .environmentObject(AuthenticationViewModel())
 }
