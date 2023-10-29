@@ -32,6 +32,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var displayName = ""
     
+    
     init(){
         registerAuthStateHandler()
         $flow
@@ -58,12 +59,12 @@ class AuthenticationViewModel: ObservableObject {
     func switchFlow() {
         flow = flow == .login ? .signUp : .login
         errorMessage = ""
-    }
-    func reset(){
-        flow = .login
         email = ""
         password = ""
         confirmPassword = ""
+    }
+    func reset(){
+        flow = .login
     }
 }
 
@@ -114,6 +115,16 @@ extension AuthenticationViewModel {
             errorMessage = error.localizedDescription
             return false
         }
+    }
+    func resetPassword() {
+        Auth.auth().sendPasswordReset(withEmail: ""){ error in
+            print("We can't send you a reset link at the moment.")
+            print(error!)
+        }
+    }
+    
+    func fetchUser(uidUser: String) {
+        // Here we'll fetch the user with the users collection from firestore
     }
 }
 

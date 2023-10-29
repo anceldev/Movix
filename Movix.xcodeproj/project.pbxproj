@@ -21,6 +21,9 @@
 		B42F51572AE984D900B2D2B6 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F51562AE984D900B2D2B6 /* AuthenticationView.swift */; };
 		B42F51592AE9B36600B2D2B6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F51582AE9B36600B2D2B6 /* HomeView.swift */; };
 		B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */; };
+		B43C4C452AEC29CD0094FB71 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */; };
+		B43C4C472AEC2CC80094FB71 /* AccountsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */; };
+		B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C482AEC43520094FB71 /* AccountViewModel.swift */; };
 		B46D7F882AE5CC7700256F7F /* MovixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F872AE5CC7700256F7F /* MovixApp.swift */; };
 		B46D7F8A2AE5CC7700256F7F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F892AE5CC7700256F7F /* MainView.swift */; };
 		B46D7F8C2AE5CC7800256F7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */; };
@@ -58,6 +61,9 @@
 		B42F51562AE984D900B2D2B6 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		B42F51582AE9B36600B2D2B6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFillViewModifier.swift; sourceTree = "<group>"; };
+		B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
+		B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsRepository.swift; sourceTree = "<group>"; };
+		B43C4C482AEC43520094FB71 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		B46D7F842AE5CC7700256F7F /* Movix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46D7F872AE5CC7700256F7F /* MovixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovixApp.swift; sourceTree = "<group>"; };
 		B46D7F892AE5CC7700256F7F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -95,6 +101,7 @@
 		B4036E9B2AE6D8D8001E2819 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B46D7F9B2AE5D1C100256F7F /* Account.swift */,
 				B4036E9C2AE6D8EF001E2819 /* Movie.swift */,
 				B4036E9E2AE6D908001E2819 /* Helpers.swift */,
 			);
@@ -120,6 +127,7 @@
 				B42F51522AE9730C00B2D2B6 /* SignUp.swift */,
 				B42F51542AE97C5C00B2D2B6 /* AuthenticatedView.swift */,
 				B42F51562AE984D900B2D2B6 /* AuthenticationView.swift */,
+				B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -157,7 +165,6 @@
 				B4A47D692AE7F7A4000AE244 /* Services */,
 				B4A47D6C2AE7FA45000AE244 /* ViewModels */,
 				B4036E9B2AE6D8D8001E2819 /* Models */,
-				B46D7F9B2AE5D1C100256F7F /* Account.swift */,
 				B46D7F972AE5CCA700256F7F /* Views */,
 				B46D7F982AE5CF9900256F7F /* Helpers */,
 				B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */,
@@ -207,6 +214,7 @@
 		B4A47D6C2AE7FA45000AE244 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				B43C4C482AEC43520094FB71 /* AccountViewModel.swift */,
 				B4A47D6D2AE7FA68000AE244 /* MoviesViewModel.swift */,
 			);
 			path = ViewModels;
@@ -227,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */,
+				B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -322,16 +331,19 @@
 				B4A47D832AE819EA000AE244 /* AuthenticationViewModel.swift in Sources */,
 				B4036EAE2AE6E213001E2819 /* MovieCommentsTab.swift in Sources */,
 				B46D7FA22AE5DCC800256F7F /* PhotoView.swift in Sources */,
+				B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */,
 				B4A47D6E2AE7FA68000AE244 /* MoviesViewModel.swift in Sources */,
 				B4036EA82AE6DD3F001E2819 /* MovieDetails.swift in Sources */,
 				B42F51532AE9730C00B2D2B6 /* SignUp.swift in Sources */,
 				B46D7F882AE5CC7700256F7F /* MovixApp.swift in Sources */,
+				B43C4C472AEC2CC80094FB71 /* AccountsRepository.swift in Sources */,
 				B4A47D6B2AE7F865000AE244 /* MovieService.swift in Sources */,
 				B4036E9F2AE6D908001E2819 /* Helpers.swift in Sources */,
 				B46D7F962AE5CCA300256F7F /* ProfileView.swift in Sources */,
 				B46D7F9E2AE5D53900256F7F /* PersonalDetails.swift in Sources */,
 				B42F51572AE984D900B2D2B6 /* AuthenticationView.swift in Sources */,
 				B42F51592AE9B36600B2D2B6 /* HomeView.swift in Sources */,
+				B43C4C452AEC29CD0094FB71 /* ForgotPassword.swift in Sources */,
 				B4036E9D2AE6D8EF001E2819 /* Movie.swift in Sources */,
 				B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */,
 				B4036EAC2AE6E11D001E2819 /* MovieDetailTab.swift in Sources */,

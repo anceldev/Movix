@@ -110,6 +110,7 @@ struct ProfileView: View {
                                     signOut()
                                 }, label: {
                                     Text("Sign Out")
+                                        .foregroundStyle(.darkOrange)
                                 })
                                 Button(role: .destructive, action: { presentingConfirmationDialog.toggle()}) {
                                     Text("Delete Account")

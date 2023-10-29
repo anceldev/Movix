@@ -18,6 +18,7 @@ extension AuthenticatedView where Unauthenticated == EmptyView {
 struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Unauthenticated: View {
     
     @StateObject private var viewModel = AuthenticationViewModel()
+    @StateObject private var accountViewModel = AccountViewModel()
     
     @State private var presentingLoginScreen = false
     @State private var presentingHomeView = false

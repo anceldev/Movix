@@ -50,20 +50,23 @@ struct SignUp: View {
                 }
                 TextField(text: $viewModel.email){
                     Text("Email")
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
                         .foregroundStyle(.textGray)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()                        
                         .focused($focus, equals: .email)
                         .onSubmit {
                             // code to do on submit email
                             self.focus = .password
                         }
                 }
+                .foregroundStyle(viewModel.email.isEmpty ? .textGray : .blackWhite)
                 .buttonBorder(.textGray)
                 SecureField(text: $viewModel.password){
                     Text("Password")
                         .foregroundStyle(.textGray)
+                        .autocorrectionDisabled()
                 }
+                .foregroundStyle(viewModel.password.isEmpty ? .textGray : .blackWhite)
                 .focused($focus, equals: .password)
                 .onSubmit {
                     focus = .confirmPassword
@@ -72,7 +75,9 @@ struct SignUp: View {
                 SecureField(text: $viewModel.confirmPassword){
                     Text("Confirm password")
                         .foregroundStyle(.textGray)
+                        .autocorrectionDisabled()
                 }
+                .foregroundStyle(viewModel.confirmPassword.isEmpty ? .textGray : .white)
                 .focused($focus, equals: .confirmPassword)
                 .onSubmit {
                     signUpWithEmailPassword()
