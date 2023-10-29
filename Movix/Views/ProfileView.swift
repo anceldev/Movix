@@ -15,6 +15,8 @@ struct ProfileView: View {
     
     @State var presentingConfirmationDialog = false
     
+    var userProfilePhoto = Image("account_photo")
+    
     private func deleteAccount() {
         Task {
             if await viewModel.deleteAccount() == true {
@@ -30,11 +32,11 @@ struct ProfileView: View {
         if viewModel.authenticationState == .authenticated {
             NavigationStack{
                 VStack {
-                    PhotoView(image: user.profileImage)
-                    Text(user.details.name)
+                    PhotoView(image: userProfilePhoto)
+                    Text(user.name)
                         .font(.title2)
                         .foregroundStyle(.white)
-                    Text(user.details.email)
+                    Text(user.email)
                         .foregroundStyle(.textGray)
                     VStack{
                         List {

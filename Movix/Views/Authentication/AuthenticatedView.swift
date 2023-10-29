@@ -55,6 +55,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                 .sheet(isPresented: $presentingLoginScreen, content: {
                     AuthenticationView()
                         .environmentObject(viewModel)
+                        .environmentObject(accountViewModel)
                 })
             case .authenticated:
                 VStack {
@@ -62,6 +63,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                     NavigationLink("Tap here to view yur profile") {
                         MainView()
                             .environmentObject(viewModel)
+                            .environmentObject(accountViewModel)
                     }
                 }
             }

@@ -22,5 +22,6 @@ struct PhotoView: View {
 }
 
 #Preview {
-    PhotoView(image: Account.testAccount.profileImage)
+    let photo = Image("account_photo")
+    return PhotoView(image: photo)
 }

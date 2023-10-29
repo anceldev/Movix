@@ -17,16 +17,15 @@ class AccountViewModel: ObservableObject{
     
     init(newUser: Account){
         self.account = newUser
-        
     }
     init(){
-        account = Account(id: "", name: "", email: "", birthdate: Date(), friends: [], typeSuscription: .normal)
+        account = Account(id: "", name: "", email: "", birthdate: Date(), friends: [], typeSuscription: .noSpecified)
     }
     
     func fetchUserAccount(_ uidUser: String){
         Task {
             do {
-                let account = try await AccountsRepository.fetchAccount(uidUser)
+                let account = try await fetchAccount(uidUser)
                 self.account = account
             }
             catch {
@@ -35,7 +34,7 @@ class AccountViewModel: ObservableObject{
             }
         }
     }
-    func createUserAccount(account: Account) {
+    func createUserAccount(_ account: Account) {
         Task {
             do {
                 try await createAccount(account)

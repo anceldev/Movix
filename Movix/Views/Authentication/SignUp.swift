@@ -15,14 +15,21 @@ private enum FocusedField: Hashable {
 
 struct SignUp: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var accountViewModel: AccountViewModel
     
+    @Environment(\.dismiss) var dismiss
     @FocusState private var focus: FocusedField?
     
     private func signUpWithEmailPassword(){
         Task {
             if await viewModel.signUpWithEmailPassword() {
-                //
+                let newAccount = Account(
+                    id: viewModel.user!.uid,
+                    name: "New User name",
+                    email: accountViewModel.account.email,
+                    birthdate: Date(),
+                    typeSuscription: .normal)
+                accountViewModel.createUserAccount(newAccount)
                 dismiss()
             }
         }
@@ -51,21 +58,22 @@ struct SignUp: View {
                 TextField(text: $viewModel.email){
                     Text("Email")
                         .foregroundStyle(.textGray)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()                        
-                        .focused($focus, equals: .email)
-                        .onSubmit {
-                            // code to do on submit email
-                            self.focus = .password
-                        }
+                        
+                }
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .focused($focus, equals: .email)
+                .onSubmit {
+                    // code to do on submit email
+                    self.focus = .password
                 }
                 .foregroundStyle(viewModel.email.isEmpty ? .textGray : .blackWhite)
                 .buttonBorder(.textGray)
                 SecureField(text: $viewModel.password){
                     Text("Password")
                         .foregroundStyle(.textGray)
-                        .autocorrectionDisabled()
                 }
+                .autocorrectionDisabled()
                 .foregroundStyle(viewModel.password.isEmpty ? .textGray : .blackWhite)
                 .focused($focus, equals: .password)
                 .onSubmit {
@@ -75,8 +83,9 @@ struct SignUp: View {
                 SecureField(text: $viewModel.confirmPassword){
                     Text("Confirm password")
                         .foregroundStyle(.textGray)
-                        .autocorrectionDisabled()
+                        
                 }
+                .autocorrectionDisabled()
                 .foregroundStyle(viewModel.confirmPassword.isEmpty ? .textGray : .white)
                 .focused($focus, equals: .confirmPassword)
                 .onSubmit {
@@ -125,4 +134,5 @@ struct SignUp: View {
 #Preview {
     SignUp()
         .environmentObject(AuthenticationViewModel())
+        .environmentObject(AccountViewModel())
 }

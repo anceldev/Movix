@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject var viewModelAuth: AuthenticationViewModel
+    @EnvironmentObject var accountViewModel: AccountViewModel
     var body: some View {
         TabView {
             if viewModelAuth.authenticationState == .authenticated {
@@ -21,6 +22,7 @@ struct MainView: View {
             else {
                 AuthenticationView()
                     .environmentObject(viewModelAuth)
+                    .environmentObject(accountViewModel)
             }
             
         }
@@ -30,5 +32,6 @@ struct MainView: View {
 #Preview {
     MainView()
         .environmentObject(AuthenticationViewModel())
+        .environmentObject(AccountViewModel())
     
 }

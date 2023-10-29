@@ -15,6 +15,7 @@ private enum FocusedField: Hashable {
 struct Login: View {
     
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var accountViewModel: AccountViewModel
     @Environment(\.dismiss) var dismiss
     
     @FocusState private var focus: FocusedField?
@@ -22,6 +23,7 @@ struct Login: View {
     private func signInWithEmailPassword() {
         Task {
             if await viewModel.singInWithEmailPassword() {
+                accountViewModel.fetchUserAccount(viewModel.user!.uid)
                 dismiss() // If is signed, dismiss
             }
         }
@@ -115,4 +117,5 @@ struct Login: View {
 #Preview {
     Login()
         .environmentObject(AuthenticationViewModel())
+        .environmentObject(AccountViewModel())
 }
