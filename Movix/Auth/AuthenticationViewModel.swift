@@ -6,6 +6,8 @@
 //
 
 import FirebaseAuth
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 import Foundation
 
 enum AuthenticationState {
@@ -31,6 +33,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var authenticationState: AuthenticationState = .unauthenticated
     @Published var errorMessage = ""
     @Published var displayName = ""
+    
     
     
     init(){

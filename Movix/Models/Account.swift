@@ -15,6 +15,7 @@ struct Account: Codable, Identifiable {
     var birthdate: Date
     var friends = [String]()
     var typeSuscription: TypeSubscription
+    var isOnfile = false
     
     /*var profileImage: Image {
         Image("account_photo")

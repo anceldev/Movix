@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import FirebaseCore
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 @MainActor
 class AccountViewModel: ObservableObject{

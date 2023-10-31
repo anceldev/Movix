@@ -44,6 +44,9 @@
 		B4A47D7E2AE814C3000AE244 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D7D2AE814C3000AE244 /* FirebaseFirestore */; };
 		B4A47D802AE814C3000AE244 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D7F2AE814C3000AE244 /* FirebaseFirestoreSwift */; };
 		B4A47D832AE819EA000AE244 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */; };
+		B4BD3F6F2AF15B9F0063FA14 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BD3F6E2AF15B9F0063FA14 /* FriendsView.swift */; };
+		B4BD3F722AF160F50063FA14 /* FriendRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BD3F712AF160F50063FA14 /* FriendRow.swift */; };
+		B4BD3F742AF1665C0063FA14 /* SubscriptionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BD3F732AF1665C0063FA14 /* SubscriptionsList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +82,9 @@
 		B4A47D702AE81284000AE244 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		B4A47D722AE81433000AE244 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		B4BD3F6E2AF15B9F0063FA14 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		B4BD3F712AF160F50063FA14 /* FriendRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRow.swift; sourceTree = "<group>"; };
+		B4BD3F732AF1665C0063FA14 /* SubscriptionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,11 +189,11 @@
 		B46D7F972AE5CCA700256F7F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B4BD3F702AF15BD40063FA14 /* Account */,
 				B42F515A2AE9D08F00B2D2B6 /* Aux&Helpers */,
 				B42F51512AE9705900B2D2B6 /* Authentication */,
 				B46D7F892AE5CC7700256F7F /* MainView.swift */,
 				B42F51582AE9B36600B2D2B6 /* HomeView.swift */,
-				B46D7F952AE5CCA300256F7F /* ProfileView.swift */,
 				B46D7F9D2AE5D53900256F7F /* PersonalDetails.swift */,
 				B46D7F9F2AE5D60B00256F7F /* FriendsList.swift */,
 				B4A47D6F2AE7FB6B000AE244 /* Movie */,
@@ -238,6 +244,17 @@
 				B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		B4BD3F702AF15BD40063FA14 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				B46D7F952AE5CCA300256F7F /* ProfileView.swift */,
+				B4BD3F6E2AF15B9F0063FA14 /* FriendsView.swift */,
+				B4BD3F712AF160F50063FA14 /* FriendRow.swift */,
+				B4BD3F732AF1665C0063FA14 /* SubscriptionsList.swift */,
+			);
+			path = Account;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -337,15 +354,18 @@
 				B42F51532AE9730C00B2D2B6 /* SignUp.swift in Sources */,
 				B46D7F882AE5CC7700256F7F /* MovixApp.swift in Sources */,
 				B43C4C472AEC2CC80094FB71 /* AccountsRepository.swift in Sources */,
+				B4BD3F6F2AF15B9F0063FA14 /* FriendsView.swift in Sources */,
 				B4A47D6B2AE7F865000AE244 /* MovieService.swift in Sources */,
 				B4036E9F2AE6D908001E2819 /* Helpers.swift in Sources */,
 				B46D7F962AE5CCA300256F7F /* ProfileView.swift in Sources */,
 				B46D7F9E2AE5D53900256F7F /* PersonalDetails.swift in Sources */,
 				B42F51572AE984D900B2D2B6 /* AuthenticationView.swift in Sources */,
+				B4BD3F742AF1665C0063FA14 /* SubscriptionsList.swift in Sources */,
 				B42F51592AE9B36600B2D2B6 /* HomeView.swift in Sources */,
 				B43C4C452AEC29CD0094FB71 /* ForgotPassword.swift in Sources */,
 				B4036E9D2AE6D8EF001E2819 /* Movie.swift in Sources */,
 				B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */,
+				B4BD3F722AF160F50063FA14 /* FriendRow.swift in Sources */,
 				B4036EAC2AE6E11D001E2819 /* MovieDetailTab.swift in Sources */,
 				B46D7FA02AE5D60B00256F7F /* FriendsList.swift in Sources */,
 				B4036EAA2AE6E0DC001E2819 /* MovieGeneralTab.swift in Sources */,
