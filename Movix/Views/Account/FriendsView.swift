@@ -24,7 +24,7 @@ struct FriendsView: View {
                         Text("Select")
                     })
                 }
-                .foregroundStyle(.cyanText)
+                .foregroundStyle(.cyanApp)
                 ForEach(1..<8) { _ in
                     FriendRow()
                 }

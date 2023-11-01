@@ -10,9 +10,9 @@ import FirebaseCore
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-@MainActor
-class AccountViewModel: ObservableObject{
-    @Published var account: Account
+//@MainActor
+//class AccountViewModel: ObservableObject{
+    /*@Published var account: Account
     // private let accountsRepository: AccountsRepositoryProtocol
     
     private var db = Firestore.firestore().collection("users_v1")
@@ -22,9 +22,9 @@ class AccountViewModel: ObservableObject{
     }
     init(){
         account = Account(id: "", name: "", email: "", birthdate: Date(), friends: [], typeSuscription: .noSpecified)
-    }
+    }*/
     
-    func fetchUserAccount(_ uidUser: String){
+    /*func fetchUserAccount(_ uidUser: String){
         Task {
             do {
                 let account = try await fetchAccount(uidUser)
@@ -35,8 +35,8 @@ class AccountViewModel: ObservableObject{
                 throw error
             }
         }
-    }
-    func createUserAccount(_ account: Account) {
+    }*/
+    /*func createUserAccount(_ account: Account) {
         Task {
             do {
                 try await createAccount(account)
@@ -45,9 +45,9 @@ class AccountViewModel: ObservableObject{
                 print("[AccountViewModel] Error creating new account")
             }
         }
-    }
+    }*/
     
-    private func createAccount(_ account: Account) async throws {
+    /*private func createAccount(_ account: Account) async throws {
         let document = db.document(account.id)
         do {
             try await document.setData(from: account)
@@ -56,9 +56,9 @@ class AccountViewModel: ObservableObject{
             print("[AccountViewModel] Can't create user document")
             throw AccountError.accountNotCreated
         }
-    }
+    }*/
     
-    private func fetchAccount(_ uidAccount: String) async throws -> Account {
+    /*private func fetchAccount(_ uidAccount: String) async throws -> Account {
         let document = db.document(uidAccount)
         do{
             let document = try await document.getDocument()
@@ -75,10 +75,10 @@ class AccountViewModel: ObservableObject{
     enum AccountError: Error {
         case accountNotFound
         case accountNotCreated
-    }
-}
+    }*/
+//}
 // FirestoreSwift need to be updated to support async/await, thats why we add this extension.
-private extension DocumentReference {
+/*private extension DocumentReference {
     func setData<T: Encodable>(from value: T) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             // Method only throws if there’s an encoding error, which indicates a problem with our model.
@@ -92,4 +92,4 @@ private extension DocumentReference {
             }
         }
     }
-}
+}*/

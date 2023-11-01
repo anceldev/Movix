@@ -39,16 +39,13 @@ struct MovixApp: App {
         WindowGroup {
             NavigationStack {
                 AuthenticatedView(unauthenticated: {
-                    Image(systemName: "film")
-                        .imageScale(.large)
-                        .foregroundStyle(.tint)
-                    Text("Welcome to Movix")
-                        .font(.title)
-                    Text("You need to be logged in to use this app.")
+                    StartView()
                 }, content: {
-                    MainView()
+                    MainTabView()
                     Spacer()
                 })
+                .foregroundStyle(.blackWhite)
+                //.background(.blackApp)
             }
         }
     }

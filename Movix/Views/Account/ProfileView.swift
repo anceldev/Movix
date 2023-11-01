@@ -133,8 +133,8 @@ struct ProfileView: View {
             }
         }
         else {
-            //MainView()
-               // .environmentObject(viewModel)
+            MainTabView()
+                .environmentObject(viewModel)
         }
     }
 }

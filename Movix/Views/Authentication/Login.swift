@@ -15,7 +15,6 @@ private enum FocusedField: Hashable {
 struct Login: View {
     
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @EnvironmentObject var accountViewModel: AccountViewModel
     @Environment(\.dismiss) var dismiss
     
     @FocusState private var focus: FocusedField?
@@ -23,7 +22,7 @@ struct Login: View {
     private func signInWithEmailPassword() {
         Task {
             if await viewModel.singInWithEmailPassword() {
-                accountViewModel.fetchUserAccount(viewModel.user!.uid)
+                viewModel.fetchUserAccount(viewModel.user!.uid)
                 dismiss() // If is signed, dismiss
             }
         }
@@ -34,21 +33,20 @@ struct Login: View {
             Spacer()
             VStack{
                 VStack {
-                    Text("Hello,")
-                    Text("Glad to see you!")
+                    VStack {
+                        Text("Hello,")
+                        Text("Glad to see you!")
+                    }
+                    .font(.largeTitle)
+                    Text("Your E-mail or phone number")
+                        .padding(.top, 12)
                 }
-                .foregroundColor(.white)
-                .font(.largeTitle)
-                
-                Text("Your E-mail or phone number")
-                    .foregroundStyle(.blackWhite)
+                .foregroundStyle(.blackWhite)
                 VStack {
-                    
                     TextField(text: $viewModel.email) {
                         Text("Email")
                             .foregroundStyle(.textGray)
                     }
-                    .foregroundStyle(viewModel.email.isEmpty ? .textGray : .blackWhite)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .focused($focus, equals: .email)
@@ -56,11 +54,11 @@ struct Login: View {
                         self.focus = .password
                     }
                     .buttonBorder(.textGray)
+                    
                     SecureField(text: $viewModel.password) {
                         Text("Password")
                             .foregroundStyle(.textGray)
                     }
-                    .foregroundStyle(viewModel.password.isEmpty ? .textGray : .blackWhite)
                     .autocorrectionDisabled()
                     .buttonBorder(.textGray)
                     .focused($focus, equals: .password)
@@ -93,10 +91,9 @@ struct Login: View {
                                     viewModel.switchFlow()
                                 }
                             }, label: {
-                                    HStack {
+                                HStack {
                                     Spacer()
                                     Text("Sign up")
-                                        .foregroundStyle(.blackWhite)
                                     Spacer()
                                 }
                             })
@@ -110,6 +107,7 @@ struct Login: View {
             Spacer()
             Spacer()
         }
+        .foregroundStyle(.blackWhite)
         .background(.blackApp)
     }
 }
@@ -117,5 +115,4 @@ struct Login: View {
 #Preview {
     Login()
         .environmentObject(AuthenticationViewModel())
-        .environmentObject(AccountViewModel())
 }

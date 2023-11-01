@@ -18,7 +18,6 @@ extension AuthenticatedView where Unauthenticated == EmptyView {
 struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Unauthenticated: View {
     
     @StateObject private var viewModel = AuthenticationViewModel()
-    @StateObject private var accountViewModel = AccountViewModel()
     
     @State private var presentingLoginScreen = false
     @State private var presentingHomeView = false
@@ -37,34 +36,35 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
     }
     
     var body: some View {
-        NavigationStack {
-            switch viewModel.authenticationState {
-            case .unauthenticated, .authenticating:
-                VStack{
-                    if let unauthenticated {
-                        unauthenticated
+        VStack {
+            NavigationStack {
+                switch viewModel.authenticationState {
+                case .unauthenticated, .authenticating:
+                    VStack{
+                        Spacer()
+                        if let unauthenticated {
+                            unauthenticated
+                        }
+                        else {
+                            Text("You are not logged in.")
+                        }
+                        Button(action: {
+                            viewModel.reset()
+                            presentingLoginScreen.toggle()
+                        }, label: {
+                            Text("Tap here to log in")
+                                .bold()
+                                .padding(.top)
+                        })
+                        Spacer()
                     }
-                    else {
-                        Text("You are not logged in.")
-                    }
-                    Button("Tap here to log in"){
-                        viewModel.reset()
-                        presentingLoginScreen.toggle()
-                    }
-                }
-                .sheet(isPresented: $presentingLoginScreen, content: {
-                    AuthenticationView()
-                        .environmentObject(viewModel)
-                        .environmentObject(accountViewModel)
-                })
-            case .authenticated:
-                VStack {
-                    Text("Your are logged in")
-                    NavigationLink("Tap here to view yur profile") {
-                        MainView()
+                    .sheet(isPresented: $presentingLoginScreen, content: {
+                        AuthenticationView()
                             .environmentObject(viewModel)
-                            .environmentObject(accountViewModel)
-                    }
+                    })
+                case .authenticated:
+                    MainTabView()
+                        .environmentObject(viewModel)
                 }
             }
         }

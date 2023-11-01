@@ -15,7 +15,6 @@ private enum FocusedField: Hashable {
 
 struct SignUp: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @EnvironmentObject var accountViewModel: AccountViewModel
     
     @Environment(\.dismiss) var dismiss
     @FocusState private var focus: FocusedField?
@@ -25,11 +24,14 @@ struct SignUp: View {
             if await viewModel.signUpWithEmailPassword() {
                 let newAccount = Account(
                     id: viewModel.user!.uid,
-                    name: "New User name",
-                    email: accountViewModel.account.email,
-                    birthdate: Date(),
-                    typeSuscription: .normal)
-                accountViewModel.createUserAccount(newAccount)
+                    name: "",
+                    email: viewModel.email,
+                    birthdate: nil,
+                    typeSuscription: .noSpecified,
+                    isOnfile: true
+                )
+                
+                viewModel.createUserAccount(newAccount)
                 dismiss()
             }
         }
@@ -134,5 +136,5 @@ struct SignUp: View {
 #Preview {
     SignUp()
         .environmentObject(AuthenticationViewModel())
-        .environmentObject(AccountViewModel())
+        //.environmentObject(AccountViewModel())
 }

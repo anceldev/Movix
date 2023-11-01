@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AuthenticationView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @EnvironmentObject var accountViewModel: AccountViewModel
     
     var body: some View {
         VStack {
@@ -17,11 +16,9 @@ struct AuthenticationView: View {
             case .login:
                 Login()
                     .environmentObject(viewModel)
-                    .environmentObject(accountViewModel)
             case .signUp:
                 SignUp()
                     .environmentObject(viewModel)
-                    .environmentObject(accountViewModel)
             }
         }
     }
@@ -30,5 +27,4 @@ struct AuthenticationView: View {
 #Preview {
     AuthenticationView()
         .environmentObject(AuthenticationViewModel())
-        .environmentObject(AccountViewModel())
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movie: Codable, Identifiable{
+struct Movie: Encodable, Decodable, Identifiable{
     let adult: Bool?
     let title: String?
     let backdropPath: String?
@@ -63,3 +63,4 @@ struct Movie: Codable, Identifiable{
 extension Movie{
     static var test = Movie(adult: false, title: "Oppenheimer", backdropPath: "/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg", id: 872585, genres: [Genre(id: 18, name: "Drama"), Genre(id: 36, name: "History")], releaseDate: "2023-07-19", runtime: 181, overview: "The story of J. Robert Oppenheimer’s role in the development of the atomic bomb during World War II.", budget: 100000000, productionCountries: [ProductionCountry(iso31661: "GB", name: "United Kingdom"), ProductionCountry(iso31661: "US", name: "United States of America")] ,spokenLanguages: [Language(iso6391: "nl", name: "Dutch") , Language(iso6391: "en", name: "English")], voteAverage: 8.251, voteCount: 3937)
 }
+

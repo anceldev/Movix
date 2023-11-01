@@ -12,7 +12,7 @@ struct Account: Codable, Identifiable {
     var id: String
     var name: String
     var email: String
-    var birthdate: Date
+    var birthdate: Date?
     var friends = [String]()
     var typeSuscription: TypeSubscription
     var isOnfile = false
