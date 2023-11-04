@@ -11,7 +11,6 @@ struct SearchView: View {
     
     
     @State private var queryText = ""
-    //@StateObject var searchService = SearchService()
     @StateObject var movieViewModel = MovieViewModel()
     
     
@@ -31,8 +30,12 @@ struct SearchView: View {
                                 MovieResult(movie: movie, urlImage: movieViewModel.urlImageMovie(urlBackdrop: movie.backdropPath ?? ""))
                                     .listRowInsets(EdgeInsets())
                                     .background(
-                                        NavigationLink("", destination: Text(movie.title!).foregroundStyle(.black))
+                                        NavigationLink("", destination: {
+                                            MovieDetails(idMovie: movie.id)
+                                                .environmentObject(movieViewModel)
+                                        })
                                     )
+                                    //.environmentObject(movieViewModel)
                             }
                         }
                     }

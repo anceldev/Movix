@@ -11,25 +11,6 @@ struct MovieResult: View {
     @State var movie: Movie
     var urlImage: URL
     
-    
-    
-    /*var urlImage: URL {
-        //let urlString = "https://image.tmdb.org/t/p/" + "w185" + (movie.posterPath ?? "")
-        let urlString = "https://image.tmdb.org/t/p/" + "w300" + (movie.backdropPath ?? "")
-        Task {
-            do {
-                let (_, response) = try await URLSession.shared.data(from: URL(string: urlString)!)
-                guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                    throw UFDError.reponseFailed
-                }
-            }
-            catch {
-                print("Error getting image")
-            }
-        }
-        return URL(string: urlString)!
-    }*/
-    
     var body: some View {
         HStack(alignment: .top) {
             VStack {

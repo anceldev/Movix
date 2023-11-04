@@ -171,7 +171,6 @@
 			children = (
 				B46D7FA12AE5DCC800256F7F /* PhotoView.swift */,
 				B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */,
-				B453B5732AF303B300133101 /* MovieResult.swift */,
 			);
 			path = "Aux&Helpers";
 			sourceTree = "<group>";
@@ -219,15 +218,16 @@
 			isa = PBXGroup;
 			children = (
 				B4BD3F752AF172B90063FA14 /* StartView.swift */,
+				B453B5732AF303B300133101 /* MovieResult.swift */,
 				B4BD3F702AF15BD40063FA14 /* Account */,
 				B42F515A2AE9D08F00B2D2B6 /* Aux&Helpers */,
 				B42F51512AE9705900B2D2B6 /* Authentication */,
+				B4A47D6F2AE7FB6B000AE244 /* Movie */,
 				B46D7F892AE5CC7700256F7F /* MainTabView.swift */,
 				B42F51582AE9B36600B2D2B6 /* HomeView.swift */,
 				B46D7F9D2AE5D53900256F7F /* PersonalDetails.swift */,
 				B46D7F9F2AE5D60B00256F7F /* FriendsList.swift */,
 				B470AFD22AF26CBD004FE808 /* SearchView.swift */,
-				B4A47D6F2AE7FB6B000AE244 /* Movie */,
 			);
 			path = Views;
 			sourceTree = "<group>";

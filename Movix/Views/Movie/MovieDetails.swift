@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct MovieDetails: View {
-    
-    var movie = Movie.test
+    @EnvironmentObject var viewModel: MovieViewModel
+    var idMovie: Int
+    @State var movie: Movie?
     
     @State var tabButton: Bool? = true
     var body: some View {
         VStack{
             ZStack{
                 AsyncImage(
-                    url: movie.imageUrl,
+                    url: movie?.imageUrl,
                     content: { image in
                         image
                             .resizable()
@@ -50,7 +51,7 @@ struct MovieDetails: View {
             .frame(maxHeight: 400)
             VStack{
                 VStack{
-                    Text(movie.overview ?? "")
+                    Text(movie?.overview ?? "")
                 }
                 .padding()
                 .foregroundColor(.white)
@@ -78,22 +79,26 @@ struct MovieDetails: View {
                 .font(.title2)
                 .padding(.top)
                 VStack{
-                    if tabButton == true {
-                        MovieGeneralTab(movie: movie)
+                    /*if tabButton == true {
+                        MovieGeneralTab(movie: movie!)
                     } else if tabButton == false {
                         MovieDetailTab()
                     } else {
                         MovieCommentsTab()
-                    }
+                    }*/
                 }
             }
             Spacer()
         }
         .background(.secondBlack)
         .ignoresSafeArea()
+        .onAppear{
+            self.movie = viewModel.getDetails(forMovie: idMovie)
+        }
     }
 }
 
 #Preview {
-    MovieDetails()
+    MovieDetails(idMovie: 872585)
+        .environmentObject(MovieViewModel())
 }
