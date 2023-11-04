@@ -14,6 +14,9 @@ struct Account: Codable, Identifiable {
     var email: String
     var birthdate: Date?
     var friends = [String]()
+    var favouriteMovies = [Int]()
+    var favouriteSeries = [Int]()
+    
     var typeSuscription: TypeSubscription
     var isOnfile = false
     

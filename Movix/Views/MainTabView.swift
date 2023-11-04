@@ -20,6 +20,7 @@ struct MainTabView: View {
                 .environmentObject(viewModelAuth)
                 .tabItem { Image("profile_dissabled") }
         }
+        .background(.blackApp)
 #else
         TabView {
             if viewModelAuth.authenticationState == .authenticated {

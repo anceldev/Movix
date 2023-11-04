@@ -32,10 +32,10 @@ extension UserFetchingData {
             throw UFDError.modelNotMatch
         }
     }
-    enum UFDError: Error {
-        case invalidURL
-        case reponseFailed
-        case modelNotMatch
-        case notInitialized
-    }
+}
+enum UFDError: Error {
+    case invalidURL
+    case reponseFailed
+    case modelNotMatch
+    case notInitialized
 }

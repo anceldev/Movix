@@ -32,12 +32,14 @@ struct ProfileView: View {
         if viewModel.authenticationState == .authenticated {
             NavigationStack{
                 VStack {
-                    PhotoView(image: userProfilePhoto)
-                    Text(user.name)
-                        .font(.title2)
-                        .foregroundStyle(.white)
-                    Text(user.email)
-                        .foregroundStyle(.textGray)
+                    VStack {
+                        PhotoView(image: userProfilePhoto)
+                        Text(user.name)
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                        Text(user.email)
+                            .foregroundStyle(.textGray)
+                    }
                     VStack{
                         List {
                             Section(header: Text("Account Settings").font(.subheadline).bold()){

@@ -9,42 +9,48 @@ import SwiftUI
 
 struct SearchView: View {
     
+    
     @State private var queryText = ""
-    @StateObject var searchService = SearchService()
+    //@StateObject var searchService = SearchService()
+    @StateObject var movieViewModel = MovieViewModel()
+    
     
     private var list = ["Monday", "Tuesday", "Wednesday"]
-    private func searchTrending() {
-        Task {
-            do { try await searchService.searchTrending() }
-            catch { fatalError("Can't fetch trending movies") }
-        }
+    
+    init() {
+        UITableView.appearance().showsVerticalScrollIndicator = false
     }
-    private func search(query: String) {
-        Task {
-            do { try await searchService.searchMovies(query: query)}
-            catch { fatalError("Can't fetch movies from query")}
-        }
-    }
+    
     var body: some View {
         VStack {
             NavigationView {
-            
-            List{
-                ForEach(searchService.moviesList.results, id: \.id) { result in
-                    Text(result.title ?? "No name")
+                VStack {
+                    List {
+                        if !movieViewModel.movies.isEmpty {
+                            ForEach(movieViewModel.movies) { movie in
+                                MovieResult(movie: movie, urlImage: movieViewModel.urlImageMovie(urlBackdrop: movie.backdropPath ?? ""))
+                                    .listRowInsets(EdgeInsets())
+                                    .background(
+                                        NavigationLink("", destination: Text(movie.title!).foregroundStyle(.black))
+                                    )
+                            }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .background(.blackApp)
+                    .scrollContentBackground(.hidden)
                 }
+                .scrollIndicators(.hidden)
             }
-            Spacer()
-            }
-            .listStyle(.plain)
-            .searchable(text: $queryText)
+            .navigationViewStyle(.stack)
+            .searchable(text: $queryText, prompt: "Search...")
+            .foregroundStyle(.blackWhite)
             .onChange(of: queryText) {
-                search(query: queryText)
+                movieViewModel.getMovies(withQuery: queryText)
             }
         }
-        .background(.blackApp)
         .onAppear(perform: {
-            searchTrending()
+            movieViewModel.getTrending()
         })
     }
 }

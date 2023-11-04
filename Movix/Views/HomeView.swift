@@ -39,7 +39,8 @@ struct HomeView: View {
             .foregroundStyle(.textGray)
             // Genres
             NavigationView {
-                List(genres, id: \.self){ genre in
+                Text("Hi")
+                /*List(genres, id: \.self){ genre in
                     if( searchText.isEmpty || genre.contains(searchText)) {
                         Text(genre)
                     }
@@ -51,7 +52,7 @@ struct HomeView: View {
                 .background(.blackApp)
                 .foregroundStyle(.blackWhite)
                 .font(.title2)
-                .multilineTextAlignment(.center)
+                .multilineTextAlignment(.center)*/
             }
             .searchable(text: $searchText, placement: .toolbar, prompt: "Search...")
             Spacer()

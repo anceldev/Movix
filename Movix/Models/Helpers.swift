@@ -28,8 +28,8 @@ struct ProductionCountry: Codable, Identifiable{
     }
 }
 struct Language: Codable, Identifiable {
-    let iso6391: String
     let name: String
+    let iso6391: String
     var id: String {
         iso6391
     }
