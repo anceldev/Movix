@@ -42,7 +42,7 @@ struct SearchView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            .navigationViewStyle(.stack)
+            //.navigationViewStyle(.stack)
             .searchable(text: $queryText, prompt: "Search...")
             .foregroundStyle(.blackWhite)
             .onChange(of: queryText) {
