@@ -9,16 +9,8 @@ import SwiftUI
 
 struct SearchView: View {
     
-    
     @State private var queryText = ""
     @StateObject var movieViewModel = MovieViewModel()
-    
-    
-    private var list = ["Monday", "Tuesday", "Wednesday"]
-    
-    init() {
-        UITableView.appearance().showsVerticalScrollIndicator = false
-    }
     
     var body: some View {
         VStack {
@@ -33,9 +25,8 @@ struct SearchView: View {
                                         NavigationLink("", destination: {
                                             MovieDetails(idMovie: movie.id)
                                                 .environmentObject(movieViewModel)
-                                        })
-                                    )
-                                    //.environmentObject(movieViewModel)
+                                            
+                                        }))
                             }
                         }
                     }
@@ -45,7 +36,6 @@ struct SearchView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            //.navigationViewStyle(.stack)
             .searchable(text: $queryText, prompt: "Search...")
             .foregroundStyle(.blackWhite)
             .onChange(of: queryText) {
@@ -53,7 +43,9 @@ struct SearchView: View {
             }
         }
         .onAppear(perform: {
-            movieViewModel.getTrending()
+            if queryText.isEmpty {
+                movieViewModel.getTrending()
+            }
         })
     }
 }

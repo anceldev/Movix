@@ -10,19 +10,31 @@ import SwiftUI
 struct MovieDetails: View {
     @EnvironmentObject var viewModel: MovieViewModel
     var idMovie: Int
-    @State var movie: Movie?
-    
+        
     @State var tabButton: Bool? = true
+    
     var body: some View {
         VStack{
             ZStack{
                 AsyncImage(
-                    url: movie?.imageUrl,
+                    url: viewModel.getPosterUrl(urlPoster: viewModel.movie.posterPath ?? ""),
                     content: { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(maxHeight: 400)
+                            .frame(maxWidth: .infinity, maxHeight: 600)
+                            
+                            .overlay {
+                                LinearGradient(colors: [
+                                    .clear,
+                                    .clear,
+                                    .clear,
+                                    .black.opacity(0.1),
+                                    .black.opacity(0.5),
+                                    .black.opacity(0.9),
+                                    .black
+                                ], startPoint: .top, endPoint: .bottom)
+                            }
                     }) {
                         ProgressView()
                     }
@@ -30,9 +42,7 @@ struct MovieDetails: View {
                     Spacer()
                     VStack {
                         HStack(spacing: 20){
-                            Text("GB")
-                            Text("Drama")
-                            Text("History")
+                            Text(viewModel.makeTags())
                         }
                         .padding(.bottom, 4)
                         HStack {
@@ -48,10 +58,10 @@ struct MovieDetails: View {
                 }
                 .foregroundStyle(.white)
             }
-            .frame(maxHeight: 400)
+            .frame(height: 468)
             VStack{
                 VStack{
-                    Text(movie?.overview ?? "")
+                    //Text(movie?.overview ?? "")
                 }
                 .padding()
                 .foregroundColor(.white)
@@ -90,10 +100,11 @@ struct MovieDetails: View {
             }
             Spacer()
         }
+        .frame(maxWidth: .infinity)
         .background(.secondBlack)
         .ignoresSafeArea()
         .onAppear{
-            self.movie = viewModel.getDetails(forMovie: idMovie)
+            viewModel.getDetails(forMovie: idMovie)
         }
     }
 }

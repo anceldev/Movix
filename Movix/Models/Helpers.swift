@@ -34,3 +34,11 @@ struct Language: Codable, Identifiable {
         iso6391
     }
 }
+
+struct Country: Codable, Identifiable{
+    var iso31661: String
+    var englishName: String
+    var id: String {
+        iso31661
+    }
+}

@@ -8,15 +8,15 @@
 import Foundation
 
 @MainActor
-
 class MovieViewModel: ObservableObject {
     private let service = SearchService()
     private let movieService = MovieService()
     
     @Published var movies = [Movie]()
+    @Published var movie: Movie
     
     init(){
-        //self.movies = service.searchTrending()
+        self.movie = Movie(adult: nil, title: nil, backdropPath: nil, posterPath: nil, id: 0, genres: nil, releaseDate: nil, runtime: nil, overview: nil, budget: nil, productionCountries: nil, spokenLanguages: nil, voteAverage: nil, voteCount: nil)
     }
     
     func getMovies(withQuery query: String){
@@ -58,7 +58,9 @@ class MovieViewModel: ObservableObject {
     }
     
     func getPosterUrl(urlPoster image: String) -> URL {
+        
         let urlString = "https://image.tmdb.org/t/p/" + "w300" + image
+        
         Task {
             do {
                 let (_, response) = try await URLSession.shared.data(from: URL(string: urlString)!)
@@ -73,7 +75,38 @@ class MovieViewModel: ObservableObject {
         return URL(string: urlString)!
     }
     
-    func getDetails(forMovie id: Int) -> Movie {
-        return Movie.test
+    func getDetails(forMovie id: Int){
+        Task {
+            do {
+                self.movie = try await movieService.details(forMovie: id)!
+            }
+            catch {
+                fatalError("MovieService error getting details for movie with id: \(id)")
+            }
+        }
     }
+    func makeTags() -> String {
+        var tags = self.movie.productionCountries == nil ? "" : movie.productionCountries![0].name
+        //var tags = "" //self.movie.productionCountries == nil ? "" : movie.productionCountries![0].name
+        
+        //let country = isoCountry(country: self.movie.productionCountries![0].name)
+        
+        
+        if let genres = self.movie.genres {
+            var maxGenres = 2
+            tags += " |"
+            for genre in genres {
+                tags += " " + genre.name
+                maxGenres -= 1
+                if maxGenres == 0 {
+                    break
+                }
+            }
+        }
+        return tags
+    }
+    
+    /*func isoCountry(country: String) -> String {
+        
+    }*/
 }

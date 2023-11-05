@@ -15,8 +15,8 @@ final class MovieService: MovieServiceProtocol{
     var movie = Movie(adult: nil, title: nil, backdropPath: nil, posterPath: nil, id: 0, genres: nil, releaseDate: nil, runtime: nil, overview: nil, budget: nil, productionCountries: nil, spokenLanguages: nil, voteAverage: nil, voteCount: nil)
     
     private var apiKey = "api_key=4bd71d332c3d3c219fe01c8d465ba03a"
-    private let baseUrl = "https://api.themoviedb.org/3/search/movie/"
-    private let trailingUrl = "language=en-US"
+    private let baseUrl = "https://api.themoviedb.org/3/movie/"
+    private let trailingUrl = "&language=en-US"
     
     func details(forMovie idMovie: Int) async throws -> Movie? {
         let urlRequest = baseUrl + "\(idMovie)" + "?" + apiKey + trailingUrl
@@ -28,6 +28,19 @@ final class MovieService: MovieServiceProtocol{
         catch {
             print("[MovieViewModel] Error getting movie details")
             throw error
+        }
+    }
+    
+    func getcountries() async throws -> [Country] {
+        let urlRequest = "https://api.themoviedb.org/3/configuration/countries?api_key=4bd71d332c3d3c219fe01c8d465ba03a"
+        var countries = [Country]()
+        do {
+            let countriesList = try await UserFetchingData.fetchData(forItem: countries, withUrl: urlRequest)
+            countries = countriesList
+            return countries
+        }
+        catch {
+            fatalError("Movie Service can't get countries")
         }
     }
 }
