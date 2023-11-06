@@ -31,17 +31,24 @@ struct ProfileView: View {
     var body: some View {
         if viewModel.authenticationState == .authenticated {
             NavigationStack{
-                VStack {
-                    VStack {
-                        PhotoView(image: userProfilePhoto)
-                        Text(user.name)
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                        Text(user.email)
-                            .foregroundStyle(.textGray)
-                    }
                     VStack{
                         List {
+                            Section {
+                                HStack {
+                                    Spacer()
+                                    VStack(alignment: .center) {
+                                        PhotoView(image: userProfilePhoto)
+                                        Text(user.name)
+                                            .font(.title2)
+                                            .foregroundStyle(.white)
+                                        Text(user.email)
+                                            .foregroundStyle(.textGray)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .listRowBackground(Color.blackApp)
+                            
                             Section(header: Text("Account Settings").font(.subheadline).bold()){
                                 NavigationLink {
                                     PersonalDetails()
@@ -130,9 +137,9 @@ struct ProfileView: View {
                             Button("Cancel", role: .cancel, action: {})
                         }
                     }
-                }
-                .background(.blackApp)
+                    .background(.blackApp)
             }
+            .toolbarBackground(Color.blackApp, for: .tabBar)
         }
         else {
             MainTabView()

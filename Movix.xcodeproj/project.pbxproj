@@ -30,6 +30,7 @@
 		B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C482AEC43520094FB71 /* AccountViewModel.swift */; };
 		B453B5742AF303B300133101 /* MovieResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B453B5732AF303B300133101 /* MovieResult.swift */; };
 		B453B5762AF3133700133101 /* trending_movies.json in Resources */ = {isa = PBXBuildFile; fileRef = B453B5752AF3133700133101 /* trending_movies.json */; };
+		B45D433F2AF94DA30034C1A4 /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D433E2AF94DA30034C1A4 /* PosterView.swift */; };
 		B46D7F882AE5CC7700256F7F /* MovixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F872AE5CC7700256F7F /* MovixApp.swift */; };
 		B46D7F8A2AE5CC7700256F7F /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F892AE5CC7700256F7F /* MainTabView.swift */; };
 		B46D7F8C2AE5CC7800256F7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */; };
@@ -84,6 +85,7 @@
 		B43C4C482AEC43520094FB71 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		B453B5732AF303B300133101 /* MovieResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieResult.swift; sourceTree = "<group>"; };
 		B453B5752AF3133700133101 /* trending_movies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trending_movies.json; sourceTree = "<group>"; };
+		B45D433E2AF94DA30034C1A4 /* PosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterView.swift; sourceTree = "<group>"; };
 		B46D7F842AE5CC7700256F7F /* Movix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46D7F872AE5CC7700256F7F /* MovixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovixApp.swift; sourceTree = "<group>"; };
 		B46D7F892AE5CC7700256F7F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				B4036EA92AE6E0DC001E2819 /* MovieGeneralTab.swift */,
 				B4036EAB2AE6E11C001E2819 /* MovieDetailTab.swift */,
 				B4036EAD2AE6E213001E2819 /* MovieCommentsTab.swift */,
+				B45D433E2AF94DA30034C1A4 /* PosterView.swift */,
 			);
 			path = Movie;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				B46D7F9C2AE5D1C100256F7F /* Account.swift in Sources */,
 				B4A47D832AE819EA000AE244 /* AuthenticationViewModel.swift in Sources */,
 				B4036EAE2AE6E213001E2819 /* MovieCommentsTab.swift in Sources */,
+				B45D433F2AF94DA30034C1A4 /* PosterView.swift in Sources */,
 				B46D7FA22AE5DCC800256F7F /* PhotoView.swift in Sources */,
 				B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */,
 				B470AFDD2AF2B46B004FE808 /* People.swift in Sources */,

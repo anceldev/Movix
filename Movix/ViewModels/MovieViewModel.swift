@@ -79,6 +79,7 @@ class MovieViewModel: ObservableObject {
         Task {
             do {
                 self.movie = try await movieService.details(forMovie: id)!
+                print("catched details for movie: " + self.movie.title!)
             }
             catch {
                 fatalError("MovieService error getting details for movie with id: \(id)")

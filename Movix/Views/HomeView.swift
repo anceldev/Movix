@@ -11,10 +11,62 @@ struct HomeView: View {
     
     private var genres = ["Action", "Adventure", "Drama", "Comedy"]
     
-    @State var searchText = ""
+    @State var queryText = ""
+    
+    init() {
+        let colorAppeareance = UINavigationBarAppearance()
+        colorAppeareance.configureWithOpaqueBackground()
+        colorAppeareance.backgroundColor = .blackApp
+        colorAppeareance.titleTextAttributes = [.foregroundColor: UIColor.blackWhite]
+        colorAppeareance.largeTitleTextAttributes = [.foregroundColor: UIColor.blackWhite]
+        
+        UINavigationBar.appearance().standardAppearance = colorAppeareance
+        UINavigationBar.appearance().compactAppearance = colorAppeareance
+        UINavigationBar.appearance().scrollEdgeAppearance = colorAppeareance
+        
+        UINavigationBar.appearance().tintColor = .white
+    }
     
     var body: some View {
-        VStack {
+        NavigationStack {
+            VStack {
+                HStack{
+                    Button(action: {
+                        // All
+                    }, label: {
+                        Text("All")
+                    })
+                    .frame(maxWidth: .infinity)
+                    Button(action: {
+                        // Movies
+                    }, label: {
+                        Text("Movies")
+                    })
+                    .frame(maxWidth: .infinity)
+                    Button(action: {
+                        // Series
+                    }, label: {
+                        Text("Series")
+                    })
+                    .frame(maxWidth: .infinity)
+                }
+                List {
+                    
+                }
+                .searchable(text: $queryText)
+                .listStyle(.plain)
+                //.background(.blackApp)
+                //.scrollContentBackground(.hidden)
+            }
+            .background(.blackApp)
+            .navigationTitle("Catalog")
+            .navigationBarTitleDisplayMode(.inline)
+            .foregroundStyle(.blackWhite)
+        }
+        
+        
+        
+        /*VStack {
             HStack{
                 Button(action: {
                     // All
@@ -57,7 +109,7 @@ struct HomeView: View {
             .searchable(text: $searchText, placement: .toolbar, prompt: "Search...")
             Spacer()
         }
-        .background(.blackApp)
+        .background(.blackApp)*/
     }
 }
 
