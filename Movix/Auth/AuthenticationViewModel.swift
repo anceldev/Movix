@@ -5,6 +5,7 @@
 //  Created by Ancel Dev account on 24/10/23.
 //
 
+import Firebase
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
@@ -29,7 +30,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var account = Account(id: "", name: "", email: "", birthdate: Date(), typeSuscription: .noSpecified)
     private var dbUsers = Firestore.firestore().collection("users_v1")
     
-    @Published var user: User?
+    @Published var user: Firebase.User?
     @Published var flow: AuthenticationFlow = .login
     
     @Published var isValid = false

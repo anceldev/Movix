@@ -17,7 +17,8 @@ extension AuthenticatedView where Unauthenticated == EmptyView {
 
 struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Unauthenticated: View {
     
-    @StateObject private var viewModel = AuthenticationViewModel()
+//    @StateObject private var viewModel = AuthenticationViewModel()
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     @State private var presentingLoginScreen = false
     @State private var presentingHomeView = false
@@ -38,7 +39,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
     var body: some View {
         VStack {
             NavigationStack {
-                switch viewModel.authenticationState {
+                switch authViewModel.authenticationState {
                 case .unauthenticated, .authenticating:
                     VStack{
                         Spacer()
@@ -49,7 +50,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                             Text("You are not logged in.")
                         }
                         Button(action: {
-                            viewModel.reset()
+                            authViewModel.reset()
                             presentingLoginScreen.toggle()
                         }, label: {
                             Text("Tap here to log in")
@@ -60,14 +61,15 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                     }
                     .sheet(isPresented: $presentingLoginScreen, content: {
                         AuthenticationView()
-                            .environmentObject(viewModel)
+                            .environmentObject(authViewModel)
                     })
                 case .authenticated:
                     MainTabView()
-                        .environmentObject(viewModel)
+                        .environmentObject(authViewModel)
                 }
             }
         }
+        .background(Color.blackApp)
     }
 }
 
@@ -77,4 +79,5 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .background(.yellow)
     }
+    .environmentObject(AuthenticationViewModel())
 }

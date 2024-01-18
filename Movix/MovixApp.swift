@@ -48,5 +48,6 @@ struct MovixApp: App {
                 //.background(.blackApp)
             }
         }
+        .environmentObject(AuthenticationViewModel())
     }
 }
