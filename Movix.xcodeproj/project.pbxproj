@@ -28,6 +28,7 @@
 		B43C4C452AEC29CD0094FB71 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */; };
 		B43C4C472AEC2CC80094FB71 /* AccountsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */; };
 		B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C482AEC43520094FB71 /* AccountViewModel.swift */; };
+		B44CBEA02B597C9B00B7DB8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B44CBE9F2B597C9B00B7DB8E /* GoogleService-Info.plist */; };
 		B453B5742AF303B300133101 /* MovieResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B453B5732AF303B300133101 /* MovieResult.swift */; };
 		B453B5762AF3133700133101 /* trending_movies.json in Resources */ = {isa = PBXBuildFile; fileRef = B453B5752AF3133700133101 /* trending_movies.json */; };
 		B45D433F2AF94DA30034C1A4 /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D433E2AF94DA30034C1A4 /* PosterView.swift */; };
@@ -47,7 +48,6 @@
 		B470AFDD2AF2B46B004FE808 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = B470AFDC2AF2B46B004FE808 /* People.swift */; };
 		B4A47D6B2AE7F865000AE244 /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A47D6A2AE7F865000AE244 /* MovieService.swift */; };
 		B4A47D712AE81284000AE244 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A47D702AE81284000AE244 /* Login.swift */; };
-		B4A47D732AE81433000AE244 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4A47D722AE81433000AE244 /* GoogleService-Info.plist */; };
 		B4A47D762AE814C3000AE244 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D752AE814C3000AE244 /* FirebaseAnalytics */; };
 		B4A47D782AE814C3000AE244 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D772AE814C3000AE244 /* FirebaseAnalyticsSwift */; };
 		B4A47D7A2AE814C3000AE244 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D792AE814C3000AE244 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -83,6 +83,7 @@
 		B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
 		B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsRepository.swift; sourceTree = "<group>"; };
 		B43C4C482AEC43520094FB71 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
+		B44CBE9F2B597C9B00B7DB8E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B453B5732AF303B300133101 /* MovieResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieResult.swift; sourceTree = "<group>"; };
 		B453B5752AF3133700133101 /* trending_movies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trending_movies.json; sourceTree = "<group>"; };
 		B45D433E2AF94DA30034C1A4 /* PosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterView.swift; sourceTree = "<group>"; };
@@ -103,7 +104,6 @@
 		B470AFDC2AF2B46B004FE808 /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
 		B4A47D6A2AE7F865000AE244 /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
 		B4A47D702AE81284000AE244 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
-		B4A47D722AE81433000AE244 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		B4BD3F6E2AF15B9F0063FA14 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		B4BD3F712AF160F50063FA14 /* FriendRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRow.swift; sourceTree = "<group>"; };
@@ -144,8 +144,8 @@
 		B4036EA02AE6DC9B001E2819 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B44CBE9F2B597C9B00B7DB8E /* GoogleService-Info.plist */,
 				B46D7F8D2AE5CC7800256F7F /* Preview Content */,
-				B4A47D722AE81433000AE244 /* GoogleService-Info.plist */,
 				B4036EA12AE6DCBE001E2819 /* configuration_details.json */,
 				B453B5752AF3133700133101 /* trending_movies.json */,
 				B4036EA52AE6DCF8001E2819 /* movie_details.json */,
@@ -196,13 +196,13 @@
 		B46D7F862AE5CC7700256F7F /* Movix */ = {
 			isa = PBXGroup;
 			children = (
-				B4A47D812AE819B0000AE244 /* Auth */,
+				B46D7F872AE5CC7700256F7F /* MovixApp.swift */,
 				B4036EA02AE6DC9B001E2819 /* Resources */,
+				B4A47D812AE819B0000AE244 /* Auth */,
 				B4A47D692AE7F7A4000AE244 /* Services */,
 				B4A47D6C2AE7FA45000AE244 /* ViewModels */,
 				B4036E9B2AE6D8D8001E2819 /* Models */,
 				B46D7F972AE5CCA700256F7F /* Views */,
-				B46D7F872AE5CC7700256F7F /* MovixApp.swift */,
 				B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */,
 			);
 			path = Movix;
@@ -356,12 +356,12 @@
 			files = (
 				B46D7F8F2AE5CC7800256F7F /* Preview Assets.xcassets in Resources */,
 				B4036EA62AE6DCF8001E2819 /* movie_details.json in Resources */,
+				B44CBEA02B597C9B00B7DB8E /* GoogleService-Info.plist in Resources */,
 				B40D594C2AF658B800A4A447 /* Serie.json in Resources */,
 				B46D7F8C2AE5CC7800256F7F /* Assets.xcassets in Resources */,
 				B4036EA22AE6DCBE001E2819 /* configuration_details.json in Resources */,
 				B40D59502AF65D2A00A4A447 /* Season.json in Resources */,
 				B40D594E2AF65C0000A4A447 /* Episode.json in Resources */,
-				B4A47D732AE81433000AE244 /* GoogleService-Info.plist in Resources */,
 				B453B5762AF3133700133101 /* trending_movies.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
