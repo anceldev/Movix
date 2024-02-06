@@ -12,22 +12,13 @@ private enum FocusedField: Hashable {
     case password
 }
 
-struct Login: View {
+struct SignIn: View {
     
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @Environment(\.dismiss) var dismiss
     
     @FocusState private var focus: FocusedField?
-    
-    private func signInWithEmailPassword() {
-        Task {
-            if await viewModel.singInWithEmailPassword() {
-                viewModel.fetchUserAccount(viewModel.user!.uid)
-                dismiss() // If is signed, dismiss
-            }
-        }
-    }
-    
+
     var body: some View {
         VStack {
             Spacer()
@@ -38,14 +29,14 @@ struct Login: View {
                         Text("Glad to see you!")
                     }
                     .font(.largeTitle)
-                    Text("Your E-mail or phone number")
+                    Text("Your E-mail")
                         .padding(.top, 12)
                 }
-                .foregroundStyle(.blackWhite)
+                .foregroundStyle(.semiWhite)
                 VStack {
                     TextField(text: $viewModel.email) {
                         Text("Email")
-                            .foregroundStyle(.textGray)
+                            .foregroundStyle(.grayLight)
                     }
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -53,14 +44,14 @@ struct Login: View {
                     .onSubmit {
                         self.focus = .password
                     }
-                    .buttonBorder(.textGray)
+                    .buttonBorder(.grayLight)
                     
                     SecureField(text: $viewModel.password) {
                         Text("Password")
-                            .foregroundStyle(.textGray)
+                            .foregroundStyle(.grayLight)
                     }
                     .autocorrectionDisabled()
-                    .buttonBorder(.textGray)
+                    .buttonBorder(.grayLight)
                     .focused($focus, equals: .password)
                     .onSubmit {
                         signInWithEmailPassword()
@@ -97,7 +88,7 @@ struct Login: View {
                                     Spacer()
                                 }
                             })
-                            .buttonBorder(.blackWhite)
+                            .buttonBorder(.semiWhite)
                         }
                     }
                 }
@@ -107,12 +98,24 @@ struct Login: View {
             Spacer()
             Spacer()
         }
-        .foregroundStyle(.blackWhite)
+        .foregroundStyle(.semiWhite)
         .background(.blackApp)
+    }
+    private func signInWithEmailPassword() {
+        Task {
+            if await viewModel.singInWithEmailPassword() {
+//                viewModel.fetchUserAccount(viewModel.user!.uid)
+//                guard let userID = viewModel.user?.uid else {
+//                    fatalError("Cannot identify user")
+//                }
+//                viewModel.fetchUserAccount(userID)
+                dismiss() // If is signed, dismiss
+            }
+        }
     }
 }
 
 #Preview {
-    Login()
+    SignIn()
         .environmentObject(AuthenticationViewModel())
 }

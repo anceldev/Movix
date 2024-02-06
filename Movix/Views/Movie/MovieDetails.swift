@@ -8,137 +8,138 @@
 import SwiftUI
 
 struct MovieDetails: View {
-    @EnvironmentObject var viewModel: MovieViewModel
+//    @EnvironmentObject var viewModel: MovieViewModel
     var idMovie: Int
     
     @State var tabButton: Bool? = true
     
     var body: some View {
-        VStack {
-            VStack(spacing: 0){
-                GeometryReader(content: { geometry in
-                    let size = geometry.size
-                    VStack {
-                        AsyncImage(
-                            url: viewModel.getPosterUrl(urlPoster: viewModel.movie.posterPath ?? ""),
-                            content: { image in
-                                PosterView(poster: image, size: size)
-                            }) {
-                                ProgressView()
-                            }
-                            .frame(maxWidth: size.width, maxHeight: 468)
-                    }
-                })
-            }
-            .frame(maxHeight: 468)
-            VStack {
-                NavigationStack {
-                    VStack{
-                        VStack{
-                            HStack(spacing: 20) {
-                                //Spacer()
-                                Button(action: {
-                                    // rate
-                                }, label: {
-                                    VStack {
-                                        Image("rate")
-                                        Text("Rate")
-                                            .font(.footnote)
-                                    }
-                                })
-                                .frame(minWidth: 62, maxWidth: .infinity)
-                                Button(action: {
-                                    // Download
-                                }, label: {
-                                    VStack {
-                                        Image("download")
-                                        Text("Download")
-                                            .font(.footnote)
-                                    }
-                                })
-                                .frame(minWidth: 62, maxWidth: .infinity)
-                                Button(action: {
-                                    // Download
-                                }, label: {
-                                    VStack {
-                                        Image("heart")
-                                        Text("My list")
-                                            .font(.footnote)
-                                    }
-                                    
-                                })
-                                .frame(minWidth: 62, maxWidth: .infinity)
-                                Button(action: {
-                                    // Download
-                                }, label: {
-                                    VStack {
-                                        Image("inviteFriend")
-                                        Text("Live")
-                                            .font(.footnote)
-                                    }
-                                })
-                                .frame(minWidth: 62, maxWidth: .infinity)
-                                //Spacer()
-                            }
-                            .font(.largeTitle)
-                            .foregroundStyle(.textGray)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: 261, minHeight: 60)
-                            VStack{
-                                Text(viewModel.movie.overview ?? "")
-                                    .font(.body)
-                                    .padding(15)
-                            }
-                            .foregroundColor(.white)
-                            HStack(spacing: 25){
-                                Button {
-                                    tabButton = true
-                                } label: {
-                                    Text("General")
-                                        .foregroundStyle(tabButton == true ? .white : .textGray)
-                                }
-                                Button {
-                                    tabButton = false
-                                } label: {
-                                    Text("Details")
-                                        .foregroundStyle(tabButton == false ? .white : .textGray)
-                                }
-                                Button {
-                                    tabButton = nil
-                                } label: {
-                                    Text("Comments")
-                                        .foregroundStyle(tabButton == nil ? .white : .textGray)
-                                }
-                            }
-                            .multilineTextAlignment(.center)
-                            .font(.title2)
-        
-                            VStack{
-                                /*if tabButton == true {
-                                 MovieGeneralTab(movie: movie!)
-                                 } else if tabButton == false {
-                                 MovieDetailTab()
-                                 } else {
-                                 MovieCommentsTab()
-                                 }*/
-                            }
-                        }
-                        .padding(.top, 16)
-                        Spacer()
-                    }
-                    
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blackApp.ignoresSafeArea())
-                    .ignoresSafeArea()
-                    .task {
-                        viewModel.getDetails(forMovie: idMovie)
-                    }
-                }
-            }
-        }
-        .task {
-            viewModel.getDetails(forMovie: idMovie)
-        }
+        VStack {}
+//        VStack {
+//            VStack(spacing: 0){
+//                GeometryReader(content: { geometry in
+//                    let size = geometry.size
+//                    VStack {
+//                        AsyncImage(
+//                            url: viewModel.getPosterUrl(urlPoster: viewModel.movie.posterPath ?? ""),
+//                            content: { image in
+//                                PosterView(poster: image, size: size)
+//                            }) {
+//                                ProgressView()
+//                            }
+//                            .frame(maxWidth: size.width, maxHeight: 468)
+//                    }
+//                })
+//            }
+//            .frame(maxHeight: 468)
+//            VStack {
+//                NavigationStack {
+//                    VStack{
+//                        VStack{
+//                            HStack(spacing: 20) {
+//                                //Spacer()
+//                                Button(action: {
+//                                    // rate
+//                                }, label: {
+//                                    VStack {
+//                                        Image("rate")
+//                                        Text("Rate")
+//                                            .font(.footnote)
+//                                    }
+//                                })
+//                                .frame(minWidth: 62, maxWidth: .infinity)
+//                                Button(action: {
+//                                    // Download
+//                                }, label: {
+//                                    VStack {
+//                                        Image("download")
+//                                        Text("Download")
+//                                            .font(.footnote)
+//                                    }
+//                                })
+//                                .frame(minWidth: 62, maxWidth: .infinity)
+//                                Button(action: {
+//                                    // Download
+//                                }, label: {
+//                                    VStack {
+//                                        Image("heart")
+//                                        Text("My list")
+//                                            .font(.footnote)
+//                                    }
+//                                    
+//                                })
+//                                .frame(minWidth: 62, maxWidth: .infinity)
+//                                Button(action: {
+//                                    // Download
+//                                }, label: {
+//                                    VStack {
+//                                        Image("inviteFriend")
+//                                        Text("Live")
+//                                            .font(.footnote)
+//                                    }
+//                                })
+//                                .frame(minWidth: 62, maxWidth: .infinity)
+//                                //Spacer()
+//                            }
+//                            .font(.largeTitle)
+//                            .foregroundStyle(.textGray)
+//                            .multilineTextAlignment(.center)
+//                            .frame(maxWidth: 261, minHeight: 60)
+//                            VStack{
+//                                Text(viewModel.movie.overview ?? "")
+//                                    .font(.body)
+//                                    .padding(15)
+//                            }
+//                            .foregroundColor(.white)
+//                            HStack(spacing: 25){
+//                                Button {
+//                                    tabButton = true
+//                                } label: {
+//                                    Text("General")
+//                                        .foregroundStyle(tabButton == true ? .white : .textGray)
+//                                }
+//                                Button {
+//                                    tabButton = false
+//                                } label: {
+//                                    Text("Details")
+//                                        .foregroundStyle(tabButton == false ? .white : .textGray)
+//                                }
+//                                Button {
+//                                    tabButton = nil
+//                                } label: {
+//                                    Text("Comments")
+//                                        .foregroundStyle(tabButton == nil ? .white : .textGray)
+//                                }
+//                            }
+//                            .multilineTextAlignment(.center)
+//                            .font(.title2)
+//        
+//                            VStack{
+//                                /*if tabButton == true {
+//                                 MovieGeneralTab(movie: movie!)
+//                                 } else if tabButton == false {
+//                                 MovieDetailTab()
+//                                 } else {
+//                                 MovieCommentsTab()
+//                                 }*/
+//                            }
+//                        }
+//                        .padding(.top, 16)
+//                        Spacer()
+//                    }
+//                    
+//                    .frame(maxWidth: .infinity)
+//                    .background(Color.blackApp.ignoresSafeArea())
+//                    .ignoresSafeArea()
+//                    .task {
+//                        viewModel.getDetails(forMovie: idMovie)
+//                    }
+//                }
+//            }
+//        }
+//        .task {
+//            viewModel.getDetails(forMovie: idMovie)
+//        }
         //.background(.blackApp)
         //.ignoresSafeArea()
         /*NavigationStack {
@@ -244,11 +245,11 @@ struct MovieDetails: View {
                 viewModel.getDetails(forMovie: idMovie)
             }
         }*/
-        .background(.blackApp)
+//        .background(.blackApp)
     }
 }
-
-#Preview {
-    MovieDetails(idMovie: 872585)
-        .environmentObject(MovieViewModel())
-}
+//
+//#Preview {
+//    MovieDetails(idMovie: 872585)
+//        .environmentObject(MovieViewModel())
+//}

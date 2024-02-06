@@ -7,6 +7,3 @@
 
 import Foundation
 
-struct People: Codable, Identifiable {
-    let id: Int
-}

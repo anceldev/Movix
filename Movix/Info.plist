@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Hauora-Bold.ttf</string>
+		<string>Hauora-ExtraBold.ttf</string>
+		<string>Hauora-ExtraLight.ttf</string>
+		<string>Hauora-Light.ttf</string>
+		<string>Hauora-Medium.ttf</string>
+		<string>Hauora-SemiBold.ttf</string>
+		<string>Hauora-Regular.ttf</string>
+	</array>
+</dict>
+</plist>

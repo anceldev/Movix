@@ -17,8 +17,8 @@ struct StartView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 128)
                 Text("Welcome to Movix")
-                    .font(.title)
-                Text("You need to be logged in to use this app.")
+                    .hauoraRegular(30)
+//                Text("You need to be logged in to use this app.")
             }
             Spacer()
         }

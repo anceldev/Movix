@@ -6,32 +6,50 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
-    //
-    //    private var user = Account.testAccount
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    @Environment(UserViewModel.self) var userViewModel
     @Environment(\.dismiss) var dismiss
-    
     @State var presentingConfirmationDialog = false
     
-    var userProfilePhoto = Image("1")
+    let user = User(id: "1", name: "Damaris", email: "dama@mail.com", friends: [], history: [], settings: nil)
     
-    
-    
-    let user = User(id: "1", name: "Damaris", email: "dama@mail.com")
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
     
     var body: some View {
         NavigationStack{
             VStack{
                 HStack {
                     VStack(alignment: .center) {
-                        PhotoView(image: userProfilePhoto)
-                        Text(user.name)
+                        ZStack {
+                            if let selectedImageData, let uiImage = UIImage(data: selectedImageData), let uidUser = viewModel.user?.uid {
+                                PhotoView(image: Image(uiImage: uiImage))
+                            }
+                            else {
+                                PhotoView()
+                            }
+                            PhotosPicker(selection: $selectedPhoto, matching: .images) {
+//                                Label("Select photo")
+                                Text("Select photo")
+                            }
+                            .onChange(of: selectedPhoto) {
+                                guard let selectedItem = selectedPhoto else {
+                                    return
+                                }
+                                Task {
+                                    await updateSelectedPhoto(with: selectedItem)
+                                }
+                            }
+                        }
+                        
+                        Text(userViewModel.user.name)
                             .font(.title2)
                             .foregroundStyle(.white)
-                        Text(user.email)
-                            .foregroundStyle(.textGray)
+                        Text(userViewModel.user.email)
+                            .foregroundStyle(.grayLight)
                     }
                 }
                 List {
@@ -69,8 +87,7 @@ struct ProfileView: View {
                             Text("History")
                         }
                     }
-                    .listRowBackground(Color.secondBlack)
-                    .listRowBackground(Color.secondBlack)
+                    .listRowBackground(Color.grayExtraBold)
                     Section(header: Text("More info and support").font(.headline).bold()) {
                         NavigationLink {
                             Text("Support")
@@ -85,7 +102,7 @@ struct ProfileView: View {
                             Text("About")
                         }
                     }
-                    .listRowBackground(Color.secondBlack)
+                    .listRowBackground(Color.grayExtraBold)
                     Section("Exit"){
                         Button(role: .cancel , action: {
                             viewModel.reset()
@@ -99,7 +116,7 @@ struct ProfileView: View {
                                 .foregroundStyle(.red)
                         }
                     }
-                    .listRowBackground(Color.secondBlack)
+                    .listRowBackground(Color.grayExtraBold)
                 }
                 .foregroundStyle(.white)
                 .scrollContentBackground(.hidden)
@@ -109,8 +126,12 @@ struct ProfileView: View {
                 }
             }
             .background(.blackApp)
-            
             .toolbarBackground(Color.blackApp, for: .tabBar)
+        }
+    }
+    private func updateSelectedPhoto(with item: PhotosPickerItem) async {
+        if let photoData = try? await item.loadTransferable(type: Data.self) {
+            selectedImageData = photoData
         }
     }
     private func deleteAccount() {
@@ -126,6 +147,8 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    let user = User(id: "1", name: "Damaris", email: "dama@mail.com", friends: [], history: [], settings: nil)
+    return ProfileView()
         .environmentObject(AuthenticationViewModel())
+        .environment(UserViewModel(uidUser: "eMFzFzG9p0aamFiCu1Vm1j1MvrwF"))
 }

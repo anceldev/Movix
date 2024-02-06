@@ -8,32 +8,45 @@
 import SwiftUI
 
 // see https://michael-ginn.medium.com/creating-optional-viewbuilder-parameters-in-swiftui-views-a0d4e3e1a0aeextension AuthenticatedView where Unauthenticated == EmptyView {
-extension AuthenticatedView where Unauthenticated == EmptyView {
-    init(@ViewBuilder content: @escaping () -> Content) {
-        self.unauthenticated = nil
-        self.content = content
-    }
-}
+//extension AuthenticatedView where Unauthenticated == EmptyView {
+//    init(@ViewBuilder content: @escaping () -> Content) {
+//        self.unauthenticated = nil
+//        self.content = content
+//    }
+//}
+//extension AuthenticatedView where Unauthenticated == EmptyView {
+//    init(@ViewBuilder content: @escaping () -> Content) {
+//        self.unauthenticated = nil
+//        self.content = content
+//    }
+//}
 
-struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Unauthenticated: View {
+//struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Unauthenticated: View {
     
-//    @StateObject private var viewModel = AuthenticationViewModel()
+struct AuthenticatedView<Unauthenticated>: View where Unauthenticated: View {
+        
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     @State private var presentingLoginScreen = false
     @State private var presentingHomeView = false
     
     var unauthenticated: Unauthenticated?
-    @ViewBuilder var content: () -> Content
+//    @ViewBuilder var content: () -> Content
     
-    public init(unauthenticated: Unauthenticated?, @ViewBuilder content: @escaping () -> Content) {
+//    public init(unauthenticated: Unauthenticated?, @ViewBuilder content: @escaping () -> Content) {
+//        self.unauthenticated = unauthenticated
+//        self.content = content
+//    }
+    public init(unauthenticated: Unauthenticated?) {
         self.unauthenticated = unauthenticated
-        self.content = content
     }
     
-    public init(@ViewBuilder unauthenticated: @escaping () -> Unauthenticated, @ViewBuilder content: @escaping () -> Content) {
+//    public init(@ViewBuilder unauthenticated: @escaping () -> Unauthenticated, @ViewBuilder content: @escaping () -> Content) {
+//        self.unauthenticated = unauthenticated()
+//        self.content = content
+//    }
+    public init(@ViewBuilder unauthenticated: @escaping () -> Unauthenticated) {
         self.unauthenticated = unauthenticated()
-        self.content = content
     }
     
     var body: some View {
@@ -64,7 +77,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                             .environmentObject(authViewModel)
                     })
                 case .authenticated:
-                    MainTabView()
+                    MainView(uidUser: authViewModel.user!.uid)
                         .environmentObject(authViewModel)
                 }
             }

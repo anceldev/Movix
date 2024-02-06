@@ -17,8 +17,8 @@ struct HomeView: View {
         let colorAppeareance = UINavigationBarAppearance()
         colorAppeareance.configureWithOpaqueBackground()
         colorAppeareance.backgroundColor = .blackApp
-        colorAppeareance.titleTextAttributes = [.foregroundColor: UIColor.blackWhite]
-        colorAppeareance.largeTitleTextAttributes = [.foregroundColor: UIColor.blackWhite]
+        colorAppeareance.titleTextAttributes = [.foregroundColor: UIColor.semiWhite]
+        colorAppeareance.largeTitleTextAttributes = [.foregroundColor: UIColor.semiWhite]
         
         UINavigationBar.appearance().standardAppearance = colorAppeareance
         UINavigationBar.appearance().compactAppearance = colorAppeareance
@@ -61,7 +61,7 @@ struct HomeView: View {
             .background(.blackApp)
             .navigationTitle("Catalog")
             .navigationBarTitleDisplayMode(.inline)
-            .foregroundStyle(.blackWhite)
+            .foregroundStyle(.semiWhite)
         }
         
         

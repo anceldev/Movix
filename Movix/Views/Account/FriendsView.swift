@@ -35,7 +35,7 @@ struct FriendsView: View {
             .toolbar(content: {
                 ToolbarItem(placement: .principal) {
                     Text("Friends")
-                        .foregroundStyle(.blackWhite)
+                        .foregroundStyle(.semiWhite)
                         .font(.title2)
                 }
             })

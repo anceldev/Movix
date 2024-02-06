@@ -24,7 +24,7 @@ struct AccountsRepository: AccountsRepositoryProtocol {
     
     // Creates a new account
     static func createAccount(_ account: User) async throws {
-        let document = usersReference.document(account.id)
+        let document = usersReference.document(account.id!)
         do{
             try await document.setData(from: account)
         }

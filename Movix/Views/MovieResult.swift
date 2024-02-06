@@ -34,10 +34,10 @@ struct MovieResult: View {
             }
             VStack(alignment: .leading) {
                 Text(movie.title!)
-                    .foregroundStyle(.blackWhite)
+                    .foregroundStyle(.semiWhite)
                     .font(.title3)
                 Text(movie.releaseDate!)
-                    .foregroundStyle(.textGray)
+                    .foregroundStyle(.grayLight)
             }
             .padding(.top, 10)
             Spacer()
@@ -49,6 +49,6 @@ struct MovieResult: View {
     }
 }
 
-#Preview {
-    MovieResult(movie: Movie.test, urlImage: URL(string: "https://image.tmdb.org/t/p/w300/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg")!)
-}
+//#Preview {
+//    MovieResult(movie: Movie.test, urlImage: URL(string: "https://image.tmdb.org/t/p/w300/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg")!)
+//}

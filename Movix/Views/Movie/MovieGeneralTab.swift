@@ -20,6 +20,6 @@ struct MovieGeneralTab: View {
     }
 }
 
-#Preview {
-    MovieGeneralTab(movie: Movie.test)
-}
+//#Preview {
+//    MovieGeneralTab(movie: Movie.test)
+//}

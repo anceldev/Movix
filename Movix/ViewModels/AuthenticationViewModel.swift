@@ -27,8 +27,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var password = ""
     @Published var confirmPassword = ""
     
-    @Published var account = User(id: "", name: "", email: "", birthdate: Date(), typeSuscription: .noSpecified)
-    private var dbUsers = Firestore.firestore().collection("users_v1")
+    private var dbUsers = Firestore.firestore().collection(usersCollection)
     
     @Published var user: Firebase.User?
     @Published var flow: AuthenticationFlow = .login
@@ -139,40 +138,40 @@ extension AuthenticationViewModel {
 // Manages Users Firestore collection
 extension AuthenticationViewModel {
     
-    func createUserAccount(_ account: User) {
+    func createDocument(for user: User) async throws {
         Task {
             do {
-                try await createAccount(account)
+                try await RepositoriesManager.repositories.createUserDocument(user)
             }
             catch {
-                print(error)
-                print("[AuthenticaitonViewModel] Error while creating new account.")
-            }
-        }
-    }
-    func fetchUserAccount(_ uidUser: String) {
-        Task {
-            do {
-                let account = try await fetchAccount(uidUser)
-                self.account = account
-            }
-            catch {
-                print(error)
-                print("[AuthenticationViewModel] Error while fetching user account")
+                fatalError("Cannot register new user")
             }
         }
     }
     
-    private func createAccount(_ account: User) async throws {
-        let document = dbUsers.document(account.id)
-        do{
-            try await document.setData(from: account)
-        }
-        catch {
-            print("[AuthenticationViewModel] Can't create user document.")
-            throw AccountError.accountNotCreated
-        }
-    }
+//    func fetchUserAccount(_ uidUser: String) {
+//        Task {
+//            do {
+//                let account = try await fetchAccount(uidUser)
+//                self.account = account
+//            }
+//            catch {
+//                print(error)
+//                print("[AuthenticationViewModel] Error while fetching user account")
+//            }
+//        }
+//    }
+    
+//    private func createAccount(_ account: User) async throws {
+//        let document = dbUsers.document(account.id)
+//        do{
+//            try await document.setData(from: account)
+//        }
+//        catch {
+//            print("[AuthenticationViewModel] Can't create user document.")
+//            throw AccountError.accountNotCreated
+//        }
+//    }
     private func fetchAccount(_ uidAccount: String) async throws -> User {
         let document = dbUsers.document(uidAccount)
         do {

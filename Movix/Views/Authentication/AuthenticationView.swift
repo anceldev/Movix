@@ -14,7 +14,7 @@ struct AuthenticationView: View {
         VStack {
             switch viewModel.flow {
             case .login:
-                Login()
+                SignIn()
                     .environmentObject(viewModel)
             case .signUp:
                 SignUp()

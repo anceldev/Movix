@@ -8,19 +8,23 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import SwiftUI
 
 struct User: Codable, Identifiable {
-    @DocumentID var id: String?
+    var id: String?
     var name: String
     var email: String
     var friends: [String]
-    var settings: Settings
     var history: [Int] // [Type: Identifier]
+    var settings: Settings?
     
-    var image: String? {
-        let collection = Collections.users
-        guard let image = id else { return nil }
-        return collection.rawValue + image
+    init(id: String? = nil, name: String = "", email: String = "", friends: [String] = [], history: [Int] = [], settings: Settings? = nil) {
+        self.id = id
+        self.name = name
+        self.email = email
+        self.friends = friends
+        self.history = history
+        self.settings = settings
     }
 }
 

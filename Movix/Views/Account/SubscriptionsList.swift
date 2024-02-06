@@ -23,7 +23,7 @@ struct SubscriptionsList: View {
                 Text("Checks")
             }
         }
-        .listRowBackground(Color.secondBlack)
+        .listRowBackground(Color.grayExtraBold)
     }
 }
 

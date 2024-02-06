@@ -27,15 +27,15 @@
 		B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */; };
 		B43C4C452AEC29CD0094FB71 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */; };
 		B43C4C472AEC2CC80094FB71 /* AccountsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */; };
-		B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C482AEC43520094FB71 /* AccountViewModel.swift */; };
+		B43C4C492AEC43520094FB71 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43C4C482AEC43520094FB71 /* UserViewModel.swift */; };
 		B44CBEA02B597C9B00B7DB8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B44CBE9F2B597C9B00B7DB8E /* GoogleService-Info.plist */; };
 		B44CBEA22B59812300B7DB8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44CBEA12B59812300B7DB8E /* User.swift */; };
-		B44CBEA42B59824B00B7DB8E /* Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44CBEA32B59824B00B7DB8E /* Collections.swift */; };
+		B44CBEA42B59824B00B7DB8E /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44CBEA32B59824B00B7DB8E /* Global.swift */; };
 		B453B5742AF303B300133101 /* MovieResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B453B5732AF303B300133101 /* MovieResult.swift */; };
 		B453B5762AF3133700133101 /* trending_movies.json in Resources */ = {isa = PBXBuildFile; fileRef = B453B5752AF3133700133101 /* trending_movies.json */; };
 		B45D433F2AF94DA30034C1A4 /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D433E2AF94DA30034C1A4 /* PosterView.swift */; };
 		B46D7F882AE5CC7700256F7F /* MovixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F872AE5CC7700256F7F /* MovixApp.swift */; };
-		B46D7F8A2AE5CC7700256F7F /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F892AE5CC7700256F7F /* MainTabView.swift */; };
+		B46D7F8A2AE5CC7700256F7F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F892AE5CC7700256F7F /* MainView.swift */; };
 		B46D7F8C2AE5CC7800256F7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */; };
 		B46D7F8F2AE5CC7800256F7F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46D7F8E2AE5CC7800256F7F /* Preview Assets.xcassets */; };
 		B46D7F962AE5CCA300256F7F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D7F952AE5CCA300256F7F /* ProfileView.swift */; };
@@ -50,8 +50,20 @@
 		B470AFDD2AF2B46B004FE808 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = B470AFDC2AF2B46B004FE808 /* People.swift */; };
 		B47D3D702B5AA45D00B104A4 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47D3D6F2B5AA45D00B104A4 /* Genre.swift */; };
 		B490C4082B72498400DBC6A7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B490C4072B72498400DBC6A7 /* README.md */; };
+		B490C40B2B72561A00DBC6A7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B490C40A2B72561A00DBC6A7 /* FirebaseStorage */; };
+		B490C40E2B72622000DBC6A7 /* RepositoriesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B490C40D2B72622000DBC6A7 /* RepositoriesManager.swift */; };
+		B490C4102B7289D700DBC6A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B490C40F2B7289D700DBC6A7 /* LaunchScreen.storyboard */; };
+		B490C41B2B728D3400DBC6A7 /* FontModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B490C41A2B728D3400DBC6A7 /* FontModifiers.swift */; };
+		B490C41C2B72909F00DBC6A7 /* Hauora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4122B728BF900DBC6A7 /* Hauora-Regular.ttf */; };
+		B490C41D2B7290A200DBC6A7 /* Hauora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4162B728C0400DBC6A7 /* Hauora-SemiBold.ttf */; };
+		B490C41E2B7290A400DBC6A7 /* Hauora-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4152B728C0400DBC6A7 /* Hauora-Medium.ttf */; };
+		B490C41F2B7290A600DBC6A7 /* Hauora-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4182B728C0400DBC6A7 /* Hauora-Light.ttf */; };
+		B490C4202B7290A800DBC6A7 /* Hauora-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4172B728C0400DBC6A7 /* Hauora-ExtraLight.ttf */; };
+		B490C4212B7290AB00DBC6A7 /* Hauora-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4132B728C0400DBC6A7 /* Hauora-ExtraBold.ttf */; };
+		B490C4222B7290AD00DBC6A7 /* Hauora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B490C4142B728C0400DBC6A7 /* Hauora-Bold.ttf */; };
+		B490C4242B72978300DBC6A7 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B490C4232B72978300DBC6A7 /* Tabs.swift */; };
 		B4A47D6B2AE7F865000AE244 /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A47D6A2AE7F865000AE244 /* MovieService.swift */; };
-		B4A47D712AE81284000AE244 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A47D702AE81284000AE244 /* Login.swift */; };
+		B4A47D712AE81284000AE244 /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A47D702AE81284000AE244 /* SignIn.swift */; };
 		B4A47D762AE814C3000AE244 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D752AE814C3000AE244 /* FirebaseAnalytics */; };
 		B4A47D782AE814C3000AE244 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D772AE814C3000AE244 /* FirebaseAnalyticsSwift */; };
 		B4A47D7A2AE814C3000AE244 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B4A47D792AE814C3000AE244 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -86,16 +98,16 @@
 		B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFillViewModifier.swift; sourceTree = "<group>"; };
 		B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
 		B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsRepository.swift; sourceTree = "<group>"; };
-		B43C4C482AEC43520094FB71 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
+		B43C4C482AEC43520094FB71 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		B44CBE9F2B597C9B00B7DB8E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B44CBEA12B59812300B7DB8E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		B44CBEA32B59824B00B7DB8E /* Collections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collections.swift; sourceTree = "<group>"; };
+		B44CBEA32B59824B00B7DB8E /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		B453B5732AF303B300133101 /* MovieResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieResult.swift; sourceTree = "<group>"; };
 		B453B5752AF3133700133101 /* trending_movies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = trending_movies.json; sourceTree = "<group>"; };
 		B45D433E2AF94DA30034C1A4 /* PosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterView.swift; sourceTree = "<group>"; };
 		B46D7F842AE5CC7700256F7F /* Movix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46D7F872AE5CC7700256F7F /* MovixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovixApp.swift; sourceTree = "<group>"; };
-		B46D7F892AE5CC7700256F7F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		B46D7F892AE5CC7700256F7F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B46D7F8E2AE5CC7800256F7F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B46D7F952AE5CCA300256F7F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -110,8 +122,20 @@
 		B470AFDC2AF2B46B004FE808 /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
 		B47D3D6F2B5AA45D00B104A4 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		B490C4072B72498400DBC6A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B490C40D2B72622000DBC6A7 /* RepositoriesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoriesManager.swift; sourceTree = "<group>"; };
+		B490C40F2B7289D700DBC6A7 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B490C4122B728BF900DBC6A7 /* Hauora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-Regular.ttf"; sourceTree = "<group>"; };
+		B490C4132B728C0400DBC6A7 /* Hauora-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-ExtraBold.ttf"; sourceTree = "<group>"; };
+		B490C4142B728C0400DBC6A7 /* Hauora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-Bold.ttf"; sourceTree = "<group>"; };
+		B490C4152B728C0400DBC6A7 /* Hauora-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-Medium.ttf"; sourceTree = "<group>"; };
+		B490C4162B728C0400DBC6A7 /* Hauora-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-SemiBold.ttf"; sourceTree = "<group>"; };
+		B490C4172B728C0400DBC6A7 /* Hauora-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-ExtraLight.ttf"; sourceTree = "<group>"; };
+		B490C4182B728C0400DBC6A7 /* Hauora-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hauora-Light.ttf"; sourceTree = "<group>"; };
+		B490C4192B728C7700DBC6A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B490C41A2B728D3400DBC6A7 /* FontModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontModifiers.swift; sourceTree = "<group>"; };
+		B490C4232B72978300DBC6A7 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		B4A47D6A2AE7F865000AE244 /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
-		B4A47D702AE81284000AE244 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		B4A47D702AE81284000AE244 /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		B4BD3F6E2AF15B9F0063FA14 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		B4BD3F712AF160F50063FA14 /* FriendRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRow.swift; sourceTree = "<group>"; };
@@ -128,6 +152,7 @@
 				B4A47D7A2AE814C3000AE244 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				B4A47D762AE814C3000AE244 /* FirebaseAnalytics in Frameworks */,
 				B4A47D7E2AE814C3000AE244 /* FirebaseFirestore in Frameworks */,
+				B490C40B2B72561A00DBC6A7 /* FirebaseStorage in Frameworks */,
 				B4A47D7C2AE814C3000AE244 /* FirebaseAuth in Frameworks */,
 				B4A47D802AE814C3000AE244 /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -146,7 +171,7 @@
 				B470AFDC2AF2B46B004FE808 /* People.swift */,
 				B40D59532AF66FB000A4A447 /* ConfigurationDetails.swift */,
 				B44CBEA12B59812300B7DB8E /* User.swift */,
-				B44CBEA32B59824B00B7DB8E /* Collections.swift */,
+				B44CBEA32B59824B00B7DB8E /* Global.swift */,
 				B47D3D6F2B5AA45D00B104A4 /* Genre.swift */,
 			);
 			path = Models;
@@ -155,6 +180,7 @@
 		B4036EA02AE6DC9B001E2819 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B490C4112B728B4A00DBC6A7 /* fonts */,
 				B44CBE9F2B597C9B00B7DB8E /* GoogleService-Info.plist */,
 				B46D7F8D2AE5CC7800256F7F /* Preview Content */,
 				B4036EA12AE6DCBE001E2819 /* configuration_details.json */,
@@ -171,7 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				B42F51542AE97C5C00B2D2B6 /* AuthenticatedView.swift */,
-				B4A47D702AE81284000AE244 /* Login.swift */,
+				B4A47D702AE81284000AE244 /* SignIn.swift */,
 				B42F51522AE9730C00B2D2B6 /* SignUp.swift */,
 				B42F51562AE984D900B2D2B6 /* AuthenticationView.swift */,
 				B43C4C442AEC29CD0094FB71 /* ForgotPassword.swift */,
@@ -184,6 +210,8 @@
 			children = (
 				B46D7FA12AE5DCC800256F7F /* PhotoView.swift */,
 				B42F515B2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift */,
+				B490C41A2B728D3400DBC6A7 /* FontModifiers.swift */,
+				B490C4232B72978300DBC6A7 /* Tabs.swift */,
 			);
 			path = "Aux&Helpers";
 			sourceTree = "<group>";
@@ -191,9 +219,11 @@
 		B46D7F7B2AE5CC7700256F7F = {
 			isa = PBXGroup;
 			children = (
+				B490C40F2B7289D700DBC6A7 /* LaunchScreen.storyboard */,
 				B490C4072B72498400DBC6A7 /* README.md */,
 				B46D7F862AE5CC7700256F7F /* Movix */,
 				B46D7F852AE5CC7700256F7F /* Products */,
+				B490C4092B72561A00DBC6A7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -208,9 +238,11 @@
 		B46D7F862AE5CC7700256F7F /* Movix */ = {
 			isa = PBXGroup;
 			children = (
+				B490C4192B728C7700DBC6A7 /* Info.plist */,
 				B46D7F8B2AE5CC7800256F7F /* Assets.xcassets */,
 				B46D7F872AE5CC7700256F7F /* MovixApp.swift */,
 				B4036EA02AE6DC9B001E2819 /* Resources */,
+				B490C40C2B72621500DBC6A7 /* Repositories */,
 				B4A47D812AE819B0000AE244 /* Auth */,
 				B4A47D692AE7F7A4000AE244 /* Services */,
 				B4A47D6C2AE7FA45000AE244 /* ViewModels */,
@@ -233,18 +265,47 @@
 			children = (
 				B4BD3F752AF172B90063FA14 /* StartView.swift */,
 				B453B5732AF303B300133101 /* MovieResult.swift */,
-				B4BD3F702AF15BD40063FA14 /* Account */,
-				B42F515A2AE9D08F00B2D2B6 /* Aux&Helpers */,
-				B42F51512AE9705900B2D2B6 /* Authentication */,
-				B4A47D6F2AE7FB6B000AE244 /* Movie */,
-				B46D7F892AE5CC7700256F7F /* MainTabView.swift */,
+				B470AFD22AF26CBD004FE808 /* SearchView.swift */,
+				B46D7F892AE5CC7700256F7F /* MainView.swift */,
 				B46D7F952AE5CCA300256F7F /* ProfileView.swift */,
 				B42F51582AE9B36600B2D2B6 /* HomeView.swift */,
 				B46D7F9D2AE5D53900256F7F /* PersonalDetails.swift */,
 				B46D7F9F2AE5D60B00256F7F /* FriendsList.swift */,
-				B470AFD22AF26CBD004FE808 /* SearchView.swift */,
+				B4BD3F702AF15BD40063FA14 /* Account */,
+				B42F515A2AE9D08F00B2D2B6 /* Aux&Helpers */,
+				B42F51512AE9705900B2D2B6 /* Authentication */,
+				B4A47D6F2AE7FB6B000AE244 /* Movie */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		B490C4092B72561A00DBC6A7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B490C40C2B72621500DBC6A7 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				B490C40D2B72622000DBC6A7 /* RepositoriesManager.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		B490C4112B728B4A00DBC6A7 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				B490C4142B728C0400DBC6A7 /* Hauora-Bold.ttf */,
+				B490C4132B728C0400DBC6A7 /* Hauora-ExtraBold.ttf */,
+				B490C4172B728C0400DBC6A7 /* Hauora-ExtraLight.ttf */,
+				B490C4182B728C0400DBC6A7 /* Hauora-Light.ttf */,
+				B490C4152B728C0400DBC6A7 /* Hauora-Medium.ttf */,
+				B490C4162B728C0400DBC6A7 /* Hauora-SemiBold.ttf */,
+				B490C4122B728BF900DBC6A7 /* Hauora-Regular.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 		B4A47D692AE7F7A4000AE244 /* Services */ = {
@@ -260,7 +321,8 @@
 		B4A47D6C2AE7FA45000AE244 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				B43C4C482AEC43520094FB71 /* AccountViewModel.swift */,
+				B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */,
+				B43C4C482AEC43520094FB71 /* UserViewModel.swift */,
 				B40D59512AF6636E00A4A447 /* MovieViewModel.swift */,
 			);
 			path = ViewModels;
@@ -281,7 +343,6 @@
 		B4A47D812AE819B0000AE244 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				B4A47D822AE819EA000AE244 /* AuthenticationViewModel.swift */,
 				B43C4C462AEC2CC80094FB71 /* AccountsRepository.swift */,
 			);
 			path = Auth;
@@ -320,6 +381,7 @@
 				B4A47D7B2AE814C3000AE244 /* FirebaseAuth */,
 				B4A47D7D2AE814C3000AE244 /* FirebaseFirestore */,
 				B4A47D7F2AE814C3000AE244 /* FirebaseFirestoreSwift */,
+				B490C40A2B72561A00DBC6A7 /* FirebaseStorage */,
 			);
 			productName = Movix;
 			productReference = B46D7F842AE5CC7700256F7F /* Movix.app */;
@@ -367,14 +429,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				B46D7F8F2AE5CC7800256F7F /* Preview Assets.xcassets in Resources */,
+				B490C4212B7290AB00DBC6A7 /* Hauora-ExtraBold.ttf in Resources */,
+				B490C41C2B72909F00DBC6A7 /* Hauora-Regular.ttf in Resources */,
 				B4036EA62AE6DCF8001E2819 /* movie_details.json in Resources */,
 				B490C4082B72498400DBC6A7 /* README.md in Resources */,
+				B490C4222B7290AD00DBC6A7 /* Hauora-Bold.ttf in Resources */,
 				B44CBEA02B597C9B00B7DB8E /* GoogleService-Info.plist in Resources */,
 				B40D594C2AF658B800A4A447 /* Serie.json in Resources */,
 				B46D7F8C2AE5CC7800256F7F /* Assets.xcassets in Resources */,
+				B490C41F2B7290A600DBC6A7 /* Hauora-Light.ttf in Resources */,
+				B490C41E2B7290A400DBC6A7 /* Hauora-Medium.ttf in Resources */,
 				B4036EA22AE6DCBE001E2819 /* configuration_details.json in Resources */,
+				B490C4202B7290A800DBC6A7 /* Hauora-ExtraLight.ttf in Resources */,
 				B40D59502AF65D2A00A4A447 /* Season.json in Resources */,
+				B490C41D2B7290A200DBC6A7 /* Hauora-SemiBold.ttf in Resources */,
 				B40D594E2AF65C0000A4A447 /* Episode.json in Resources */,
+				B490C4102B7289D700DBC6A7 /* LaunchScreen.storyboard in Resources */,
 				B453B5762AF3133700133101 /* trending_movies.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,14 +456,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B46D7F8A2AE5CC7700256F7F /* MainTabView.swift in Sources */,
+				B46D7F8A2AE5CC7700256F7F /* MainView.swift in Sources */,
 				B42F51552AE97C5C00B2D2B6 /* AuthenticatedView.swift in Sources */,
 				B46D7F9C2AE5D1C100256F7F /* U.swift in Sources */,
 				B4A47D832AE819EA000AE244 /* AuthenticationViewModel.swift in Sources */,
 				B4036EAE2AE6E213001E2819 /* MovieCommentsTab.swift in Sources */,
 				B45D433F2AF94DA30034C1A4 /* PosterView.swift in Sources */,
 				B46D7FA22AE5DCC800256F7F /* PhotoView.swift in Sources */,
-				B43C4C492AEC43520094FB71 /* AccountViewModel.swift in Sources */,
+				B43C4C492AEC43520094FB71 /* UserViewModel.swift in Sources */,
 				B470AFDD2AF2B46B004FE808 /* People.swift in Sources */,
 				B4036EA82AE6DD3F001E2819 /* MovieDetails.swift in Sources */,
 				B42F51532AE9730C00B2D2B6 /* SignUp.swift in Sources */,
@@ -407,16 +477,18 @@
 				B44CBEA22B59812300B7DB8E /* User.swift in Sources */,
 				B4036E9F2AE6D908001E2819 /* Helpers.swift in Sources */,
 				B46D7F962AE5CCA300256F7F /* ProfileView.swift in Sources */,
+				B490C41B2B728D3400DBC6A7 /* FontModifiers.swift in Sources */,
 				B46D7F9E2AE5D53900256F7F /* PersonalDetails.swift in Sources */,
 				B42F51572AE984D900B2D2B6 /* AuthenticationView.swift in Sources */,
 				B4BD3F742AF1665C0063FA14 /* SubscriptionsList.swift in Sources */,
 				B470AFD92AF2B416004FE808 /* SearchService.swift in Sources */,
 				B42F51592AE9B36600B2D2B6 /* HomeView.swift in Sources */,
+				B490C40E2B72622000DBC6A7 /* RepositoriesManager.swift in Sources */,
 				B43C4C452AEC29CD0094FB71 /* ForgotPassword.swift in Sources */,
 				B4036E9D2AE6D8EF001E2819 /* Movie.swift in Sources */,
 				B40D59522AF6636E00A4A447 /* MovieViewModel.swift in Sources */,
 				B42F515C2AE9D0B300B2D2B6 /* ButtonFillViewModifier.swift in Sources */,
-				B44CBEA42B59824B00B7DB8E /* Collections.swift in Sources */,
+				B44CBEA42B59824B00B7DB8E /* Global.swift in Sources */,
 				B4BD3F722AF160F50063FA14 /* FriendRow.swift in Sources */,
 				B4036EAC2AE6E11D001E2819 /* MovieDetailTab.swift in Sources */,
 				B453B5742AF303B300133101 /* MovieResult.swift in Sources */,
@@ -424,7 +496,8 @@
 				B46D7FA02AE5D60B00256F7F /* FriendsList.swift in Sources */,
 				B4036EAA2AE6E0DC001E2819 /* MovieGeneralTab.swift in Sources */,
 				B470AFD52AF2AECA004FE808 /* UserFetchingData.swift in Sources */,
-				B4A47D712AE81284000AE244 /* Login.swift in Sources */,
+				B490C4242B72978300DBC6A7 /* Tabs.swift in Sources */,
+				B4A47D712AE81284000AE244 /* SignIn.swift in Sources */,
 				B47D3D702B5AA45D00B104A4 /* Genre.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -562,9 +635,11 @@
 				DEVELOPMENT_TEAM = 5VZ6Q8DGLP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Movix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -591,9 +666,11 @@
 				DEVELOPMENT_TEAM = 5VZ6Q8DGLP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Movix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -644,6 +721,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B490C40A2B72561A00DBC6A7 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B4A47D742AE814C3000AE244 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
 		B4A47D752AE814C3000AE244 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B4A47D742AE814C3000AE244 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

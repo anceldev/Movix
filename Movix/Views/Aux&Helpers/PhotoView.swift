@@ -11,6 +11,10 @@ struct PhotoView: View {
     
     var image: Image
     
+    init(image: Image = Image("avatarDefault")) {
+        self.image = image
+    }
+    
     var body: some View {
         image
             .resizable()

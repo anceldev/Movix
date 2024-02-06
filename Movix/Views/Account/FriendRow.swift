@@ -18,10 +18,10 @@ struct FriendRow: View {
                 .clipShape(Circle())
             VStack(alignment: .leading){
                 Text("Alexandra")
-                    .foregroundStyle(.blackWhite)
+                    .foregroundStyle(.semiWhite)
                     .font(.title3)
                 Text("Offline")
-                    .foregroundStyle(.textGray)
+                    .foregroundStyle(.grayLight)
                     .font(.caption)
             }
             Spacer()
@@ -29,11 +29,11 @@ struct FriendRow: View {
                 // Invite friend
             }, label: {
                 Image(systemName: "person.2.wave.2")
-                    .foregroundStyle(.blackWhite)
+                    .foregroundStyle(.semiWhite)
             })
         }
         .padding()
-        .background(.secondBlack)
+        .background(.grayExtraBold)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         
     }
