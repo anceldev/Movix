@@ -14,21 +14,24 @@ struct User: Codable, Identifiable {
     var name: String
     var email: String
     var friends: [String]
-    var recomendations: [String]
-    var history: [String: String] // [Type: Identifier]
+    var settings: Settings
+    var history: [Int] // [Type: Identifier]
     
     var image: String? {
         let collection = Collections.users
         guard let image = id else { return nil }
         return collection.rawValue + image
     }
+}
+
+struct Settings: Codable {
+    var movieRecomendations: [Genre]
+    var tvshowRecomendations: [Genre]
+    var notifications: Bool
     
-    init(id: String? = nil, name: String = "", email: String = "", friends: [String] = [], recomendations: [String] = [], history: [String : String] = [:]) {
-        self.id = id
-        self.name = name
-        self.email = email
-        self.friends = friends
-        self.recomendations = recomendations
-        self.history = history
+    init(movieRecomendations: [Genre] = [], tvshowRecomendations: [Genre] = [], notifications: Bool = false) {
+        self.movieRecomendations = movieRecomendations
+        self.tvshowRecomendations = tvshowRecomendations
+        self.notifications = notifications
     }
 }

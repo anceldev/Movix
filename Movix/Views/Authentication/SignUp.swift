@@ -22,7 +22,7 @@ struct SignUp: View {
     private func signUpWithEmailPassword(){
         Task {
             if await viewModel.signUpWithEmailPassword() {
-                let newAccount = Account(
+                let newAccount = User(
                     id: viewModel.user!.uid,
                     name: "",
                     email: viewModel.email,

@@ -16,29 +16,10 @@ struct PageableList<Result>: Encodable, Decodable where Result: Encodable, Resul
     let totalResults: Int?
 }
 
-struct Genre: Codable, Identifiable {
-    let id: Int
-    let name: String
-}
-struct ProductionCountry: Codable, Identifiable{
-    let iso31661: String
-    let name: String
-    var id: String {
-        iso31661
-    }
-}
 struct Language: Codable, Identifiable {
     let name: String
     let iso6391: String
     var id: String {
         iso6391
-    }
-}
-
-struct Country: Codable, Identifiable{
-    var iso31661: String
-    var englishName: String
-    var id: String {
-        iso31661
     }
 }

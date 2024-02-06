@@ -27,7 +27,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var password = ""
     @Published var confirmPassword = ""
     
-    @Published var account = Account(id: "", name: "", email: "", birthdate: Date(), typeSuscription: .noSpecified)
+    @Published var account = User(id: "", name: "", email: "", birthdate: Date(), typeSuscription: .noSpecified)
     private var dbUsers = Firestore.firestore().collection("users_v1")
     
     @Published var user: Firebase.User?
@@ -139,7 +139,7 @@ extension AuthenticationViewModel {
 // Manages Users Firestore collection
 extension AuthenticationViewModel {
     
-    func createUserAccount(_ account: Account) {
+    func createUserAccount(_ account: User) {
         Task {
             do {
                 try await createAccount(account)
@@ -163,7 +163,7 @@ extension AuthenticationViewModel {
         }
     }
     
-    private func createAccount(_ account: Account) async throws {
+    private func createAccount(_ account: User) async throws {
         let document = dbUsers.document(account.id)
         do{
             try await document.setData(from: account)
@@ -173,11 +173,11 @@ extension AuthenticationViewModel {
             throw AccountError.accountNotCreated
         }
     }
-    private func fetchAccount(_ uidAccount: String) async throws -> Account {
+    private func fetchAccount(_ uidAccount: String) async throws -> User {
         let document = dbUsers.document(uidAccount)
         do {
             let document = try await document.getDocument()
-            let account = try document.data(as: Account.self)
+            let account = try document.data(as: User.self)
             return account
         }
         catch {

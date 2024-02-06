@@ -57,7 +57,7 @@ struct ProfileView: View {
                             Text("Notifications")
                         }
                         NavigationLink {
-                            Text("My devices")
+                            Text("Recomendations")
                         } label: {
                             Image(systemName: "heart")
                             Text("Recomendations")
@@ -109,6 +109,8 @@ struct ProfileView: View {
                 }
             }
             .background(.blackApp)
+            
+            .toolbarBackground(Color.blackApp, for: .tabBar)
         }
     }
     private func deleteAccount() {

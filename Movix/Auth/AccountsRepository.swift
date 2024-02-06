@@ -12,8 +12,8 @@ import FirebaseFirestoreSwift
 import Foundation
 
 protocol AccountsRepositoryProtocol {
-    static func createAccount(_ account: Account) async throws
-    static func fetchAccount(_ uidAccount: String) async throws -> Account
+    static func createAccount(_ account: User) async throws
+    static func fetchAccount(_ uidAccount: String) async throws -> User
 }
 
 
@@ -23,7 +23,7 @@ struct AccountsRepository: AccountsRepositoryProtocol {
     static let usersReference = Firestore.firestore().collection("users")
     
     // Creates a new account
-    static func createAccount(_ account: Account) async throws {
+    static func createAccount(_ account: User) async throws {
         let document = usersReference.document(account.id)
         do{
             try await document.setData(from: account)
@@ -33,12 +33,12 @@ struct AccountsRepository: AccountsRepositoryProtocol {
         }
     }
     // Loads an existing account.
-    static func fetchAccount(_ uidAccount: String) async throws -> Account {
+    static func fetchAccount(_ uidAccount: String) async throws -> User {
         let docReference = usersReference.document(uidAccount) // Accound document reference
         
         do {
             let document = try await docReference.getDocument()
-            let account = try document.data(as: Account.self)
+            let account = try document.data(as: User.self)
             return account
         }
         catch {
