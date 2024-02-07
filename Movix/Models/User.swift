@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 import SwiftUI
 
 struct User: Codable, Identifiable {
-    var id: String?
+    @DocumentID var id: String?
     var name: String
     var email: String
     var friends: [String]

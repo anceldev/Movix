@@ -12,6 +12,7 @@ struct MainView: View {
     @State var userViewModel: UserViewModel
     
     init(uidUser: String) {
+        print("load init")
         self.userViewModel = UserViewModel(uidUser: uidUser)
     }
     

@@ -13,38 +13,19 @@ struct ProfileView: View {
     @Environment(UserViewModel.self) var userViewModel
     @Environment(\.dismiss) var dismiss
     @State var presentingConfirmationDialog = false
-    
-    let user = User(id: "1", name: "Damaris", email: "dama@mail.com", friends: [], history: [], settings: nil)
-    
-    @State private var selectedPhoto: PhotosPickerItem? = nil
-    @State private var selectedImageData: Data? = nil
-    
+        
     var body: some View {
         NavigationStack{
             VStack{
                 HStack {
                     VStack(alignment: .center) {
                         ZStack {
-                            if let selectedImageData, let uiImage = UIImage(data: selectedImageData), let uidUser = viewModel.user?.uid {
-                                PhotoView(image: Image(uiImage: uiImage))
-                            }
-                            else {
+                            if let image = userViewModel.profileImage {
+                                PhotoView(image: image)
+                            } else {
                                 PhotoView()
                             }
-                            PhotosPicker(selection: $selectedPhoto, matching: .images) {
-//                                Label("Select photo")
-                                Text("Select photo")
-                            }
-                            .onChange(of: selectedPhoto) {
-                                guard let selectedItem = selectedPhoto else {
-                                    return
-                                }
-                                Task {
-                                    await updateSelectedPhoto(with: selectedItem)
-                                }
-                            }
                         }
-                        
                         Text(userViewModel.user.name)
                             .font(.title2)
                             .foregroundStyle(.white)
@@ -56,6 +37,7 @@ struct ProfileView: View {
                     Section(header: Text("Account Settings").font(.headline).bold()){
                         NavigationLink {
                             PersonalDetails()
+                                .environment(userViewModel)
                         } label: {
                             HStack{
                                 Image(systemName: "square.and.pencil")
@@ -127,11 +109,6 @@ struct ProfileView: View {
             }
             .background(.blackApp)
             .toolbarBackground(Color.blackApp, for: .tabBar)
-        }
-    }
-    private func updateSelectedPhoto(with item: PhotosPickerItem) async {
-        if let photoData = try? await item.loadTransferable(type: Data.self) {
-            selectedImageData = photoData
         }
     }
     private func deleteAccount() {

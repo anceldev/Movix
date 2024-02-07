@@ -18,3 +18,22 @@ enum Lan: String {
 extension Lan {
     static var mainLan = Lan.en
 }
+enum AppErrors: Error {
+    case nilUid
+    case failCreateDocument
+    case noDocumentFound
+    case changeRequestError
+    
+    func errorMessage() -> String {
+        switch self {
+        case .nilUid:
+            return "Nil id founded in User"
+        case .failCreateDocument:
+            return "Error creating user's document"
+        case .noDocumentFound:
+            return "User document not found"
+        case .changeRequestError:
+            return "Cannot create profileChangeRequest from specified user"
+        }
+    }
+}

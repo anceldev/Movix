@@ -41,10 +41,7 @@ struct MovixApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                AuthenticatedView(unauthenticated: {
-                    StartView()
-                })
-                .foregroundStyle(.semiWhite)
+                AuthenticatedView()
             }
         }
         .environmentObject(AuthenticationViewModel())

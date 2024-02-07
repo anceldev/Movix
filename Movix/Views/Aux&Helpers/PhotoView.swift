@@ -10,15 +10,16 @@ import SwiftUI
 struct PhotoView: View {
     
     var image: Image
-    
-    init(image: Image = Image("avatarDefault")) {
+    let size: CGFloat
+    init(image: Image = Image("avatarDefault"), size: CGFloat = 120) {
         self.image = image
+        self.size = size
     }
     
     var body: some View {
         image
             .resizable()
-            .frame(width: 120, height: 120)
+            .frame(width: size, height: size)
             .clipShape(Circle())
             .overlay(Circle().stroke(LinearGradient(colors: [.darkOrange, .orange], startPoint: .leading, endPoint: .trailing), lineWidth: 4))
             .padding(.top, 10)

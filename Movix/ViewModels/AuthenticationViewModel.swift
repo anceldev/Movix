@@ -69,6 +69,12 @@ class AuthenticationViewModel: ObservableObject {
         password = ""
         confirmPassword = ""
     }
+    func resetForm() {
+        errorMessage = ""
+        email = ""
+        password = ""
+        confirmPassword = ""
+    }
     func reset(){
         flow = .login
     }
@@ -106,6 +112,8 @@ extension AuthenticationViewModel {
         do {
             try Auth.auth().signOut()
             authenticationState = .unauthenticated
+            resetForm()
+            flow = .login
         }
         catch {
             print(error)

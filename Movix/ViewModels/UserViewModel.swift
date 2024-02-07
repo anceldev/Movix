@@ -7,13 +7,14 @@
 
 import Foundation
 import SwiftUI
+import FirebaseAuth
 import FirebaseStorage
 import Observation
 
 @Observable
 class UserViewModel {
     var user: User
-    var profileImage: Image
+    var profileImage: Image?
     private let bucket = usersStorageBucket
     private let storage = Storage.storage()
     
@@ -21,24 +22,24 @@ class UserViewModel {
         self.user = User()
         self.profileImage = Image("avatarDefault")
         fetchUser(uidUser: uidUser)
-        if let idUser = self.user.id {
-            downloadAvatar(uidUser: idUser) { image in
-                if let uiImage = image {
-                    self.profileImage = Image(uiImage: uiImage)
-                } else {
-                    
-                    print("Cant use image")
-                }
-            }
-        }
     }
     private func fetchUser(uidUser: String) {
         Task {
             do {
                 self.user = try await RepositoriesManager.repositories.fetchUserData(with: uidUser)
+                if let idUser = self.user.id {
+                    downloadAvatar(uidUser: idUser) { image in
+                        if let uiImage = image {
+                            self.profileImage = Image(uiImage: uiImage)
+                        }
+                        else {
+                            print("Cant use image")
+                        }
+                    }
+                }
             }
             catch {
-                fatalError("Cannot get user")
+                print("Not found user")
             }
         }
     }
@@ -62,7 +63,9 @@ class UserViewModel {
             }
         }
     }
-    
+    /**
+     Updates user's profile image
+     */
     func updateAvatar(image: UIImage, uidUser: String) -> Bool {
         let refImage = bucket + uidUser
         let storageRef = storage.reference().child(refImage)
@@ -85,6 +88,36 @@ class UserViewModel {
             }
         }
         return true
+    }
+    /**
+     Update user's profile name
+     */
+    func userNameChange(username: String, completion: @escaping (Error?) -> Void){
+        guard let documentID = self.user.id else {
+            return completion(AppErrors.nilUid)
+        }
+        if let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest() {
+            changeRequest.displayName = username
+            // Update change in FirebaseAuthentication profile
+            changeRequest.commitChanges { error in
+                if let error = error {
+                    completion(error)
+                }
+                else {
+                    let docReference = RepositoriesManager.repositories.reference.collection(usersCollection).document(documentID)
+                    docReference.updateData(["name": username]) { error in
+                        if let error = error {
+                            print("Cannot find user associated document. Contact with admin. \(error.localizedDescription)")
+                            completion(error)
+                        }
+                    }
+                    completion(nil)
+                }
+            }
+        }
+        else {
+            completion(AppErrors.changeRequestError)
+        }
     }
 }
 /**

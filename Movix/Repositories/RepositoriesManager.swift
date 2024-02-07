@@ -17,7 +17,7 @@ final class RepositoriesManager {
 
     func createUserDocument(_ user: User) async throws {
         guard let userID = user.id else {
-            throw RepositoryErrors.nilUid
+            throw AppErrors.nilUid
         }
         do {
             print(userID)
@@ -25,7 +25,7 @@ final class RepositoriesManager {
         }
         catch {
             print(error.localizedDescription)
-            throw RepositoryErrors.failCreateDocument
+            throw AppErrors.failCreateDocument
         }
     }
     func fetchUserData(with uidUser: String) async throws -> User {
@@ -37,27 +37,12 @@ final class RepositoriesManager {
         }
         catch {
             print(error.localizedDescription)
-            throw RepositoryErrors.noDocumentFound
+            throw AppErrors.noDocumentFound
         }
     }
     
 }
-enum RepositoryErrors: Error {
-    case nilUid
-    case failCreateDocument
-    case noDocumentFound
-    
-    func errorMessage() -> String {
-        switch self {
-        case .nilUid:
-            return "Nil id founded in User"
-        case .failCreateDocument:
-            return "Error creating user's document"
-        case .noDocumentFound:
-            return "User document not found"
-        }
-    }
-}
+
 extension RepositoriesManager {
     static let repositories = RepositoriesManager()
 }
