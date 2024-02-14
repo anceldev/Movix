@@ -42,6 +42,7 @@ struct MovixApp: App {
         WindowGroup {
             NavigationStack {
                 AuthenticatedView()
+                    .preferredColorScheme(.dark)
             }
         }
         .environmentObject(AuthenticationViewModel())

@@ -6,110 +6,79 @@
 //
 
 import SwiftUI
-
+import UIKit
 struct HomeView: View {
     
-    private var genres = ["Action", "Adventure", "Drama", "Comedy"]
-    
     @State var queryText = ""
-    
-    init() {
-        let colorAppeareance = UINavigationBarAppearance()
-        colorAppeareance.configureWithOpaqueBackground()
-        colorAppeareance.backgroundColor = .blackApp
-        colorAppeareance.titleTextAttributes = [.foregroundColor: UIColor.semiWhite]
-        colorAppeareance.largeTitleTextAttributes = [.foregroundColor: UIColor.semiWhite]
-        
-        UINavigationBar.appearance().standardAppearance = colorAppeareance
-        UINavigationBar.appearance().compactAppearance = colorAppeareance
-        UINavigationBar.appearance().scrollEdgeAppearance = colorAppeareance
-        
-        UINavigationBar.appearance().tintColor = .white
-    }
+    @State var movies = [Movie]()
+    @State var path = NavigationPath()
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                HStack{
-                    Button(action: {
-                        // All
-                    }, label: {
-                        Text("All")
-                    })
-                    .frame(maxWidth: .infinity)
-                    Button(action: {
-                        // Movies
-                    }, label: {
-                        Text("Movies")
-                    })
-                    .frame(maxWidth: .infinity)
-                    Button(action: {
-                        // Series
-                    }, label: {
-                        Text("Series")
-                    })
-                    .frame(maxWidth: .infinity)
-                }
-                List {
-                    
-                }
-                .searchable(text: $queryText)
-                .listStyle(.plain)
-                //.background(.blackApp)
-                //.scrollContentBackground(.hidden)
-            }
-            .background(.blackApp)
-            .navigationTitle("Catalog")
-            .navigationBarTitleDisplayMode(.inline)
-            .foregroundStyle(.semiWhite)
-        }
-        
-        
-        
-        /*VStack {
-            HStack{
-                Button(action: {
-                    // All
-                }, label: {
-                    Text("All")
-                })
-                .frame(maxWidth: .infinity)
-                Button(action: {
-                    // Movies
-                }, label: {
-                    Text("Movies")
-                })
-                .frame(maxWidth: .infinity)
-                Button(action: {
-                    // Series
-                }, label: {
-                    Text("Series")
-                })
-                .frame(maxWidth: .infinity)
-            }
-            .font(.title2)
-            .foregroundStyle(.textGray)
-            // Genres
-            NavigationView {
-                Text("Hi")
-                /*List(genres, id: \.self){ genre in
-                    if( searchText.isEmpty || genre.contains(searchText)) {
-                        Text(genre)
+        NavigationView {
+            NavigationStack(path: $path) {
+                VStack {
+//                    HStack{
+//                        Button(action: {
+//                            // All
+//                            print("All tapped")
+//                        }, label: {
+//                            Text("All")
+//                        })
+//                        .frame(maxWidth: .infinity)
+//                        Button(action: {
+//                            // Movies
+//                            print("Movies tapped")
+//                        }, label: {
+//                            Text("Movies")
+//                        })
+//                        .frame(maxWidth: .infinity)
+//                        Button(action: {
+//                            // Series
+//                            print("Series tapped")
+//                        }, label: {
+//                            Text("Series")
+//                        })
+//                        .frame(maxWidth: .infinity)
+//                    }
+                    List {
+                        ForEach(movies, id:\.id) { movie in
+                            NavigationLink(value: movie.id) {
+                                Text(movie.title!)
+                            }
+                        }
                     }
+                    .listStyle(.plain)
+                    .onChange(of: queryText, {
+                        getMoviesList()
+                    })
                 }
-                
-                .listStyle(.plain)
-
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .navigationDestination(for: Int.self) { id in
+                    MovieDetails(idMovie: id)
+//                    TestView(id: id)
+                }
                 .background(.blackApp)
-                .foregroundStyle(.blackWhite)
-                .font(.title2)
-                .multilineTextAlignment(.center)*/
+                .navigationTitle("Catalog")
+                .navigationBarTitleDisplayMode(.inline)
+                .foregroundStyle(.semiWhite)
             }
-            .searchable(text: $searchText, placement: .toolbar, prompt: "Search...")
-            Spacer()
+            
         }
-        .background(.blackApp)*/
+        .searchable(text: $queryText)
+    }
+    
+    private func getMoviesList(){
+        print("Searching: " + queryText)
+        Task {
+            do {
+                if let movies = try await MediaService.service.searchMedia(query: queryText) as? [Movie] {
+                    self.movies = movies
+                    print(movies.count)
+                }
+            }
+            catch {
+                print("Error fetching movies")
+            }
+        }
     }
 }
 

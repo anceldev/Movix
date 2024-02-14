@@ -7,3 +7,6 @@
 
 import Foundation
 
+struct People: Encodable, Decodable, Identifiable {
+    let id: Int
+}

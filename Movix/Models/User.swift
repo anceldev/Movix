@@ -15,7 +15,7 @@ struct User: Codable, Identifiable {
     var name: String
     var email: String
     var friends: [String]
-    var history: [Int] // [Type: Identifier]
+    var history: [Int]
     var settings: Settings?
     
     init(id: String? = nil, name: String = "", email: String = "", friends: [String] = [], history: [Int] = [], settings: Settings? = nil) {
