@@ -64,33 +64,5 @@ struct Movie: MediaProtocol{
         self.spokenLanguages = origin.spokenLanguages
         self.voteAverage = origin.voteAverage
     }
-    
-//    var imageUrl: URL {
-//        let baseUrl = "https://image.tmdb.org/t/p/"
-//        let width = "w780"
-//        let url = baseUrl + width + (backdropPath ?? "")
-//        return URL(string: url)!
-//    }
-    
-//    struct Credits: Codable, Identifiable{
-//        let id: Int
-//        let cast: [Actor]
-//    }
-//    
-//    struct Actor: Codable, Identifiable{
-//        let id: Int
-//        let name: String
-//        let profilePath: String?
-//        let gender: Int
-//        var rol: String {
-//            if gender == 2 {
-//                return "Actor"
-//            } else if gender == 1{
-//                return "Actress"
-//            } else {
-//                return ""
-//            }
-//        }
-//    }
 }
 

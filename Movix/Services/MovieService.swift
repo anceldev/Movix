@@ -20,9 +20,9 @@ final class MediaService: MediaServiceProtocol {
     var tvSeriesList = TvSerieListResult()
     
     
-    func searchMedia(query: String) async throws -> [any MediaProtocol] {
+    func searchMedia(query: String, filter: MediaFilter) async throws -> [any MediaProtocol] {
         let formattedQuery = query.replacingOccurrences(of: " ", with: "%20")
-        let urlRequest = baseUrl + "search/movie" + "?" + api_key + "&query=" + formattedQuery + Lan.mainLan.query + "&include_adult=false&page=1"
+        let urlRequest = baseUrl + "search/" + filter.rawValue + "?" + api_key + "&query=" + formattedQuery + Lan.mainLan.query + "&include_adult=false&page=1"
         print(urlRequest)
         
         do {
@@ -34,7 +34,6 @@ final class MediaService: MediaServiceProtocol {
             throw ServiceErrors.mediaService
         }
     }
-    
     func searchDetails(movie id: Int) async throws -> Movie {
         let urlRequest = baseUrl + "movie/" + "\(id)" + "?" + api_key + Lan.mainLan.query
         do {
@@ -46,6 +45,9 @@ final class MediaService: MediaServiceProtocol {
             throw ServiceErrors.movieNotFound
         }
     }
+//    func getMediaUrl(urlPoster image: String) -> URL {
+//        
+//    }
     private func makeRequest<T:Codable>(for item: T, url: String) async throws -> T {
         /// Generate request url
         guard let url = URL(string: url) else {

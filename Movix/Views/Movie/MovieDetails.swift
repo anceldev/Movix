@@ -11,15 +11,43 @@ struct MovieDetails: View {
     let idMovie: Int
     @State var searchedMovie: Movie?
     
-    //    init(idMovie: Int) {
-    //        self.idMovie = idMovie
-    //    }
+    enum MovieActionsButtons: CaseIterable {
+        case rate
+        case download
+        case heart
+        case invite
+        
+        var image: Image {
+            switch self {
+            case .rate: return Image("rate")
+            case .download: return Image("download")
+            case .heart: return Image("heart")
+            case .invite: return Image("inviteFriend")
+            }
+        }
+        var title: String {
+            switch self {
+            case .rate: return "Rate"
+            case .download: return "Download"
+            case .heart: return "Like"
+            case .invite: return "Invite"
+            }
+        }
+    }
+    @State private var backdropUrl = ""
+    @State private var posterUrl = ""
     
     func fetchMovie(){
         Task {
             do {
                 let newMovie = try await MediaService.service.searchDetails(movie: self.idMovie)
                 self.searchedMovie = Movie(origin: newMovie)
+                if let backdrop = searchedMovie?.backdropPath {
+                    backdropUrl = "https://image.tmdb.org/t/p/w780/" + backdrop
+                }
+                if let poster = searchedMovie?.posterPath {
+                    posterUrl = "https://image.tmdb.org/t/p/w500/" + poster
+                }
             }
             catch {
                 throw error
@@ -27,256 +55,86 @@ struct MovieDetails: View {
         }
     }
     var body: some View {
-        VStack {
-            if searchedMovie != nil {
-                Text("Id is: \(idMovie)")
-                Text(searchedMovie?.title ?? "No title available")
-                Text(searchedMovie?.overview ?? "No overview available")
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                GeometryReader { geometry in
+                    let size = geometry.size
+                    ZStack {
+//                        AsyncImage(url: URL(string: backdropUrl)) { image in
+//                            image
+//                                .resizable()
+//                                .scaledToFill()
+//                                .frame(width: size.width , height: size.height)
+//                                .overlay {
+//                                    LinearGradient(
+//                                        colors: [.blackApp.opacity(0.59), .clear, .blackApp.opacity(1     )],
+//                                        startPoint: .top,
+//                                        endPoint: .bottom)
+//                                }
+//                        } placeholder: {
+//                            ProgressView()
+//                        }
+                        AsyncImage(url: URL(string: posterUrl)) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(maxHeight: size.height)
+                        LinearGradient(
+                            colors: [.blackApp.opacity(0.59), .clear ,.blackApp.opacity(0.8)], startPoint: .top, endPoint: .bottom)
+                    }
+                }
             }
+            .frame(height: 568)
+            .frame(maxWidth: .infinity)
+            .foregroundStyle(.semiWhite)
+            VStack {
+                VStack {
+                    MovieBarButtons()
+                        .padding(15)
+                }
+                VStack {
+                    Text(searchedMovie?.overview ?? "No overview")
+                        .lineLimit(3)
+                        .foregroundStyle(.semiWhite)
+                }
+                .padding(.horizontal, 20)
+                Spacer()
+            }
+            .background(.blackApp)
         }
+        .ignoresSafeArea()
+        .background(.blackApp)
         .onAppear(perform: {
             fetchMovie()
         })
     }
+    @ViewBuilder
+    func MovieBarButtons() -> some View {
+        HStack(spacing: 20) {
+            ForEach(MovieActionsButtons.allCases, id:\.self) { btn in
+                Button {
+                    print(btn.title)
+                } label: {
+                    VStack{
+                        btn.image
+                        Text(btn.title)
+                            .font(.footnote)
+                    }
+                }
+                .frame(minWidth: 62, maxWidth: .infinity)
+            }
+        }
+        .padding(.horizontal, 40)
+        .font(.largeTitle)
+        .foregroundStyle(.grayLight)
+        .multilineTextAlignment(.center)
+    }
 }
 
-
-//    var body: some View {
-//        VStack {
-//            VStack(spacing: 0){
-//                GeometryReader(content: { geometry in
-//                    let size = geometry.size
-//                    VStack {
-//                        AsyncImage(
-//                            url: viewModel.getPosterUrl(urlPoster: viewModel.movie.posterPath ?? ""),
-//                            content: { image in
-//                                PosterView(poster: image, size: size)
-//                            }) {
-//                                ProgressView()
-//                            }
-//                            .frame(maxWidth: size.width, maxHeight: 468)
-//                    }
-//                })
-//            }
-//            .frame(maxHeight: 468)
-//            VStack {
-//                NavigationStack {
-//                    VStack{
-//                        VStack{
-//                            HStack(spacing: 20) {
-//Spacer()
-//                                Button(action: {
-// rate
-//                                }, label: {
-//                                    VStack {
-//                                        Image("rate")
-//                                        Text("Rate")
-//                                            .font(.footnote)
-//                                    }
-//                                })
-//                                .frame(minWidth: 62, maxWidth: .infinity)
-//                                Button(action: {
-// Download
-//                                }, label: {
-//                                    VStack {
-//                                        Image("download")
-//                                        Text("Download")
-//                                            .font(.footnote)
-//                                    }
-//                                })
-//                                .frame(minWidth: 62, maxWidth: .infinity)
-//                                Button(action: {
-// Download
-//                                }, label: {
-//                                    VStack {
-//                                        Image("heart")
-//                                        Text("My list")
-//                                            .font(.footnote)
-//                                    }
-//
-//                                })
-//                                .frame(minWidth: 62, maxWidth: .infinity)
-//                                Button(action: {
-// Download
-//                                }, label: {
-//                                    VStack {
-//                                        Image("inviteFriend")
-//                                        Text("Live")
-//                                            .font(.footnote)
-//                                    }
-//                                })
-//                                .frame(minWidth: 62, maxWidth: .infinity)
-//Spacer()
-//                            }
-//                            .font(.largeTitle)
-//                            .foregroundStyle(.textGray)
-//                            .multilineTextAlignment(.center)
-//                            .frame(maxWidth: 261, minHeight: 60)
-//                            VStack{
-//                                Text(viewModel.movie.overview ?? "")
-//                                    .font(.body)
-//                                    .padding(15)
-//                            }
-//                            .foregroundColor(.white)
-//                            HStack(spacing: 25){
-//                                Button {
-//                                    tabButton = true
-//                                } label: {
-//                                    Text("General")
-//                                        .foregroundStyle(tabButton == true ? .white : .textGray)
-//                                }
-//                                Button {
-//                                    tabButton = false
-//                                } label: {
-//                                    Text("Details")
-//                                        .foregroundStyle(tabButton == false ? .white : .textGray)
-//                                }
-//                                Button {
-//                                    tabButton = nil
-//                                } label: {
-//                                    Text("Comments")
-//                                        .foregroundStyle(tabButton == nil ? .white : .textGray)
-//                                }
-//                            }
-//                            .multilineTextAlignment(.center)
-//                            .font(.title2)
-
-//                            VStack{
-/*if tabButton == true {
- MovieGeneralTab(movie: movie!)
- } else if tabButton == false {
- MovieDetailTab()
- } else {
- MovieCommentsTab()
- }*/
-//                            }
-//                        }
-//                        .padding(.top, 16)
-//                        Spacer()
-//                    }
-//
-//                    .frame(maxWidth: .infinity)
-//                    .background(Color.blackApp.ignoresSafeArea())
-//                    .ignoresSafeArea()
-//                    .task {
-//                        viewModel.getDetails(forMovie: idMovie)
-//                    }
-//                }
-//            }
-//        }
-//        .task {
-//            viewModel.getDetails(forMovie: idMovie)
-//        }
-//        .background(.blackApp)
-//        .ignoresSafeArea()
-/*NavigationStack {
- VStack{
- VStack {
- ZStack{
- AsyncImage(
- url: viewModel.getPosterUrl(urlPoster: viewModel.movie.posterPath ?? ""),
- content: { image in
- image
- .resizable()
- .aspectRatio(contentMode: .fit)
- .frame(maxWidth: .infinity, maxHeight: 700)
- .clipped()
- .overlay {
- LinearGradient(colors: [
- .clear,
- .clear,
- .clear,
- .black.opacity(0.1),
- .black.opacity(0.5),
- .black.opacity(0.9),
- .black
- ], startPoint: .top, endPoint: .bottom)
- }
- }) {
- ProgressView()
- }
- VStack{
- Spacer()
- VStack {
- HStack(spacing: 20){
- Text(viewModel.makeTags())
- }
- .padding(.bottom, 4)
- HStack {
- Text("2023")
- Text(" | ")
- Text("3h1min")
- Text(" | ")
- Text("18+")
- }
- .font(.footnote).bold()
- .padding(.bottom, 7)
- }
- }
- .foregroundStyle(.white)
- 
- }
- Spacer()
- }
- .ignoresSafeArea()
- 
- 
- .frame(height: 468)
- 
- VStack{
- VStack{
- Text(movie?.overview ?? "")
- }
- .padding()
- .foregroundColor(.white)
- HStack(spacing: 25){
- Button {
- tabButton = true
- } label: {
- Text("General")
- .foregroundStyle(tabButton == true ? .white : .textGray)
- }
- Button {
- tabButton = false
- } label: {
- Text("Details")
- .foregroundStyle(tabButton == false ? .white : .textGray)
- }
- Button {
- tabButton = nil
- } label: {
- Text("Comments")
- .foregroundStyle(tabButton == nil ? .white : .textGray)
- }
- }
- .multilineTextAlignment(.center)
- .font(.title2)
- .padding(.top)
- VStack{
- /*if tabButton == true {
-  MovieGeneralTab(movie: movie!)
-  } else if tabButton == false {
-  MovieDetailTab()
-  } else {
-  MovieCommentsTab()
-  }*/
- }
- }
- Spacer()
- }
- 
- .frame(maxWidth: .infinity)
- .background(Color.blackApp.ignoresSafeArea())
- .ignoresSafeArea()
- .task {
- viewModel.getDetails(forMovie: idMovie)
- }
- }*/
-//        .background(.blackApp)
-//    }
-//}
-//
-//#Preview {
-//    MovieDetails(idMovie: 872585)
+#Preview {
+    MovieDetails(idMovie: 872585)
 //        .environmentObject(MovieViewModel())
-//}
+}
