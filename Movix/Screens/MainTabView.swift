@@ -10,7 +10,12 @@ import SwiftUI
 struct MainTabView: View {
     @State private var selectedTab: TabOption = .search
     @State var moviesVM = MoviesViewModel()
+    @State var userVM: UserViewModel
     
+    init(user: Account) {
+        self._userVM = State(initialValue: UserViewModel(user: user))
+    }
+
     var body: some View {
         TabView(selection: $selectedTab) {
             Group {
@@ -21,7 +26,7 @@ struct MainTabView: View {
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
-                
+
                 SearchScreen()
                     .tag(TabOption.search)
                     .tabItem {
@@ -29,7 +34,7 @@ struct MainTabView: View {
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
-                
+
                 MyListsScreen()
                     .tag(TabOption.lists)
                     .tabItem {
@@ -37,7 +42,7 @@ struct MainTabView: View {
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
-                
+
                 ProfileScreen()
                     .tag(TabOption.profile)
                     .tabItem {
@@ -45,15 +50,21 @@ struct MainTabView: View {
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
+//                    .environment(userVM)
             }
         }
         .tint(.blue1)
         .background(.bw10)
         .environment(moviesVM)
+        .environment(userVM)
+
         .animation(.easeOut, value: selectedTab)
+        .toolbar(.visible, for: .tabBar)
+        .toolbarBackground(.bw10, for: .tabBar)
     }
 }
 
-#Preview {
-    MainTabView()
-}
+//#Preview {
+//    MainTabView()
+//        
+//}

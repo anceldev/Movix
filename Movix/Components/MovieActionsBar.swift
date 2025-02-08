@@ -11,13 +11,8 @@ struct MovieActionsBar: View {
     let idMovie: Int
     @Binding var showRateSlider: Bool
     @Environment(MovieViewModel.self) var movieVM
-//    @Environment(AuthViewModel.self) var authViewModel
-//    var isFavorite: Bool {
-//        guard (authViewModel.account?.favoriteMovies?.first(where: { $0.id == idMovie
-//        })) != nil else { return false }
-//        return true
-//    }
-    
+    @Environment(UserViewModel.self) var userVM
+
     var body: some View {
         VStack {
             HStack(spacing: 16) {
@@ -54,7 +49,8 @@ struct MovieActionsBar: View {
                             .font(.system(size: 12))
                     }
 //                    .foregroundStyle(isFavorite ? .blue1 : .bw50)
-                    .foregroundStyle(.blue1)
+//                    .foregroundStyle(.blue1)
+                    .foregroundStyle(.bw50)
                     .frame(width: 60)
                 })
                 NavigationLink {
@@ -65,9 +61,10 @@ struct MovieActionsBar: View {
                 } label: {
                     VStack(spacing: 12) {
                         VStack {
-                            Image(systemName: "play.display")
+//                            Image(systemName: "play.display")
+                            Image(.providersIcon)
                                 .resizable()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 24, height: 24)
                                 .padding(8)
                                 .background(
                                     LinearGradient(colors: [Color.marsA, Color.marsB], startPoint: .bottomLeading, endPoint: .topTrailing)
@@ -94,6 +91,7 @@ struct MovieActionsBar: View {
     MovieActionsBar(idMovie: 533535, showRateSlider: .constant(true))
         .background(.bw20)
         .environment(MovieViewModel())
+        .environment(UserViewModel(user: Account.preview))
 //        .environment(AuthViewModel())
 }
 

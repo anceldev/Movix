@@ -71,8 +71,6 @@ struct MediaRow: View {
         .onAppear {
             Task {
                 self.image = await moviesVM.getBackdropImage(backdropPath: backdropPath)
-//                let image = await Movie.getBackdropImage(posterPath: backdropPath)
-//                self.image = image
             }
         }
     }

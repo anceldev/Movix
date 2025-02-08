@@ -10,15 +10,12 @@ import SwiftUI
 struct MovieScreen: View {
     
     let movieId: Int
-    //    @State private var castViewModel: CastViewModel
     @State private var showRateSlider = false
     @State private var currentRate: Float = 5.0
-    //    @Environment(AuthViewModel.self) var authViewModel
     @State private var movieVM = MovieViewModel()
     
     init(movieId: Int) {
         self.movieId = movieId
-        //        self._castViewModel = State(initialValue: CastViewModel(id: movieId))
     }
     
     var body: some View {
@@ -57,15 +54,10 @@ struct MovieScreen: View {
                 .padding(.top, 44)
         }
         .padding(.bottom, 24)
-        //        .sheet(isPresented: $showRateSlider) {
-        //            RateView(currentRate: $currentRate, action: makeRate)
-        //                .presentationDetents([.height(300)])
-        //        }
-//        .ignoresSafeArea()
+        .ignoresSafeArea(.all)
         .onAppear {
             Task {
                 await movieVM.getMovieDetails(id: movieId)
-//                await movieVM.getMovieCast(id: movieId)
             }
         }
         .swipeToDismiss()
@@ -74,6 +66,5 @@ struct MovieScreen: View {
 #Preview(body: {
     NavigationStack {
         MovieScreen(movieId: Movie.preview.id)
-        //            .environment(AuthViewModel())
     }
 })

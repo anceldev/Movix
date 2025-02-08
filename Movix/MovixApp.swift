@@ -11,7 +11,8 @@ import SwiftUI
 struct MovixApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AuthenticatedScreen()
+                .colorScheme(.dark)
         }
     }
 }

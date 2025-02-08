@@ -12,7 +12,7 @@ struct ListItemsView: View {
     @Binding var searchTerm: String
     @Environment(MoviesViewModel.self) var moviesVM
     @State private var showLoadButton = false
-    
+
     var body: some View {
         @Bindable var viewModel = moviesVM
         LazyVStack(alignment: .leading) {
@@ -21,7 +21,8 @@ struct ListItemsView: View {
                 NavigationLink {
                     MovieScreen(movieId: movie.id)
                         .navigationBarBackButtonHidden()
-                    
+                        .toolbar(.hidden, for: .tabBar)
+
                 } label: {
                     MediaRow(
                         title: movie.title,
@@ -35,7 +36,8 @@ struct ListItemsView: View {
                 loadMoreMovies()
             } label: {
                 Label("Ver más", systemImage: "chevron.down")
-                    .foregroundStyle(.marsB)
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(.blue1)
                     .frame(maxWidth: .infinity)
             }
         }
@@ -45,8 +47,7 @@ struct ListItemsView: View {
         Task {
             if searchTerm.isEmpty {
                 await moviesVM.getTrendingMovies()
-            }
-            else {
+            } else {
                 await moviesVM.searchMovies(searchTerm: searchTerm)
             }
         }

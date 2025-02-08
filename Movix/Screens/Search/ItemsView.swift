@@ -8,14 +8,11 @@
 import SwiftUI
 
 struct ItemsView: View {
-    
     enum FetchAction {
         case trending
         case search
         case favMovies
     }
-    
-//    @Environment(AuthViewModel.self) var authViewModel
     @Environment(MoviesViewModel.self) var moviesVM
 
     @Binding var searchTerm: String

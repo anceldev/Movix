@@ -27,7 +27,7 @@ enum Endpoints {
     case review(MediaType, String)
     case movieProviders(Int)
     
-    private static let apiKey = "4bd71d332c3d3c219fe01c8d465ba03a"
+    private static let apiKey = Bundle.main.infoDictionary?["MovixAPIKey"] as! String
     private static let baseUrlPath = "https://api.themoviedb.org/3/"
     
     var endpoint: String {

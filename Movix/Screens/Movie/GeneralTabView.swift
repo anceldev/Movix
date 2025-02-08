@@ -29,7 +29,6 @@ struct GeneralTabView: View {
                             NavigationLink {
                                 ActorScreen(id: actor.id)
                                     .navigationBarBackButtonHidden()
-                                Text(actor.originalName)
                             } label: {
                                 ActorLink(
                                     imageUrl: actor.profilePath,

@@ -63,9 +63,12 @@ struct PosterView: View {
             
             LinearGradient(
                 stops: [
-                    .init(color: .bw10.opacity(0.59), location: 0),
-                    .init(color: .bw10.opacity(0), location: 0.48),
-                    .init(color: .bw10, location: 1)
+//                    .init(color: .bw10.opacity(0.59), location: 0),
+//                    .init(color: .bw10.opacity(0), location: 0.48),
+//                    .init(color: .bw10, location: 1)
+                    .init(color: .black.opacity(0.59), location: 0),
+                    .init(color: .black.opacity(0), location: 0.48),
+                    .init(color: .black, location: 1)
                 ],
                 startPoint: .bottom,
                 endPoint: .top

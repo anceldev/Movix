@@ -36,6 +36,7 @@ struct SearchBar: View {
                     .tint(Color.bw90)
                     .submitLabel(.search)
                     .onSubmit {
+                        moviesVM.searchedMovies = []
                         searchMovies()
                     }
                 
