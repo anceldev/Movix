@@ -19,9 +19,8 @@ struct SearchScreen: View {
         NavigationStack {
             VStack {
                 Text("Search")
-                    .font(.system(size: 22))
+                    .font(.hauora(size: 22, weight: .semibold))
                     .foregroundStyle(.white)
-                    .fontWeight(.semibold)
                 SearchBar(searchTerm: $searchTerm,
                     filterAction: {
                     showFilterSheet = true

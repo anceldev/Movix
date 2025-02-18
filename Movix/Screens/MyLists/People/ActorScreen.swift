@@ -106,8 +106,9 @@ struct ActorScreen: View {
     func ActorBio(bio: String) -> some View {
         VStack(alignment: .leading) {
             Text("Bio")
-                .fontWeight(.semibold)
-                .font(.system(size: 18))
+                .font(.hauora(size: 18, weight: .semibold))
+//                .fontWeight(.semibold)
+//                .font(.system(size: 18))
             Text(bio)
                 .lineLimit(viewMoreLimit)
             Button(action: {

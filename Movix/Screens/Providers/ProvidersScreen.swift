@@ -8,20 +8,14 @@
 import SwiftUI
 
 struct ProvidersScreen: View {
-//    let viewModel: ProvidersViewModel
-//    
-//    init(id: Int) {
-//        self.viewModel = ProvidersViewModel(id: id)
     @Environment(MovieViewModel.self) var movieVM
-//    }
     var body: some View {
-//        ZStack(alignment: .top) {
             VStack {
                 BannerTopBar(true)
                 ScrollView(.vertical) {
                     VStack(alignment: .leading, spacing: 24) {
                         Text("Providers")
-                            .font(.system(size: 32, weight: .medium))
+                            .font(.hauora(size: 32, weight: .medium))
                         ProvidersList(title: "Stream", providers: movieVM.providers.streamProviders)
                             .background(.clear)
                         ProvidersList(title: "Rent", providers: movieVM.providers.rentProviders)
@@ -30,10 +24,8 @@ struct ProvidersScreen: View {
                             .background(.clear)
                         Spacer()
                     }
-//                    .padding(24)
                     .padding(.horizontal, 24)
                     .padding(.bottom, 24)
-//                    .padding(.top, 40)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     Spacer()
                 }
@@ -54,15 +46,12 @@ struct ProvidersScreen: View {
     func ProvidersList(title: String, providers: [Providers.Provider]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.system(size: 20, weight: .medium))
+                .font(.hauora(size: 20, weight: .medium))
                 .foregroundStyle(.bw50)
             if providers.count > 0 {
                 FlowLayout(spacing: 24) {
                     ForEach(providers) { provider in
                         ZStack {
-//                            LinearGradient(colors: [.bw50, .bw90], startPoint: .top, endPoint: .bottom)
-//                                .aspectRatio(1/1, contentMode: .fill)
-//                            ProgressView()
                             AsyncImage(url: provider.logoPath) { phase in
                                 switch phase {
                                 case .empty:

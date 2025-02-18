@@ -34,7 +34,6 @@ struct SignInScreen: View {
                         .onSubmit {
                             focusedField = .password
                         }
-                    
                     SecureField("Password", text: $authVM.password)
                         .customCapsule(focusedField == .password || authVM.password != "" ? .white : .bw50, input: true)
                         .autocorrectionDisabled()
@@ -45,7 +44,6 @@ struct SignInScreen: View {
                         .onSubmit {
                             focusedField = nil
                         }
-                    
                     Button(action: {
                         login()
                     }, label: {
@@ -64,16 +62,14 @@ struct SignInScreen: View {
                         }
                     }
                     .multilineTextAlignment(.center)
-                    .font(.system(size: 14))
+                    .font(.hauora(size: 14))
                     .foregroundStyle(.bw50)
                     .padding(.top, 2)
                     Spacer()
                     VStack {
                         Text("Don't have an account?")
                             .foregroundStyle(.bw50)
-                            .font(.system(size: 16))
-//                        Link("Join TMDB", destination: URL(string: "https://www.themoviedb.org/signup")!)
-//                            .foregroundStyle(.blue1)
+                            .font(.hauora(size: 16))
                         Button {
                             withAnimation(.easeIn) {
                                 authVM.flow = .signUp
@@ -92,6 +88,7 @@ struct SignInScreen: View {
         .background(.bw10)
         .sheet(isPresented: $showPrivacyRules) {
             PrivacyScreen()
+                .presentationDetents([.height(.infinity)])
         }
     }
     
@@ -100,14 +97,12 @@ struct SignInScreen: View {
         VStack {
             VStack(spacing: 36) {
                 Text("Login")
-                    .font(.system(size: 34))
+                    .font(.hauora(size: 34))
                 VStack(spacing: 12) {
                     Image("profileDefault")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(height: 80)
-//                    Text("Add your\navatar")
-//                        .multilineTextAlignment(.center)
                 }
                 .padding(.bottom, 24)
             }
@@ -124,9 +119,6 @@ struct SignInScreen: View {
 
 #Preview(traits: .sizeThatFitsLayout, body: {
     @Previewable @State var preview = AuthViewModel()
-//    preview.account?.id = 1
-//    preview.account?.name = "Name"
-//    preview.account?.username = "Username"
     return NavigationStack {
         SignInScreen()
             .environment(preview)

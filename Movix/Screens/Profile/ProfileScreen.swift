@@ -22,9 +22,9 @@ struct ProfileScreen: View {
 //                    }
 //                    
 //                }
-                ForEach(userVM.user.movies) { movie in
-                    Text(movie.movieId, format: .number)
-                }
+//                ForEach(userVM.user.movies) { movie in
+//                    Text(movie.movieId, format: .number)
+//                }
             }
             Button("Logout") {
                 logout()

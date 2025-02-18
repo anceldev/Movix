@@ -10,17 +10,27 @@ import Foundation
 @Observable
 final class UserViewModel {
     var user: Account
+    var errorMessage: String?
     
     init(user: Account) {
         self.user = user
     }
-}
-
-
-extension Account {
-    static var preview = Account(
-        id: UUID(),
-        username: "Dani",
-        email: "dani@mail.com"
-    )
+    
+//    func getFavoriteMovies() {
+//        do {
+//            
+//        } catch <#pattern#> {
+//            <#statements#>
+//        }
+//    }
+    
+    func addFavoriteMovie(movie: Movie) async {
+        do {
+            
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            self.errorMessage = error.localizedDescription
+        }
+    }
 }

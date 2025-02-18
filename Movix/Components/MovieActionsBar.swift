@@ -7,6 +7,36 @@
 
 import SwiftUI
 
+struct ActionBarButtonLabel: View {
+    let label: String
+    let imageName: String
+    let isOn: Bool
+    
+    var image: Image {
+        if isOn {
+            return Image(imageName)
+        }
+        else {
+            return Image("\(imageName)-disabled")
+        }
+    }
+    var body: some View {
+        VStack(spacing: 12) {
+            VStack {
+                image
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .tint(isOn ? .blue1 : .bw50)
+            }
+            .frame(width: 30, height: 30)
+            Text(label)
+                .font(.hauora(size: 12))
+                .foregroundStyle(isOn ? .blue1 : .bw50)
+        }
+        .frame(width: 60)
+    }
+}
+
 struct MovieActionsBar: View {
     let idMovie: Int
     @Binding var showRateSlider: Bool
@@ -19,49 +49,26 @@ struct MovieActionsBar: View {
                 Button(action: {
                     showRateSlider.toggle()
                 }, label: {
-                    VStack(spacing: 12) {
-                        VStack {
-                            Image(systemName: "hand.thumbsup")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                        }
-                        .frame(width: 30, height: 30)
-                            Text("Rate")
-                            .font(.system(size: 12))
-                    }
-                    .frame(width: 60)
+                    ActionBarButtonLabel(label: "Rate", imageName: "rate", isOn: false)
                 })
-                .foregroundStyle(.bw50)
-                .foregroundStyle(.bw50)
+                
                 Button(action: {
-//                    toggleFavorite()
                     print("My list")
                 }, label: {
-                    VStack(spacing: 12) {
-                        VStack {
-//                            Image(systemName: isFavorite ? "heart.fill" : "heart")
-                            Image(systemName: "heart")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                        }
-                        .frame(width: 30, height: 30)
-                            Text("My List")
-                            .font(.system(size: 12))
-                    }
-//                    .foregroundStyle(isFavorite ? .blue1 : .bw50)
-//                    .foregroundStyle(.blue1)
-                    .foregroundStyle(.bw50)
-                    .frame(width: 60)
+                    ActionBarButtonLabel(label: "Favorites", imageName: "heart-icon", isOn: true)
+                })
+                Button(action: {
+                    print("My list")
+                }, label: {
+                    ActionBarButtonLabel(label: "My List", imageName: "heart-icon", isOn: false)
                 })
                 NavigationLink {
-//                    ProvidersScreen(id: idMovie)
                     ProvidersScreen()
                         .navigationBarBackButtonHidden()
                         .environment(movieVM)
                 } label: {
                     VStack(spacing: 12) {
                         VStack {
-//                            Image(systemName: "play.display")
                             Image(.providersIcon)
                                 .resizable()
                                 .frame(width: 24, height: 24)
@@ -74,7 +81,7 @@ struct MovieActionsBar: View {
                         }
                         .frame(width: 30, height: 30)
                         Text("Providers")
-                            .font(.system(size: 12))
+                            .font(.hauora(size: 12))
                             .foregroundStyle(.white)
                     }
                     .frame(width: 60)
@@ -92,6 +99,5 @@ struct MovieActionsBar: View {
         .background(.bw20)
         .environment(MovieViewModel())
         .environment(UserViewModel(user: Account.preview))
-//        .environment(AuthViewModel())
 }
 

@@ -24,12 +24,9 @@ struct ListItemsView: View {
                         .toolbar(.hidden, for: .tabBar)
 
                 } label: {
-                    MediaRow(
-                        title: movie.title,
-                        backdropPath: movie.backdropPath,
-                        releaseDate: movie.releaseDate,
-                        voteAverage: movie.voteAverage
-                    )
+                    MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: movie.releaseDate, voteAverage: movie.voteAverage) {
+                        Image(.heartIcon)
+                    }
                 }
             }
             Button {

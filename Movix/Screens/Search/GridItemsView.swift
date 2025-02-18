@@ -23,9 +23,7 @@ struct GridItemsView: View {
                     NavigationLink {
                         MovieScreen(movieId: movie.id)
                             .navigationBarBackButtonHidden()
-                        //                        .environment(authViewModel)
                     } label: {
-                        //                    Text(movie.title.lowercased())
                         MediaGridItem(posterPath: movie.posterPath, voteAverage: movie.voteAverage)
                             .environment(moviesVM)
                     }

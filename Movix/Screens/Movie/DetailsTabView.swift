@@ -41,10 +41,12 @@ struct DetailsTabView: View {
                 ForEach(orderedKeys, id: \.self) { key in
                     if let value = movieDetails[key] {
                         Text(key)
-                            .font(.system(size: 14))
+                            .font(.hauora(size: 14))
+//                            .font(.system(size: 14))
                             .foregroundStyle(.white)
                         Text(value)
-                            .font(.system(size: 14))
+                            .font(.hauora(size: 14))
+//                            .font(.system(size: 14))
                             .foregroundStyle(.bw50)
                     }
                 }

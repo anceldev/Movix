@@ -26,6 +26,7 @@ struct StarView: View {
             // Estrella rellena con gradiente
             Image(systemName: "star.fill")
                 .font(.system(size: 38, weight: .thin))
+//                .font(.hauora(size: 38, weight: .thin))
                 .foregroundStyle(LinearGradient(colors: [.marsA, .marsB], startPoint: .leading, endPoint: .trailing))
                 .mask(
                     Rectangle()
@@ -42,18 +43,16 @@ struct RatingView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Rating")
-                .font(.system(size: 22, weight: .medium))
+//                .font(.system(size: 22, weight: .medium))
+                .font(.hauora(size: 22, weight: .medium))
             VStack(spacing: 12) {
                 Text("Rate the movie with a touch")
                 VStack(spacing: 12) {
-                    
                     HStack {
                         ForEach(0..<5) { index in
                             StarView(rating: currentRate, index: Float(index))
-                            
                         }
                     }
-                    
                     HStack {
                         Slider(
                             value: $currentRate,
@@ -63,8 +62,6 @@ struct RatingView: View {
                             isEditing = editing
                         }
                         .tint(.mars)
-                        
-                        
                     }
                     .padding(.horizontal, 44)
                     Button {

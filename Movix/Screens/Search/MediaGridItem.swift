@@ -40,7 +40,8 @@ struct MediaGridItem: View {
                             .fill(.black.opacity(0.8))
                         Text(formattedRate)
                             .foregroundStyle(.blue1)
-                            .font(.system(size: 12))
+//                            .font(.system(size: 12))
+                            .font(.hauora(size: 12))
                     }
                     .frame(width: 30, height: 20)
                 }

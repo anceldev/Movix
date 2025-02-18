@@ -40,7 +40,6 @@ struct ItemsView: View {
     NavigationStack {
         VStack {
             ItemsView(searchTerm: .constant(""), itemsView: .grid)
-//                .environment(AuthViewModel())
                 .environment(MoviesViewModel())
         }
         .background(.bw10)

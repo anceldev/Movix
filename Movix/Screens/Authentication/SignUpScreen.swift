@@ -60,7 +60,8 @@ struct SignUpScreen: View {
                         Text("Policy rules of our company")
                     }
                     .multilineTextAlignment(.center)
-                    .font(.system(size: 14))
+//                    .font(.system(size: 14))
+                    .font(.hauora(size: 14))
                     .foregroundStyle(.bw50)
                     .padding(.top, 2)
                     VStack(spacing: 28) {
@@ -71,7 +72,8 @@ struct SignUpScreen: View {
                             Text("Or continue with")
                                 .lineLimit(1)
                                 .foregroundStyle(.white)
-                                .font(.system(size: 14))
+//                                .font(.system(size: 14))
+                                .font(.hauora(size: 14))
                             Rectangle()
                                 .fill(.white)
                                 .frame(width: 60, height: 1)
@@ -108,7 +110,7 @@ struct SignUpScreen: View {
         VStack {
             VStack(spacing: 36) {
                 Text("Login")
-                    .font(.system(size: 34))
+                    .font(.hauora(size: 34))
                 VStack(spacing: 12) {
                     Image("profileDefault")
                         .resizable()

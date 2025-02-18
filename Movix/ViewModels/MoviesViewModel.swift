@@ -20,7 +20,6 @@ final class MoviesViewModel {
     private var searchedMoviesPage: Int = 0
     private var favoriteMoviesPage: Int = 0
     
-//    private let httpClient = HTTPClient()
     private let httpClient = HTTPClient.shared
     
     init() {
@@ -41,6 +40,7 @@ final class MoviesViewModel {
                 modelType: Genres.self
             )
             let genres = try await httpClient.load(resource)
+            print(genres.genres.count)
             return genres.genres
         } catch {
             print(error)
@@ -101,26 +101,19 @@ final class MoviesViewModel {
             return nil
         }
         do {
-//            if let cachedImage = try await ImageCacheManager.shared.getImage(forKey: posterPath) {
-//                return Image(uiImage: cachedImage)
-//            }
-            
             var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
             let (dataW780, _) = try await URLSession.shared.data(from: url)
             if let uiImage = UIImage(data: dataW780) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
                 return Image(uiImage: uiImage)
             }
             url = URL(string: "https://image.tmdb.org/t/p/w1280\(posterPath)")!
             let (dataW1280, _) = try await URLSession.shared.data(from: url)
             if let uiImage = UIImage(data: dataW1280) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
                 return Image(uiImage: uiImage)
             }
             url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
             let (dataOriginal, _) = try await URLSession.shared.data(from: url)
             if let uiImage = UIImage(data: dataOriginal) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
                 return Image(uiImage: uiImage)
             }
             return nil
@@ -136,20 +129,14 @@ final class MoviesViewModel {
             return nil
         }
         do {
-//            if let cachedImage = try await ImageCacheManager.shared.getImage(forKey: posterPath) {
-//                return Image(uiImage: cachedImage)
-//            }
-            
             var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
             let (dataW780, _) = try await URLSession.shared.data(from: url)
             if let uiImage = UIImage(data: dataW780) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
                 return Image(uiImage: uiImage)
             }
             url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
             let (dataOriginal, _) = try await URLSession.shared.data(from: url)
             if let uiImage = UIImage(data: dataOriginal) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
                 return Image(uiImage: uiImage)
             }
             return nil

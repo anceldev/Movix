@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-enum MovieTab: String, CaseIterable {
+enum MovieTab: String, CaseIterable, Identifiable, Hashable {
     case general, details, reviews
+    
+    var id: Self { self }
 }
 struct MovieTabsView: View {
     /// View Properties
-    @State private var selectedTab: MovieTab? = .general
+    @State private var selectedTab: MovieTab = .general
     @Environment(\.colorScheme) private var scheme
     @Environment(MovieViewModel.self) var movieVM
     /// Tab Progress
@@ -22,7 +24,8 @@ struct MovieTabsView: View {
     var body: some View {
         VStack(spacing: 15) {
             /// Custom Tab Bar
-            CustomTabBar()
+//            CustomTabBar()
+            CustomSegmentedControl(state: $selectedTab)
             switch selectedTab {
             case .general:
 //                GeneralTabView(cast: movieVM.cast)
@@ -33,8 +36,6 @@ struct MovieTabsView: View {
             case .reviews:
                 ReviewsTabView()
                     .environment(movieVM)
-            case nil:
-                EmptyView()
             }
         }
         .frame(maxWidth: .infinity, alignment: .top)

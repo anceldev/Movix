@@ -20,10 +20,12 @@ enum SupabaseConfig {
     }
 }
 
-enum SupabaseTables: String {
+
+fileprivate enum Tables: String {
     case listMovies = "list_movies"
     case favorites
-    case list
+    case lists
+    case movies
     case ratings
     case users
 }
@@ -56,7 +58,7 @@ final class SupClient {
         }
         
         let account = Account(id: authResponse.user.id, username: email, email: email, lang: lang)
-        let _ = try await client.from(SupabaseTables.users.rawValue)
+        let _ = try await client.from(Tables.users.rawValue)
             .insert(account)
             .execute()
         return try await getAccount(userId: account.id)
@@ -104,14 +106,43 @@ final class SupClient {
     }
     
     private func getAccount(userId: UUID) async throws -> Account {
-        let userData = try await client
-            .from(SupabaseTables.users.rawValue)
+        let userResponse = try await client
+            .from(Tables.users.rawValue)
             .select("""
-                    *,
-                    movies(*)
-                    """)
+                id,
+                username,
+                email,
+                lang
+                """)
             .eq("id", value: userId)
             .execute()
-        return try JSONDecoder().decode([Account].self, from: userData.data)[0]
+        let responseAccount = try JSONDecoder().decode([Account].self, from: userResponse.data)
+        guard var account = responseAccount.first else {
+            throw SupabaseClientError.invalidAccount
+        }
+        account.favorites = try await getFavorites(userId: userId)
+        account.rates = try await getRatedMovies(userId: userId)
+
+        return account
+    }
+    
+    func getFavorites(userId: UUID) async throws -> [SupMovie] {
+        let response = try await client
+            .from(Tables.favorites.rawValue)
+            .select("movie_id(*)")
+            .eq("user_id", value: userId)
+            .execute()
+        let favorites = try JSONDecoder().decode([FavoritesTable].self, from: response.data)
+        return favorites.compactMap { $0.movie }
+    }
+    func getRatedMovies(userId: UUID) async throws -> [RatesList] {
+        let response = try await client
+            .from(Tables.ratings.rawValue)
+            .select("movie_id(*), rate")
+            .eq("user_id", value: userId)
+            .execute()
+        let ratedMovies = try JSONDecoder().decode([RatesList].self, from: response.data)
+
+        return ratedMovies
     }
 }

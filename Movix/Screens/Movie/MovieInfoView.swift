@@ -21,6 +21,7 @@ struct MovieInfoView: View {
                         Text(overview)
                             .lineLimit(viewMore)
                             .foregroundStyle(.white)
+                            .font(.hauora(size: 16))
                         
                         Button(action: {
                             print("View more...")
@@ -32,13 +33,16 @@ struct MovieInfoView: View {
                                 }
                             }
                         }, label: {
-                            Text(viewMore == nil ? "View less" : "View More ")
+                            Text("View More ")
                                 .foregroundStyle(.blue1)
+                                .font(.hauora(size: 12))
+                                .opacity(viewMore == nil ? 0 : 1)
                         })
+                        .disabled(viewMore == nil)
                     }
                 }
             }
-            .padding(16)
+            .padding([.horizontal, .top], 16)
         }
     }
 }
