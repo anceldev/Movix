@@ -41,10 +41,18 @@ struct MyListsScreen: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.bw10)
         }
+//        .onAppear {
+//            getFavoriteMovies()
+//        }
     }
+//    private func getFavoriteMovies() {
+//        Task {
+//            await userVM.getFavoriteMovies()
+//        }
+//    }
 }
 
 #Preview {
     MyListsScreen()
-        .environment(UserViewModel(user: Account.preview))
+        .environment(UserViewModel(user: User.preview))
 }

@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var selectedTab: TabOption = .search
+    @State private var selectedTab: TabOption = .lists
     @State var moviesVM = MoviesViewModel()
     @State var userVM: UserViewModel
     
-    init(user: Account) {
+    init(user: User) {
         self._userVM = State(initialValue: UserViewModel(user: user))
     }
 
@@ -60,6 +60,6 @@ struct MainTabView: View {
 }
 
 #Preview {
-    MainTabView(user: Account.preview)
+    MainTabView(user: User.preview)
         .environment(AuthViewModel())
 }

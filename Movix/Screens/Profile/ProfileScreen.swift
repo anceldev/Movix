@@ -16,6 +16,7 @@ struct ProfileScreen: View {
             Text("Profile screen")
                 .foregroundStyle(.white)
             VStack {
+                Text(userVM.user.username)
 //                if let user = authVM.user {
 //                    ForEach(user.movies, id:\.id) { movie in
 //                        Text(movie.movieId, format: .number)
@@ -43,5 +44,5 @@ struct ProfileScreen: View {
 #Preview {
     ProfileScreen()
         .environment(AuthViewModel())
-        .environment(UserViewModel(user: Account.preview))
+        .environment(UserViewModel(user: User.preview))
 }

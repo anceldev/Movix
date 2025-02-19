@@ -24,7 +24,7 @@ struct SupMovie: Codable, Identifiable, Hashable {
 
 struct FavoritesTable: Decodable {
     let movie: SupMovie
-    let user: Account?
+    let user: User?
     
     enum CodingKeys: String, CodingKey {
         case movie = "movie_id"
@@ -32,12 +32,12 @@ struct FavoritesTable: Decodable {
     }
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.user = try container.decodeIfPresent(Account.self, forKey: .user)
+        self.user = try container.decodeIfPresent(User.self, forKey: .user)
         self.movie = try container.decode(SupMovie.self, forKey: .movie)
     }
 }
 struct RatesList: Decodable {
-    let user: Account?
+    let user: User?
     let movie: SupMovie
     let rate: Double?
     
@@ -48,7 +48,7 @@ struct RatesList: Decodable {
     }
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.user = try container.decodeIfPresent(Account.self, forKey: .user)
+        self.user = try container.decodeIfPresent(User.self, forKey: .user)
         self.movie = try container.decode(SupMovie.self, forKey: .movie)
         self.rate = try container.decodeIfPresent(Double.self, forKey: .rate)
     }

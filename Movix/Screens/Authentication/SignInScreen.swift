@@ -22,12 +22,12 @@ struct SignInScreen: View {
                 Title()
                     .padding(.top, 44)
                 VStack(spacing: 16) {
-                    TextField("Email", text: $authVM.email)
+                    TextField("Email", text: $authVM.username)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
-                        .customCapsule(focusedField == .username || authVM.email != "" ? .white : .bw50, input: true)
-                        .foregroundStyle(authVM.email != "" ? .white : .bw50)
+                        .customCapsule(focusedField == .username || authVM.username != "" ? .white : .bw50, input: true)
+                        .foregroundStyle(authVM.username != "" ? .white : .bw50)
                         .focused($focusedField, equals: .username).animation(.easeInOut, value: focusedField)
                         .tint(.white)
                         .submitLabel(.next)
@@ -70,12 +70,8 @@ struct SignInScreen: View {
                         Text("Don't have an account?")
                             .foregroundStyle(.bw50)
                             .font(.hauora(size: 16))
-                        Button {
-                            withAnimation(.easeIn) {
-                                authVM.flow = .signUp
-                            }
-                        } label: {
-                            Text("Sign up")
+                        Link(destination: URL(string: "https://www.themoviedb.org/signup")!) {
+                            Text("Join TMDB")
                                 .foregroundStyle(.blue1)
                         }
                     }

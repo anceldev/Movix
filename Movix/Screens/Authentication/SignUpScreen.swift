@@ -32,7 +32,7 @@ struct SignUpScreen: View {
                         .foregroundStyle(email != "" ? .white : .bw50)
                         .focused($focusedField, equals: .name).animation(.easeInOut, value: focusedField)
                     
-                    TextField("Email", text: $authVM.email)
+                    TextField("Email", text: $authVM.username)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -124,9 +124,9 @@ struct SignUpScreen: View {
         }
     }
     private func signUp() {
-        Task {
-            await authVM.signUp()
-        }
+//        Task {
+//            await authVM.signUp()
+//        }
     }
 }
 

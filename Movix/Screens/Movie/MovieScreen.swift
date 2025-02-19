@@ -14,6 +14,8 @@ struct MovieScreen: View {
     @State private var currentRate: Float = 5.0
     @State private var movieVM = MovieViewModel()
     @Environment(UserViewModel.self) var userVM
+    @Environment(AuthViewModel.self) var authVM
+    
     
     init(movieId: Int) {
         self.movieId = movieId
@@ -109,9 +111,8 @@ struct MovieScreen: View {
     }
     private func addToFavorites() {
         Task {
-            if let movie = movieVM.movie {
-                await userVM.addFavoriteMovie(movie: movie)
-            }
+            guard let movie = movieVM.movie else { return }
+            await userVM.addFavoriteMovie(movie: movie)
         }
     }
 }
@@ -119,5 +120,6 @@ struct MovieScreen: View {
     NavigationStack {
         MovieScreen(movieId: Movie.preview.id)
     }
-    .environment(UserViewModel(user: Account.preview))
+    .environment(UserViewModel(user: User.preview))
+    .environment(AuthViewModel())
 })

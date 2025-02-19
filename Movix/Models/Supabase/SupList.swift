@@ -20,7 +20,7 @@ struct SupList: Codable, Identifiable {
 }
 
 struct ListTable: Decodable {
-    let user_id: Account?
+    let user_id: User?
     let name: String
     let isPublic: Bool
 }

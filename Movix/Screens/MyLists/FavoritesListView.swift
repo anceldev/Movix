@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct FavoritesListView: View {
-    let movies: [SupMovie]
+    let movies: [Movie]
     var body: some View {
         VStack {
             ScrollView(.vertical) {
                 ForEach(movies) { movie in
                     NavigationLink {
-                        MovieScreen(movieId: movie.tmdbId)
+                        MovieScreen(movieId: movie.id)
                             .navigationBarBackButtonHidden()
                     } label: {
                         MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: nil, voteAverage: nil) {
@@ -33,11 +33,14 @@ struct FavoritesListView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            print(movies)
+        }
     }
 }
 
 #Preview {
     NavigationStack {
-        FavoritesListView(movies: [SupMovie.preview1, SupMovie.preview2])
+        FavoritesListView(movies: [Movie.preview])
     }
 }

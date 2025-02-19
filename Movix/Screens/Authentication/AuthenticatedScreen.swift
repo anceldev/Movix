@@ -28,8 +28,10 @@ struct AuthenticatedScreen: View {
                 ProgressView()
                     .tint(.marsB)
             case .unauthenticated:
-                AuthenticationScreen()
+                SignInScreen()
                     .environment(authVM)
+//                AuthenticationScreen()
+//                    .environment(authVM)
             }
         }
     }
