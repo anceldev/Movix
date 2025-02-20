@@ -13,15 +13,17 @@ struct MediaRow<Content:View>: View {
     let backdropPath: String?
     let releaseDate: Date?
     let voteAverage: Double?
+    let myRate: Int?
     @State private var image: Image? = nil
     @ViewBuilder let content: () -> Content
     
-    init(title: String, backdropPath: String? = nil, releaseDate: Date? = nil, voteAverage: Double? = nil, content: @escaping () -> Content) {
+    init(title: String, backdropPath: String? = nil, releaseDate: Date? = nil, voteAverage: Double? = nil, myRate: Int? = nil, content: @escaping () -> Content) {
         
         self.title = title
         self.backdropPath = backdropPath
         self.releaseDate = releaseDate
         self.voteAverage = voteAverage
+        self.myRate = myRate
         self.image = nil
         self.content = content
     }
@@ -47,19 +49,24 @@ struct MediaRow<Content:View>: View {
                         .frame(maxWidth: .infinity)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         
-                        
-                        if let formattedRate = NumberFormatter.popularity.string(from: NSNumber(value: voteAverage ?? 0.0)) {
-                            VStack(alignment: .leading) {
-                                ZStack(alignment: .center){
-                                    UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, bottomTrailing: 10))
-                                        .fill(.black.opacity(0.8))
-                                    Text(formattedRate)
-                                        .foregroundStyle(.blue1)
-                                        .font(.hauora(size: 12))
-                                }
-                                .frame(width: 30, height: 20)
+                        if let voteAverage = voteAverage {
+                            if let formattedRate = NumberFormatter.popularity.string(from: NSNumber(value: voteAverage)) {
+//                                VStack(alignment: .leading) {
+//                                    ZStack(alignment: .center){
+//                                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, bottomTrailing: 10))
+//                                            .fill(.black.opacity(0.8))
+//                                        Text(formattedRate)
+//                                            .foregroundStyle(.blue1)
+//                                            .font(.hauora(size: 12))
+//                                    }
+//                                    .frame(width: 30, height: 20)
+//                                }
+//                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                                Vote(value: formattedRate)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        }
+                        if let myRate = myRate {
+                            Vote(value: String(myRate))
                         }
                     }
                 }
@@ -84,5 +91,19 @@ struct MediaRow<Content:View>: View {
                 self.image = await moviesVM.getBackdropImage(backdropPath: backdropPath)
             }
         }
+    }
+    @ViewBuilder
+    func Vote(value: String) -> some View {
+        VStack(alignment: .leading) {
+            ZStack(alignment: .center){
+                UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, bottomTrailing: 10))
+                    .fill(.black.opacity(0.8))
+                Text(value)
+                    .foregroundStyle(.blue1)
+                    .font(.hauora(size: 12))
+            }
+            .frame(width: 30, height: 20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }

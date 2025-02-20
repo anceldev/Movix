@@ -26,7 +26,7 @@ enum TabOption {
 //        switch self {
 //        case .home:     return "home"
 //        case .search:   return "magnifyingglass"
-//        case .favorites:return "heart"
+//        case .favoriteMovies:return "heart"
 //        case .profile:  return "person"
 //        }
 //    }

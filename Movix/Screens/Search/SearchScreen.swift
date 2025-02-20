@@ -7,11 +7,19 @@
 
 import SwiftUI
 
+enum SearchTab: String, CaseIterable, Identifiable, Hashable {
+    case all
+    case movies
+    case tvShow = "Tv Shows"
+    var id: Self { self }
+}
+
 struct SearchScreen: View {
     
     @State private var showFilterSheet: Bool = false
     @State private var itemsView: ViewOption = .grid
     @State private var searchTerm = ""
+    @State private var selectedTab: SearchTab = .movies
     @Environment(MoviesViewModel.self) private var moviesVM
     
     var body: some View {
@@ -25,10 +33,20 @@ struct SearchScreen: View {
                     filterAction: {
                     showFilterSheet = true
                 }, itemsView: $itemsView)
-                ItemsView(
-                    searchTerm: $searchTerm,
-                    itemsView: itemsView
-                )
+                VStack(spacing: 0) {
+                    CustomSegmentedControl(state: $selectedTab)
+                    switch selectedTab {
+                    case .all:
+                        Text("This is all")
+                    case .movies:
+                        ItemsView(
+                            searchTerm: $searchTerm,
+                            itemsView: itemsView
+                        )
+                    case .tvShow:
+                        Text("Tv Shows")
+                    }
+                }
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

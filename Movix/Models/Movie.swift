@@ -14,21 +14,17 @@ struct Movie: Codable, Identifiable, Hashable {
     var overview: String?
     var runtime: Int?
     var releaseDate: Date?
-    
     var posterPathUrl: URL?
     var posterPath: String?
-
     var genres: [Genre]?
-
     var backdropPath: String?
-//    var backdropPath: URL?
-
     var budget: Double?
     var homepageURL: URL?
     var popularity: Double?
     var voteAverage: Double?
     var voteCount: Int?
     var isAdult: Bool?
+    var rating: Int?
     
     var duration: String {
         guard let runtime else {
@@ -54,6 +50,7 @@ struct Movie: Codable, Identifiable, Hashable {
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
         case isAdult = "adult"
+        case rating
     }
     
     init(from decoder: Decoder) throws {
@@ -90,6 +87,7 @@ struct Movie: Codable, Identifiable, Hashable {
         self.voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount)
         self.isAdult = try container.decodeIfPresent(Bool.self, forKey: .isAdult)
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
+        self.rating = try container.decodeIfPresent(Int.self, forKey: .rating)
 //        self.genreIds = try container.decode([Int].self, forKey: .genreIds)
     }
     

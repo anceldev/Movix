@@ -12,6 +12,7 @@ import SwiftUI
 final class MoviesViewModel {
     var trendingMovies = [ShortMovie]()
     var searchedMovies = [ShortMovie]()
+    var similarMovies = [ShortMovie]()
     var movieGenres = [Genre]()
     var tvGenre = [Genre]()
     var errorMessage: String?
@@ -40,7 +41,6 @@ final class MoviesViewModel {
                 modelType: Genres.self
             )
             let genres = try await httpClient.load(resource)
-            print(genres.genres.count)
             return genres.genres
         } catch {
             print(error)
@@ -54,7 +54,7 @@ final class MoviesViewModel {
         self.trendingMoviesPage += 1
         do {
             let resource = Resource(
-                url: Endpoints.trending(.movie, .week, self.trendingMoviesPage).url,
+                url: Endpoints.trending(.movie, .week).url,
                 method: .get([
                     URLQueryItem(name: "language", value: lang),
                     URLQueryItem(name: "page", value: "\(self.trendingMoviesPage)")
@@ -145,6 +145,25 @@ final class MoviesViewModel {
             print(error.localizedDescription)
             self.errorMessage = error.localizedDescription
             return nil
+        }
+    }
+    
+    func getSimilarMovies(movieId: Int) async {
+        do {
+            let resource = Resource(
+                url: MovieEndpoint.simiarMovies(movieId).url,
+                method: .get([
+                    URLQueryItem(name: "language", value: "en"),
+                    URLQueryItem(name: "page", value: "1")
+                ]),
+                modelType: PageCollection<ShortMovie>.self
+            )
+            let similarMovies = try await httpClient.load(resource)
+            self.similarMovies = similarMovies.results
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            self.errorMessage = error.localizedDescription
         }
     }
 }

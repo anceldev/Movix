@@ -10,7 +10,6 @@ import SwiftUI
 enum ListControls: String, CaseIterable, Identifiable, Hashable {
     case favorites
     case rates
-//    case lists
     var id: Self { self }
 }
 
@@ -27,11 +26,9 @@ struct MyListsScreen: View {
                 VStack {
                     switch selectedControl {
                     case .favorites:
-                        FavoritesListView(movies: userVM.user.favorites)
+                        FavoritesListView(movies: userVM.user.favoriteMovies)
                     case .rates:
-                        RatesListView(ratesList: userVM.user.rates)
-//                    case .lists:
-//                        Text("Lists")
+                        RatesListView(ratedList: userVM.user.ratedMovies)
                     }
                     Spacer()
                 }
@@ -41,15 +38,7 @@ struct MyListsScreen: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.bw10)
         }
-//        .onAppear {
-//            getFavoriteMovies()
-//        }
     }
-//    private func getFavoriteMovies() {
-//        Task {
-//            await userVM.getFavoriteMovies()
-//        }
-//    }
 }
 
 #Preview {

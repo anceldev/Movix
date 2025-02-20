@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StarView: View {
     var rating: Float
+//    var rating: Int
     var index: Float
     
     var starFillWidth: CGFloat {
@@ -26,7 +27,6 @@ struct StarView: View {
             // Estrella rellena con gradiente
             Image(systemName: "star.fill")
                 .font(.system(size: 38, weight: .thin))
-//                .font(.hauora(size: 38, weight: .thin))
                 .foregroundStyle(LinearGradient(colors: [.marsA, .marsB], startPoint: .leading, endPoint: .trailing))
                 .mask(
                     Rectangle()
@@ -38,39 +38,43 @@ struct StarView: View {
 }
 
 struct RatingView: View {
+//    @Binding var currentRate: Int
     @Binding var currentRate: Float
     @State private var isEditing = false
+    let action: () -> Void
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Rating")
-//                .font(.system(size: 22, weight: .medium))
                 .font(.hauora(size: 22, weight: .medium))
             VStack(spacing: 12) {
                 Text("Rate the movie with a touch")
                 VStack(spacing: 12) {
-                    HStack {
-                        ForEach(0..<5) { index in
-                            StarView(rating: currentRate, index: Float(index))
+                    VStack {
+                        HStack(spacing: 0) {
+                            ForEach(0..<5) { index in
+                                StarView(rating: currentRate, index: Float(index))
+                            }
                         }
-                    }
-                    HStack {
-                        Slider(
-                            value: $currentRate,
-                            in: 0...10,
-                            step: 0.1
-                        ) { editing in
-                            isEditing = editing
+                        HStack {
+                            Slider(
+                                value: $currentRate,
+                                in: 0...10,
+                                step: 1
+                            ) { editing in
+                                isEditing = editing
+                            }
+                            .tint(.mars)
                         }
-                        .tint(.mars)
-                    }
-                    .padding(.horizontal, 44)
-                    Button {
-                        print("Send rating")
-                    } label: {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.system(size: 32, weight: .light))
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, LinearGradient(colors: [.marsA, .marsB], startPoint: .bottomLeading, endPoint: .topTrailing))
+                                            .padding(.horizontal, 44)
+                        Button {
+                            action()
+                        } label: {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .font(.system(size: 32, weight: .light))
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.white, LinearGradient(colors: [.marsA, .marsB], startPoint: .bottomLeading, endPoint: .topTrailing))
+                        }
                     }
                 }
             }
@@ -83,6 +87,9 @@ struct RatingView: View {
 }
 
 #Preview {
-    @Previewable @State var currentRate: Float = 0.0
-    RatingView(currentRate: $currentRate)
+    @Previewable @State var currentRate: Float = 0
+    VStack {
+        RatingView(currentRate: $currentRate, action: {})
+    }
+    .padding(16)
 }

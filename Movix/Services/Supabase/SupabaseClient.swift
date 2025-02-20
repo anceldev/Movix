@@ -120,20 +120,20 @@ final class SupClient {
 //        guard var account = responseAccount.first else {
 //            throw SupabaseClientError.invalidAccount
 //        }
-//        account.favorites = try await getFavorites(userId: userId)
-//        account.rates = try await getRatedMovies(userId: userId)
+//        account.favoriteMovies = try await getFavorites(userId: userId)
+//        account.ratedMovies = try await getRatedMovies(userId: userId)
 //
 //        return account
 //    }
 //    
 //    func getFavorites(userId: UUID) async throws -> [SupMovie] {
 //        let response = try await client
-//            .from(Tables.favorites.rawValue)
+//            .from(Tables.favoriteMovies.rawValue)
 //            .select("movie_id(*)")
 //            .eq("user_id", value: userId)
 //            .execute()
-//        let favorites = try JSONDecoder().decode([FavoritesTable].self, from: response.data)
-//        return favorites.compactMap { $0.movie }
+//        let favoriteMovies = try JSONDecoder().decode([FavoritesTable].self, from: response.data)
+//        return favoriteMovies.compactMap { $0.movie }
 //    }
 //    func getRatedMovies(userId: UUID) async throws -> [RatesList] {
 //        let response = try await client

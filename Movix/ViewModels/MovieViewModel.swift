@@ -16,8 +16,6 @@ final class MovieViewModel {
     var providers: Providers = .init()
     
     var errorMessage: String?
-    
-    //    private let httpClient = HTTPClient()
         private let httpClient = HTTPClient.shared
     
     func getProviders(id: Int) async {

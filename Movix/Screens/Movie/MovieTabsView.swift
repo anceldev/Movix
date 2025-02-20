@@ -17,6 +17,7 @@ struct MovieTabsView: View {
     @State private var selectedTab: MovieTab = .general
     @Environment(\.colorScheme) private var scheme
     @Environment(MovieViewModel.self) var movieVM
+    @Environment(UserViewModel.self) var userVM
     /// Tab Progress
     @State private var tabProgress: CGFloat = 0
         @State private var viewHeight: CGFloat = 300 // Add this line
@@ -29,8 +30,11 @@ struct MovieTabsView: View {
             switch selectedTab {
             case .general:
 //                GeneralTabView(cast: movieVM.cast)
-                GeneralTabView(id: movieVM.movie?.id ?? 0)
-                    .environment(movieVM)
+                GeneralTabView(
+                    id: movieVM.movie?.id ?? 0,
+                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
+                )
+                .environment(movieVM)
             case .details:
                 DetailsTabView(movie: movieVM.movie!)
             case .reviews:

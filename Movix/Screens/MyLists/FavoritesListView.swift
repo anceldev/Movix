@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoritesListView: View {
     let movies: [Movie]
+    @Environment(UserViewModel.self) var userVM
     var body: some View {
         VStack {
             ScrollView(.vertical) {
@@ -17,9 +18,9 @@ struct FavoritesListView: View {
                         MovieScreen(movieId: movie.id)
                             .navigationBarBackButtonHidden()
                     } label: {
-                        MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: nil, voteAverage: nil) {
+                        MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: nil, voteAverage: movie.voteAverage) {
                             Button {
-                                print("Liked or dislike")
+                                toggleFavorite(movie: movie)
                             } label: {
                                 Image(.heartIcon)
                                     .foregroundStyle(.blue1)
@@ -33,8 +34,11 @@ struct FavoritesListView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            print(movies)
+        .animation(.easeOut, value: userVM.user.favoriteMovies)
+    }
+    private func toggleFavorite(movie: Movie) {
+        Task {
+            await userVM.toggleFavoriteMovie(movie: movie)
         }
     }
 }
@@ -42,5 +46,6 @@ struct FavoritesListView: View {
 #Preview {
     NavigationStack {
         FavoritesListView(movies: [Movie.preview])
+            .environment(UserViewModel(user: User.preview))
     }
 }

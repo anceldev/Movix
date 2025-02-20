@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct GeneralTabView: View {
-//    let cast: [Cast]
-    @State private var currentRate: Float = 0.0
     @Environment(MovieViewModel.self) var movieVM
-    
+    @Environment(UserViewModel.self) var userVM
+
+    @State private var currentRate: Float
     @State private var castVM: CastViewModel
     
-    init(id: Int) {
+    init(id: Int, currentRate: Int? = nil) {
         self._castVM = State(initialValue: CastViewModel(id: id))
+        self._currentRate = State(initialValue: Float(currentRate != nil ? currentRate! : 0))
     }
     
     var body: some View {
@@ -40,10 +41,13 @@ struct GeneralTabView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            RatingView(currentRate: $currentRate)
+            RatingView(currentRate: $currentRate, action: rateMovie)
             Spacer()
         }
         .padding(16)
+        .onChange(of: currentRate) {
+            print(Int(currentRate))
+        }
     }
     
     @ViewBuilder
@@ -62,7 +66,6 @@ struct GeneralTabView: View {
                                 .aspectRatio(contentMode: .fill)
                                 .offset(y: 8)
                                 .frame(width: 76, height: 76)
-                            
                         }
                         .clipped()
                     case .failure(_):
@@ -87,11 +90,17 @@ struct GeneralTabView: View {
         .font(.system(size: 12))
         .frame(maxWidth: 80)
     }
+    private func rateMovie() {
+        Task {
+            guard let movie = movieVM.movie else { return }
+            await userVM.addRating(movie: movie, rating: Int(currentRate))
+        }
+    }
 }
 #Preview(body: {
     NavigationStack {
         MovieScreen(movieId: Movie.preview.id)
             .environment(MovieViewModel())
-//            .environment(AuthViewModel())
+            .environment(UserViewModel(user: User.preview))
     }
 })

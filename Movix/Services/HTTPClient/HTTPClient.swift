@@ -9,7 +9,6 @@ import Foundation
 
 enum HTTPMethod {
     case get([URLQueryItem])
-//    case post(Data?)
     case post(Data?,[URLQueryItem])
     case delete(Data?)
     
@@ -31,6 +30,7 @@ struct Resource<T:Codable> {
 struct HTTPClient {
     
     static var shared = HTTPClient()
+    private let apiKey = Bundle.main.infoDictionary?["MovixAPIKey"] as? String ?? ""
     private var defaultHeaders: [String: String] {
         var headers = ["accept": "application/json"]
         headers["content-type"] = "application/json"
@@ -46,7 +46,9 @@ struct HTTPClient {
                 url: resource.url,
                 resolvingAgainstBaseURL: false
             )
+            
             components?.queryItems = queryItems
+            components?.queryItems?.append(URLQueryItem(name: "api_key", value: apiKey))
             guard let url = components?.url else {
                 throw NetworkError.badRequest
             }
@@ -56,29 +58,27 @@ struct HTTPClient {
             
             
         case .post(let data, let queries):
-//            if queries.count > 0 {
-//                var components = URLComponents(
-//                    url: resource.url,
-//                    resolvingAgainstBaseURL: false
-//                )
-//                components?.queryItems = queries
-//                guard let url = components?.url else {
-//                    throw NetworkError.badRequest
-//                }
-//                request = URLRequest(url: url)
-//            }
+            if queries.count > 0 {
+                var components = URLComponents(
+                    url: resource.url,
+                    resolvingAgainstBaseURL: false
+                )
+                components?.queryItems = queries
+                guard let url = components?.url else {
+                    throw NetworkError.badRequest
+                }
+                request = URLRequest(url: url)
+            }
             request.httpMethod = resource.method.name
             request.httpBody = data
         case .delete(let data):
             request.httpMethod = resource.method.name
             request.httpBody = data
         }
-        
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = defaultHeaders
         let session = URLSession(configuration: configuration)
         let (data, response) = try await session.data(for: request)
-//        print(String(decoding: data, as: UTF8.self))
         guard let _ = response as? HTTPURLResponse else {
             throw NetworkError.invalidResponse
         }

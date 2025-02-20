@@ -21,7 +21,7 @@ struct ActionBarButtonLabel: View {
         }
     }
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 8) {
             VStack {
                 image
                     .resizable()
@@ -67,7 +67,7 @@ struct MovieActionsBar: View {
                         .navigationBarBackButtonHidden()
                         .environment(movieVM)
                 } label: {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         VStack {
                             Image(.providersIcon)
                                 .resizable()

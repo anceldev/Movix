@@ -11,7 +11,7 @@ struct MovieScreen: View {
     
     let movieId: Int
     @State private var showRateSlider = false
-    @State private var currentRate: Float = 5.0
+    @State private var currentRate: Int = 0
     @State private var movieVM = MovieViewModel()
     @Environment(UserViewModel.self) var userVM
     @Environment(AuthViewModel.self) var authVM
@@ -39,10 +39,16 @@ struct MovieScreen: View {
                                         ActionBarButtonLabel(label: "Rate", imageName: "rate", isOn: false)
                                     })
                                     
-                                    Button(action: {
-                                        addToFavorites()
-                                    }, label: {
-                                        ActionBarButtonLabel(label: "Favorites", imageName: "heart-icon", isOn: true)
+                                    Button(
+                                        action: {
+                                            addToFavorites()
+                                        },
+                                        label: {
+                                            ActionBarButtonLabel(
+                                                label: "Favorites",
+                                                imageName: "heart-icon",
+                                                isOn: userVM.user.favoriteMovies.contains(where: { $0.id == movie.id })
+                                            )
                                     })
                                     NavigationLink {
                                         Text("Lists screen")
@@ -112,9 +118,12 @@ struct MovieScreen: View {
     private func addToFavorites() {
         Task {
             guard let movie = movieVM.movie else { return }
-            await userVM.addFavoriteMovie(movie: movie)
+        
+            await userVM.toggleFavoriteMovie(movie: movie)
+            
         }
     }
+
 }
 #Preview(body: {
     NavigationStack {

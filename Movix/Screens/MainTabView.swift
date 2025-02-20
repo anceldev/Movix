@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var selectedTab: TabOption = .lists
+    @State private var selectedTab: TabOption = .home
     @State var moviesVM = MoviesViewModel()
     @State var userVM: UserViewModel
     

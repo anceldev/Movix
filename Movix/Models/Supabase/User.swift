@@ -15,8 +15,8 @@ struct User: Codable, Identifiable {
     var lang: String?
     var avatarPath: String?
     
-    var favorites: [Movie]
-    var rates: [RatesList]
+    var favoriteMovies: [Movie]
+    var ratedMovies: [Movie]
     var lists: [SupList]
     
     enum CodingKeys: String, CodingKey {
@@ -35,14 +35,14 @@ struct User: Codable, Identifiable {
         }
     }
     
-    init(id: Int, name: String, username: String, lang: String? = nil, avatarPath: String?, favorites: [Movie] = [], rates: [RatesList] = [], lists: [SupList] = []) {
+    init(id: Int, name: String, username: String, lang: String? = nil, avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [SupList] = []) {
         self.id = id
         self.name = name
         self.username = username
         self.lang = lang
         self.avatarPath = avatarPath
-        self.favorites = favorites
-        self.rates = rates
+        self.favoriteMovies = favoriteMovies
+        self.ratedMovies = ratedMovies
         self.lists = lists
     }
     
@@ -59,8 +59,8 @@ struct User: Codable, Identifiable {
             self.avatarPath = "https://image.tmdb.org/t/p/w500" + avatarPath
         }
         
-        self.favorites = []
-        self.rates = []
+        self.favoriteMovies = []
+        self.ratedMovies = []
         self.lists = []
     }
     

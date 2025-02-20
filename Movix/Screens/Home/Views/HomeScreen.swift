@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeScreen: View {
+    @Environment(MoviesViewModel.self) var moviesVM
     var body: some View {
         VStack {
             Text("Welcome to Movix")
@@ -20,4 +21,5 @@ struct HomeScreen: View {
 
 #Preview {
     HomeScreen()
+        .environment(MoviesViewModel())
 }

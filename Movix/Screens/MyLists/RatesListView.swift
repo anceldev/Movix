@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct RatesListView: View {
-    let ratesList: [RatesList]
+    let ratedList: [Movie]
+    @Environment(UserViewModel.self) var userVM
     var body: some View {
         VStack {
             ScrollView(.vertical) {
-                ForEach(ratesList, id: \.movie.id) { item in
+                ForEach(ratedList) { item in
                     NavigationLink {
-                        MovieScreen(movieId: item.movie.tmdbId)
+                        MovieScreen(movieId: item.id)
                             .navigationBarBackButtonHidden()
                     } label: {
-                        MediaRow(title: item.movie.title, backdropPath: item.movie.backdropPath) {
-                            Text(item.rate ?? 0, format: .number)
+                        MediaRow(title: item.title, backdropPath: item.backdropPath, myRate: item.rating) {
+                            Text(item.rating ?? 0, format: .number)
                         }
                     }
                 }
@@ -29,6 +30,7 @@ struct RatesListView: View {
     }
 }
 
-#Preview {
-    RatesListView(ratesList: [])
-}
+//#Preview {
+//    RatesListView(ratedList: [])
+//        .environment(UserViewModel(user: User.preview))
+//}
