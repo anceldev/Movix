@@ -12,6 +12,7 @@ struct Response: Codable {
     let expiresAt: Date?
     let token: String?
     let sessionId: String?
+    let listId: Int?
     
     let statusCode: Int?
     let statusMessage: String?
@@ -23,6 +24,7 @@ struct Response: Codable {
         case sessionId = "session_id"
         case statusCode = "status_code"
         case statusMessage = "status_message"
+        case listId = "list_id"
     }
     
     init(from decoder: Decoder) throws {
@@ -40,6 +42,7 @@ struct Response: Codable {
         self.sessionId = try values.decodeIfPresent(String.self, forKey: .sessionId)
         self.statusCode = try values.decodeIfPresent(Int.self, forKey: .statusCode)
         self.statusMessage = try values.decodeIfPresent(String.self, forKey: .statusMessage)
+        self.listId = try values.decodeIfPresent(Int.self, forKey: .listId)
     }
     func encode(to encoder: any Encoder) throws {
         

@@ -15,6 +15,8 @@ final class MovieViewModel {
     var reviews = [Review]()
     var providers: Providers = .init()
     
+    private var lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
+    
     var errorMessage: String?
         private let httpClient = HTTPClient.shared
     
@@ -36,7 +38,7 @@ final class MovieViewModel {
         do {
             let resource = Resource(
                 url: Endpoints.movie("\(id)").url,
-                method: .get([URLQueryItem(name: "language", value: "en-US")]),
+                method: .get([URLQueryItem(name: "language", value: lang)]),
                 modelType: Movie.self
             )
             let movie = try await httpClient.load(resource)
@@ -50,7 +52,7 @@ final class MovieViewModel {
         do {
             let resource = Resource(
                 url: Endpoints.cast("\(id)", .movie).url,
-                method: .get([URLQueryItem(name: "language", value: "en-US")]),
+                method: .get([URLQueryItem(name: "language", value: lang)]),
                 modelType: Credit.self
             )
             let movieCredits = try await httpClient.load(resource)
@@ -68,7 +70,7 @@ final class MovieViewModel {
             let resource = Resource(
                 url: Endpoints.review(.movie, "\(id)").url,
                 method: .get([
-                    URLQueryItem(name: "language", value: "en-US"),
+                    URLQueryItem(name: "language", value: lang),
                     URLQueryItem(name: "page", value: "1")
                 ]),
                 modelType: PageCollection<Review>.self

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShortMovie: Codable, Identifiable, Equatable, Hashable {
+struct ShortMovie: Codable, Identifiable, Equatable, Hashable, MediaItemProtocol {
     var id: Int
     var title: String
     var releaseDate: Date?

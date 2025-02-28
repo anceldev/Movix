@@ -7,16 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B4CAFB3A2D577109005BEB0B /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = B4CAFB392D577109005BEB0B /* Auth */; };
-		B4CAFB3C2D577109005BEB0B /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = B4CAFB3B2D577109005BEB0B /* Functions */; };
-		B4CAFB3E2D577109005BEB0B /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = B4CAFB3D2D577109005BEB0B /* PostgREST */; };
-		B4CAFB402D577109005BEB0B /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = B4CAFB3F2D577109005BEB0B /* Realtime */; };
-		B4CAFB422D577109005BEB0B /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = B4CAFB412D577109005BEB0B /* Storage */; };
-		B4CAFB452D57715A005BEB0B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = B4CAFB442D57715A005BEB0B /* Supabase */; };
+		B4C2E55B2D707D5B00A6CE99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B43A86F02D562D9500E4EC34 /* Movix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,12 +41,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B4CAFB3E2D577109005BEB0B /* PostgREST in Frameworks */,
-				B4CAFB3C2D577109005BEB0B /* Functions in Frameworks */,
-				B4CAFB452D57715A005BEB0B /* Supabase in Frameworks */,
-				B4CAFB3A2D577109005BEB0B /* Auth in Frameworks */,
-				B4CAFB422D577109005BEB0B /* Storage in Frameworks */,
-				B4CAFB402D577109005BEB0B /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +50,7 @@
 		B43A86E72D562D9500E4EC34 = {
 			isa = PBXGroup;
 			children = (
+				B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */,
 				B43A86F22D562D9500E4EC34 /* Movix */,
 				B4CAFB432D57715A005BEB0B /* Frameworks */,
 				B43A86F12D562D9500E4EC34 /* Products */,
@@ -101,12 +92,6 @@
 			);
 			name = Movix;
 			packageProductDependencies = (
-				B4CAFB392D577109005BEB0B /* Auth */,
-				B4CAFB3B2D577109005BEB0B /* Functions */,
-				B4CAFB3D2D577109005BEB0B /* PostgREST */,
-				B4CAFB3F2D577109005BEB0B /* Realtime */,
-				B4CAFB412D577109005BEB0B /* Storage */,
-				B4CAFB442D57715A005BEB0B /* Supabase */,
 			);
 			productName = Movix;
 			productReference = B43A86F02D562D9500E4EC34 /* Movix.app */;
@@ -137,7 +122,6 @@
 			mainGroup = B43A86E72D562D9500E4EC34;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B43A86F12D562D9500E4EC34 /* Products */;
@@ -154,6 +138,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4C2E55B2D707D5B00A6CE99 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +289,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -340,7 +325,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -383,50 +368,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B4CAFB392D577109005BEB0B /* Auth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Auth;
-		};
-		B4CAFB3B2D577109005BEB0B /* Functions */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Functions;
-		};
-		B4CAFB3D2D577109005BEB0B /* PostgREST */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = PostgREST;
-		};
-		B4CAFB3F2D577109005BEB0B /* Realtime */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Realtime;
-		};
-		B4CAFB412D577109005BEB0B /* Storage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Storage;
-		};
-		B4CAFB442D57715A005BEB0B /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4CAFB382D577109005BEB0B /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B43A86E82D562D9500E4EC34 /* Project object */;
 }

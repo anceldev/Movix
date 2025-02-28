@@ -15,23 +15,28 @@ final class MoviesViewModel {
     var similarMovies = [ShortMovie]()
     var movieGenres = [Genre]()
     var tvGenre = [Genre]()
+    
+    var movieCredits: MovieCredits?
+    
     var errorMessage: String?
     
     private var trendingMoviesPage: Int = 0
     private var searchedMoviesPage: Int = 0
     private var favoriteMoviesPage: Int = 0
     
+    private var lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
+    
     private let httpClient = HTTPClient.shared
     
     init() {
         Task {
-            self.movieGenres = await getGenres(lang: "en", mediaType: .movie)
-            self.tvGenre = await getGenres(lang: "en", mediaType: .tv)
-            await getTrendingMovies(lang: "en")
+            self.movieGenres = await getGenres(lang: lang, mediaType: .movie)
+            self.tvGenre = await getGenres(lang: lang, mediaType: .tv)
+            await getTrendingMovies()
         }
     }
     
-    private func getGenres(lang: String = "en", mediaType: MediaType) async -> [Genre]{
+    private func getGenres(lang: String, mediaType: MediaType) async -> [Genre]{
         do {
             let resource = Resource(
                 url: Endpoints.genre(mediaType).url,
@@ -43,14 +48,12 @@ final class MoviesViewModel {
             let genres = try await httpClient.load(resource)
             return genres.genres
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
             return []
         }
     }
     
-    func getTrendingMovies(lang: String = "en") async {
+    func getTrendingMovies() async {
         self.trendingMoviesPage += 1
         do {
             let resource = Resource(
@@ -64,12 +67,10 @@ final class MoviesViewModel {
             let trendingMovies = try await httpClient.load(resource)
             self.trendingMovies += trendingMovies.results
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = errorMessage
+            setError(error)
         }
     }
-    func searchMovies(searchTerm: String, lang: String = "en") async {
+    func searchMovies(searchTerm: String) async {
         if self.searchedMovies.isEmpty {
             self.searchedMoviesPage = 1
         }
@@ -90,9 +91,7 @@ final class MoviesViewModel {
             let searchedMovies = try await httpClient.load(resource)
             self.searchedMovies += searchedMovies.results
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = errorMessage
+            setError(error)
         }
     }
     
@@ -118,9 +117,7 @@ final class MoviesViewModel {
             }
             return nil
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
             return nil
         }
     }
@@ -141,9 +138,7 @@ final class MoviesViewModel {
             }
             return nil
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
             return nil
         }
     }
@@ -166,4 +161,65 @@ final class MoviesViewModel {
             self.errorMessage = error.localizedDescription
         }
     }
+    
+    
+    private func setError(_ error: Error) {
+        print(error)
+        print(error.localizedDescription)
+        self.errorMessage = error.localizedDescription
+    }
+}
+
+extension HTTPClient {
+    static func getBackdropImage(backdropPath: String?) async -> Image? {
+        guard let posterPath = backdropPath else {
+            return nil
+        }
+        do {
+            var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
+            let (dataW780, _) = try await URLSession.shared.data(from: url)
+            if let uiImage = UIImage(data: dataW780) {
+                return Image(uiImage: uiImage)
+            }
+            url = URL(string: "https://image.tmdb.org/t/p/w1280\(posterPath)")!
+            let (dataW1280, _) = try await URLSession.shared.data(from: url)
+            if let uiImage = UIImage(data: dataW1280) {
+                return Image(uiImage: uiImage)
+            }
+            url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
+            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
+            if let uiImage = UIImage(data: dataOriginal) {
+                return Image(uiImage: uiImage)
+            }
+            return nil
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+//            self.errorMessage = error.localizedDescription
+            return nil
+        }
+    }
+    static func getPosterImage(posterPath: String?) async -> Image? {
+        guard let posterPath = posterPath else {
+            return nil
+        }
+        do {
+            var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
+            let (dataW780, _) = try await URLSession.shared.data(from: url)
+            if let uiImage = UIImage(data: dataW780) {
+                return Image(uiImage: uiImage)
+            }
+            url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
+            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
+            if let uiImage = UIImage(data: dataOriginal) {
+                return Image(uiImage: uiImage)
+            }
+            return nil
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+    
 }

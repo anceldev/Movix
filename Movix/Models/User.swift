@@ -19,6 +19,10 @@ struct User: Codable, Identifiable {
     var ratedMovies: [Movie]
     var lists: [SupList]
     
+    var avatarPathURl: URL {
+        return URL(string: "https://image.tmdb.org/t/p/w500\(avatarPath ?? "")")!
+    }
+    
     enum CodingKeys: String, CodingKey {
         case id
         case name

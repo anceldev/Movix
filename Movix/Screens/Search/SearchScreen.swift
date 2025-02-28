@@ -44,7 +44,7 @@ struct SearchScreen: View {
                             itemsView: itemsView
                         )
                     case .tvShow:
-                        Text("Tv Shows")
+                        SearchedTvShows()
                     }
                 }
                 Spacer()

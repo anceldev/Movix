@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movie: Codable, Identifiable, Hashable {
+struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
     var id: Int
     var title: String
     var originalTitle: String?
@@ -17,6 +17,7 @@ struct Movie: Codable, Identifiable, Hashable {
     var posterPathUrl: URL?
     var posterPath: String?
     var genres: [Genre]?
+    var genreIds: [Int]?
     var backdropPath: String?
     var budget: Double?
     var homepageURL: URL?
@@ -25,6 +26,8 @@ struct Movie: Codable, Identifiable, Hashable {
     var voteCount: Int?
     var isAdult: Bool?
     var rating: Int?
+    
+    var character: String?
     
     var duration: String {
         guard let runtime else {
@@ -51,6 +54,8 @@ struct Movie: Codable, Identifiable, Hashable {
         case voteCount = "vote_count"
         case isAdult = "adult"
         case rating
+        
+        case character
     }
     
     init(from decoder: Decoder) throws {
@@ -87,8 +92,11 @@ struct Movie: Codable, Identifiable, Hashable {
         self.voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount)
         self.isAdult = try container.decodeIfPresent(Bool.self, forKey: .isAdult)
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
+        self.genreIds = try container.decodeIfPresent([Int].self, forKey: .genreIds)
         self.rating = try container.decodeIfPresent(Int.self, forKey: .rating)
 //        self.genreIds = try container.decode([Int].self, forKey: .genreIds)
+        
+        self.character = try container.decodeIfPresent(String.self, forKey: .character)
     }
     
     func encode(to encoder: any Encoder) throws { }

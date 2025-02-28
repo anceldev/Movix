@@ -15,7 +15,7 @@ struct ActorScreen: View {
     var body: some View {
         ZStack(alignment: .top) {
             ScrollView(.vertical) {
-                ZStack {
+                ZStack(alignment: .top) {
                     ActorPhoto()
                     LinearGradient(
                         stops: [
@@ -30,6 +30,7 @@ struct ActorScreen: View {
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 5)
+                    BannerTopBar(true)
                     
                 }
                 VStack {
@@ -40,14 +41,11 @@ struct ActorScreen: View {
                 }
                 .foregroundStyle(.white)
                 .padding()
-                
             }
             .scrollIndicators(.hidden)
-            BannerTopBar(true)
-                .padding(.top, 44)
+//            BannerTopBar(true)
         }
         .background(.bw10)
-        .ignoresSafeArea()
         .swipeToDismiss()
         .onAppear {
             Task {
@@ -121,9 +119,12 @@ struct ActorScreen: View {
                     }
                 }
             }, label: {
-                Text(viewMoreLimit == nil ? "View less" : "View More ")
+                Text("View More ")
                     .foregroundStyle(.blue1)
+                    .font(.hauora(size: 12))
+                    .opacity(viewMoreLimit == nil ? 0 : 1)
             })
+            .disabled(viewMoreLimit == nil)
         }
     }
 }

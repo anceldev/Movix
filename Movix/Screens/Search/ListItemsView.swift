@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct ListItemsView: View {
-    let movies: [ShortMovie]
+struct ListItemsView<T: MediaItemProtocol>: View {
+//    let movies: [ShortMovie]
+    let movies: [T]
     @Binding var searchTerm: String
     @Environment(MoviesViewModel.self) var moviesVM
     @State private var showLoadButton = false
@@ -19,9 +20,10 @@ struct ListItemsView: View {
             var seenMovieIDs = Set<Int>()
             ForEach(movies.filter { seenMovieIDs.insert($0.id).inserted }) { movie in
                 NavigationLink {
-                    MovieScreen(movieId: movie.id)
-                        .navigationBarBackButtonHidden()
-                        .toolbar(.hidden, for: .tabBar)
+//                    MovieScreen(movieId: movie.id)
+//                        .navigationBarBackButtonHidden()
+//                        .toolbar(.hidden, for: .tabBar)
+                    Text(movie.title)
 
                 } label: {
                     MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: movie.releaseDate, voteAverage: movie.voteAverage) {

@@ -12,27 +12,76 @@ struct ProfileScreen: View {
     @Environment(UserViewModel.self) var userVM
     var body: some View {
 //        @Bindable var authVM = authVM
-        VStack {
-            Text("Profile screen")
-                .foregroundStyle(.white)
+        NavigationStack {
             VStack {
-                Text(userVM.user.username)
-//                if let user = authVM.user {
-//                    ForEach(user.movies, id:\.id) { movie in
-//                        Text(movie.movieId, format: .number)
-//                    }
-//                    
-//                }
-//                ForEach(userVM.user.movies) { movie in
-//                    Text(movie.movieId, format: .number)
-//                }
+                VStack(spacing: 10) {
+                    AsyncImage(url: userVM.user.avatarPathURl) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .tint(.marsA)
+                        case .success(let image):
+                            ZStack {
+                                Color.bw50
+                                    .frame(width: 104, height: 104)
+                                    .clipShape(.circle)
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 104, height: 104)
+                                    .overlay {
+                                        Circle().stroke(.marsA, lineWidth: 2)
+                                    }
+                            }
+                            //                    case .failure(let _):
+                        case .failure:
+                            Image(.profileDefault)
+                                .resizable()
+                                .frame(width: 104, height: 104)
+                        @unknown default:
+                            Image(.profileDefault)
+                                .resizable()
+                                .frame(width: 104, height: 104)
+                        }
+                    }
+                    .padding(.top, 20)
+                    Text(userVM.user.username)
+                        .font(.hauora(size: 20))
+                        .foregroundStyle(.white)
+                }
+                VStack {
+                    
+                    List {
+                        Section {
+                            NavigationLink {
+                                LanguageScreen()
+                                    .environment(userVM)
+                                    .navigationBarBackButtonHidden()
+                            } label: {
+                                Text("Language")
+                                    .font(.hauora(size: 16, weight: .medium))
+                            }
+                            .listRowBackground(Color.bw20)
+                        } header: {
+                            Text("Account settings")
+                                .font(.hauora(size: 14, weight: .bold))
+                                .foregroundStyle(.white)
+                        }
+                        
+                    }
+                    .foregroundStyle(.white)
+                    .background(.clear)
+                    .scrollContentBackground(.hidden)
+                }
+                Button("Logout") {
+                    logout()
+                }
             }
-            Button("Logout") {
-                logout()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.bw10)
+            .onAppear {
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.bw10)
     }
     private func logout() {
         Task {
@@ -42,7 +91,9 @@ struct ProfileScreen: View {
 }
 
 #Preview {
-    ProfileScreen()
-        .environment(AuthViewModel())
-        .environment(UserViewModel(user: User.preview))
+    NavigationStack {
+        ProfileScreen()
+            .environment(AuthViewModel())
+            .environment(UserViewModel(user: User.preview))
+    }
 }

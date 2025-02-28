@@ -20,12 +20,13 @@ enum RequestError: Error {
     case tokenValidationError
     case sessionError
     case failedRequest
+    case listError
 }
 
 @Observable
 final class AuthViewModel {
-    var username: String = "anceltests"
-    var password: String = "12121212"
+    var username: String = ""
+    var password: String = ""
     
     var user: User?
     var state: AuthState = .authenticating

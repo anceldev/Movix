@@ -18,33 +18,32 @@ enum TimeWindow: String {
     case day
     case week
 }
-//
-//enum AuthEndpoints {
-//    case getAccount(String)
-//    case deleteSession
-//    case requestToken
-//    case validateTokenWithLogin
-//    case createSession
-//    
-//    var url: URL {
-//        switch self {
-//        case .getAccount(let sessionId):
-//            return URL(string: baseUrlPath + "account?api_key=\(apiKey)&session_id=\(sessionId)")!
-//        case .deleteSession:
-//            return URL(string: Self.baseUrlPath + self.endpoint + "?api_key=\(Self.apiKey)")!
-//        case .requestToken:
-//            return URL(string: Self.baseUrlPath + self.endpoint + "new?api_key=\(Self.apiKey)")!
-//        case .validateTokenWithLogin:
-//            return URL(string: Self.baseUrlPath + self.endpoint + "?api_key=\(Self.apiKey)")!
-//        case .createSession:
-//            return URL(string: Self.baseUrlPath + self.endpoint + "new?api_key=\(Self.apiKey)")!
-//        }
-//    }
-//}
+
+enum SerieEndpoint {
+    case trending(TimeWindow)
+    case serie(Int)
+    case season(Int, Int)
+    case episode(Int, Int, Int)
+    
+    var url: URL {
+        switch self {
+        case .trending(let timeWindow):
+            return URL(string: baseUrlPath + "trending/tv/\(timeWindow)")!
+        case .serie(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)")!
+        case .season(let serieId, let season):
+            return URL(string: baseUrlPath + "tv/\(serieId)/season/\(season)")!
+        case .episode(let serieId, let season, let episode):
+            return URL(string: baseUrlPath + "tv/\(serieId)/season/\(season)/episode/\(episode)")!
+        }
+    }
+}
 
 enum MovieEndpoint {
     case addRating(Int)
     case simiarMovies(Int)
+    case createList
+    case movieCredits(Int)
     
     var url: URL {
         switch self {
@@ -52,10 +51,24 @@ enum MovieEndpoint {
             return URL(string: baseUrlPath + "movie/\(movieId)/rating")!
         case .simiarMovies(let movieId):
             return URL(string: baseUrlPath + "movie/\(movieId)/similar")!
+        case .createList:
+            return URL(string: baseUrlPath + "list")!
+        case .movieCredits(let peopleId):
+            return URL(string: baseUrlPath + "person/\(peopleId)/movie_credits")!
         }
     }
 }
 
+enum ConfigEndpoints {
+    case languages
+    
+    var url: URL {
+        switch self {
+        case .languages:
+            return URL(string: baseUrlPath + "configuration/languages")!
+        }
+    }
+}
 
 enum Endpoints {
     case movie(String) //

@@ -51,17 +51,6 @@ struct MediaRow<Content:View>: View {
                         
                         if let voteAverage = voteAverage {
                             if let formattedRate = NumberFormatter.popularity.string(from: NSNumber(value: voteAverage)) {
-//                                VStack(alignment: .leading) {
-//                                    ZStack(alignment: .center){
-//                                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, bottomTrailing: 10))
-//                                            .fill(.black.opacity(0.8))
-//                                        Text(formattedRate)
-//                                            .foregroundStyle(.blue1)
-//                                            .font(.hauora(size: 12))
-//                                    }
-//                                    .frame(width: 30, height: 20)
-//                                }
-//                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                 Vote(value: formattedRate)
                             }
                         }
@@ -88,7 +77,8 @@ struct MediaRow<Content:View>: View {
         .frame(height: 104)
         .onAppear {
             Task {
-                self.image = await moviesVM.getBackdropImage(backdropPath: backdropPath)
+//                self.image = await moviesVM.getBackdropImage(backdropPath: backdropPath)
+                self.image = await HTTPClient.getBackdropImage(backdropPath: backdropPath)
             }
         }
     }

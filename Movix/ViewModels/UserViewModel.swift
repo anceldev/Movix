@@ -10,38 +10,32 @@ import Foundation
 @Observable
 final class UserViewModel {
     var user: User
+    var languages = [Language]()
     var errorMessage: String?
     private var favoritesPage = 1
     private var ratedMoviesPage = 1
+    
+    var language: String {
+        didSet {
+            UserDefaults.standard.set(language, forKey: "lang")
+        }
+    }
     
     private var httpClient = HTTPClient()
     private var sessionId = UserDefaults.standard.string(forKey: "session_id") ?? ""
     
     init(user: User) {
         self.user = user
+        self.language = UserDefaults.standard.string(forKey: "lang") ?? "en"
         Task {
             await getFavoriteMovies()
             await getRatedMovies()
         }
     }
     
-//    func getFavoriteMovies() {
-//        do {
-//            
-//        } catch <#pattern#> {
-//            <#statements#>
-//        }
-//    }
     
-//    func toggleFavoriteMovie(movie: Movie) async {
-//        do {
-//            
-//        } catch {
-//            print(error)
-//            print(error.localizedDescription)
-//            self.errorMessage = error.localizedDescription
-//        }
-//    }
+    /// Add or removes a movie from favorites
+    /// - Parameter movie: movie to add or delete.
     func toggleFavoriteMovie(movie: Movie) async {
         do {
             let isFavorite = user.favoriteMovies.contains { $0.id == movie.id }
@@ -50,6 +44,7 @@ final class UserViewModel {
                 "media_id": movie.id,
                 "favorite": !isFavorite
             ] as [String:Any?]
+            
             let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
             let resource = Resource(
                 url: Endpoints.addFavorite(user.id).url,
@@ -69,9 +64,7 @@ final class UserViewModel {
                 user.favoriteMovies.append(movie)
             }
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
     }
     func getFavoriteMovies() async {
@@ -89,9 +82,7 @@ final class UserViewModel {
             let favoriteMovies = try await httpClient.load(resource)
             self.user.favoriteMovies = favoriteMovies.results
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
     }
     func getRatedMovies() async {
@@ -109,9 +100,7 @@ final class UserViewModel {
             let ratedCollection = try await httpClient.load(resource)
             self.user.ratedMovies = ratedCollection.results
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
     }
     func addRating(movie: Movie, rating: Int) async {
@@ -136,9 +125,7 @@ final class UserViewModel {
                 user.ratedMovies.append(ratedMovie)
             }
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
     }
     func getCurrentMovieRating(movieId: Int?) -> Int? {
@@ -146,5 +133,52 @@ final class UserViewModel {
         guard let movie = user.ratedMovies.first(where: { $0.id == movieId }),
               let ratingValue = movie.rating else { return nil }
         return ratingValue
+    }
+    
+    func createList(name: String, description: String, language: String) async {
+        do {
+            let parameters = [
+                "name": name,
+                "description": description,
+                "language": language
+            ] as [String:Any?]
+            
+            let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            
+            let resource = Resource(
+                url: MovieEndpoint.createList.url,
+                method: .post(postData, []),
+                modelType: Response.self
+            )
+            let response = try await httpClient.load(resource)
+            guard let succes = response.success,
+                  succes == true else {
+                throw RequestError.listError
+            }
+            let listId = response.listId
+            print(listId ?? 0)
+            
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func getLanguages() async {
+        do {
+            let resource = Resource(
+                url: ConfigEndpoints.languages.url,
+                modelType: [Language].self
+            )
+            let response = try await httpClient.load(resource)
+            self.languages = response
+        } catch {
+            setError(error)
+        }
+    }
+    
+    private func setError(_ error: Error) {
+        print(error)
+        print(error.localizedDescription)
+        self.errorMessage = error.localizedDescription
     }
 }

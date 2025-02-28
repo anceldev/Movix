@@ -13,6 +13,7 @@ final class PeopleViewModel {
     var actor: People?
     var errorMessage: String?
 
+    private var lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
     private let httpClient = HTTPClient.shared
     
     init() {
@@ -24,6 +25,9 @@ final class PeopleViewModel {
         do {
             let resource = Resource(
                 url: Endpoints.person("\(id)").url,
+                method: .get([
+                    URLQueryItem(name: "language", value: lang)
+                ]),
                 modelType: People.self
             )
             let actor = try await httpClient.load(resource)
