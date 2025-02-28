@@ -10,9 +10,9 @@ import SwiftUI
 
 @Observable
 final class MoviesViewModel {
-    var trendingMovies = [ShortMovie]()
-    var searchedMovies = [ShortMovie]()
-    var similarMovies = [ShortMovie]()
+    var trendingMovies = [Movie]()
+    var searchedMovies = [Movie]()
+    var similarMovies = [Movie]()
     var movieGenres = [Genre]()
     var tvGenre = [Genre]()
     
@@ -62,7 +62,8 @@ final class MoviesViewModel {
                     URLQueryItem(name: "language", value: lang),
                     URLQueryItem(name: "page", value: "\(self.trendingMoviesPage)")
                 ]),
-                modelType: PageCollection<ShortMovie>.self
+//                modelType: PageCollection<ShortMovie>.self
+                modelType: PageCollection<Movie>.self
             )
             let trendingMovies = try await httpClient.load(resource)
             self.trendingMovies += trendingMovies.results
@@ -85,7 +86,8 @@ final class MoviesViewModel {
                     URLQueryItem(name: "language", value: lang),
                     URLQueryItem(name: "page", value: "\(self.searchedMoviesPage)")
                 ]),
-                modelType: PageCollection<ShortMovie>.self
+//                modelType: PageCollection<ShortMovie>.self
+                modelType: PageCollection<Movie>.self
             )
             print("Searching on page: \(self.searchedMoviesPage)")
             let searchedMovies = try await httpClient.load(resource)
@@ -151,7 +153,8 @@ final class MoviesViewModel {
                     URLQueryItem(name: "language", value: "en"),
                     URLQueryItem(name: "page", value: "1")
                 ]),
-                modelType: PageCollection<ShortMovie>.self
+//                modelType: PageCollection<ShortMovie>.self
+                modelType: PageCollection<Movie>.self
             )
             let similarMovies = try await httpClient.load(resource)
             self.similarMovies = similarMovies.results

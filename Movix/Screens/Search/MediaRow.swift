@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MediaRow<Content:View>: View {
-    @Environment(MoviesViewModel.self) var moviesVM
+//    @Environment(MoviesViewModel.self) var moviesVM
+    
     let title: String
     let backdropPath: String?
     let releaseDate: Date?
@@ -77,7 +78,6 @@ struct MediaRow<Content:View>: View {
         .frame(height: 104)
         .onAppear {
             Task {
-//                self.image = await moviesVM.getBackdropImage(backdropPath: backdropPath)
                 self.image = await HTTPClient.getBackdropImage(backdropPath: backdropPath)
             }
         }

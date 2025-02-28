@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct SearchedTvShows: View {
-    @State private var tvVM = TvViewModel()
+//    @State private var seriesVM = SeriesViewModel()
     var body: some View {
         VStack {
-            ScrollView(.vertical) {
-                ListItemsView(movies: tvVM.trendingTvShows, searchTerm: .constant(""))
-            }
-            .scrollIndicators(.hidden)
+//            ScrollView(.vertical) {
+//                ListItemsView(mediaItems: tvVM.trendingTvShows, searchTerm: .constant(""), mediaType: .tv)
+//            }
+//            .scrollIndicators(.hidden)
         }
 //        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -10,6 +10,7 @@ import SwiftUI
 struct GridItemsView: View {
     let movies: [ShortMovie]
     @Binding var searchTerm: String
+    let mediaType: MediaType
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Environment(MoviesViewModel.self) var moviesVM
@@ -25,38 +26,18 @@ struct GridItemsView: View {
                             .navigationBarBackButtonHidden()
                     } label: {
                         MediaGridItem(posterPath: movie.posterPath, voteAverage: movie.voteAverage)
-                            .environment(moviesVM)
+//                            .environment(moviesVM)
                     }
                 }
             }
-            Button {
-                loadMoreMovies()
-            } label: {
-                Label("Ver más", systemImage: "chevron.down")
-                    .foregroundStyle(.blue1)
-                    .frame(maxWidth: .infinity)
-                    .labelStyle(.iconOnly)
-            }
-            .padding()
         }
         .padding(16)
         .animation(.easeIn, value: moviesVM.searchedMovies)
     }
-    private func loadMoreMovies() {
-        Task {
-            if searchTerm.isEmpty {
-                await moviesVM.getTrendingMovies()
-            }
-            else {
-                await moviesVM.searchMovies(searchTerm: searchTerm)
-            }
-        }
-    }
 }
 
 #Preview {
-    GridItemsView(movies: [ShortMovie.preview], searchTerm: .constant(""))
-//        .environment(AuthViewModel())
+    GridItemsView(movies: [ShortMovie.preview], searchTerm: .constant(""), mediaType: .movie)
         .environment(MoviesViewModel())
 }
 

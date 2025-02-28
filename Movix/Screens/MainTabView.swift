@@ -11,6 +11,7 @@ struct MainTabView: View {
     @State private var selectedTab: TabOption = .home
     @State var moviesVM = MoviesViewModel()
     @State var userVM: UserViewModel
+    @State private var seriesVM = SeriesViewModel()
     
     init(user: User) {
         self._userVM = State(initialValue: UserViewModel(user: user))
@@ -53,6 +54,7 @@ struct MainTabView: View {
         .background(.bw10)
         .environment(moviesVM)
         .environment(userVM)
+        .environment(seriesVM)
         .animation(.easeOut, value: selectedTab)
         .toolbar(.visible, for: .tabBar)
         .toolbarBackground(.bw10, for: .tabBar)

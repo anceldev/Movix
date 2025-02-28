@@ -55,7 +55,7 @@ struct DetailsTabView: View {
 //                ScrollView(.vertical) {
 //                    
 //                GridItemsView(
-//                    movies: moviesVM.similarMovies,
+//                    mediaItems: moviesVM.similarMovies,
 //                    searchTerm: .constant("")
 //                )
 //                .environment(moviesVM)

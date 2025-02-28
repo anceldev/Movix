@@ -17,10 +17,11 @@ enum SearchTab: String, CaseIterable, Identifiable, Hashable {
 struct SearchScreen: View {
     
     @State private var showFilterSheet: Bool = false
-    @State private var itemsView: ViewOption = .grid
+    @State private var viewOption: ViewOption = .grid
     @State private var searchTerm = ""
     @State private var selectedTab: SearchTab = .movies
     @Environment(MoviesViewModel.self) private var moviesVM
+    @Environment(SeriesViewModel.self) private var seriesVM
     
     var body: some View {
         @Bindable var moviesVM = moviesVM
@@ -32,20 +33,22 @@ struct SearchScreen: View {
                 SearchBar(searchTerm: $searchTerm,
                     filterAction: {
                     showFilterSheet = true
-                }, itemsView: $itemsView)
+                }, viewOption: $viewOption)
                 VStack(spacing: 0) {
                     CustomSegmentedControl(state: $selectedTab)
                     switch selectedTab {
                     case .all:
                         Text("This is all")
                     case .movies:
-                        ItemsView(
+                        MediaItemsView(
                             searchTerm: $searchTerm,
-                            itemsView: itemsView
+                            viewOption: viewOption,
+                            mediaType: .movie
                         )
                     case .tvShow:
                         SearchedTvShows()
                     }
+
                 }
                 Spacer()
             }
@@ -55,11 +58,16 @@ struct SearchScreen: View {
                 Text("Filter screen")
             }
         }
+        .onChange(of: selectedTab, { oldValue, newValue in
+            searchTerm = ""
+        })
         .environment(moviesVM)
+        .environment(seriesVM)
     }
 }
 
 #Preview {
     SearchScreen()
         .environment(MoviesViewModel())
+        .environment(SeriesViewModel())
 }

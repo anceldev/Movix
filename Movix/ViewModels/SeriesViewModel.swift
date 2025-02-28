@@ -9,8 +9,8 @@ import Foundation
 import Observation
 
 @Observable
-final class TvViewModel {
-    var trendingTvShows = [TvSerie]()
+final class SeriesViewModel {
+    var trendingSeries = [TvSerie]()
     
     var errorMessage: String?
     private var trendingMoviesPage: Int = 0
@@ -31,7 +31,7 @@ final class TvViewModel {
                 modelType: PageCollection<TvSerie>.self
             )
             let response = try await httpClient.load(resource)
-            self.trendingTvShows = response.results
+            self.trendingSeries = response.results
         } catch  {
             setError(error)
         }

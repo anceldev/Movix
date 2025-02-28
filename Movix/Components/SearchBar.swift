@@ -13,11 +13,11 @@ struct SearchBar: View {
 
     @Binding var searchTerm: String    
     var filterAction: () -> Void
-    @Binding var itemsView: ViewOption
+    @Binding var viewOption: ViewOption
     
-//    init(filterAction: @escaping () -> Void, itemsView: Binding<ViewOption>) {
+//    init(filterAction: @escaping () -> Void, viewOption: Binding<ViewOption>) {
 //        self.filterAction = filterAction
-//        self._itemsView = itemsView
+//        self._itemsView = viewOption
 //    }
     
     var body: some View {
@@ -66,10 +66,10 @@ struct SearchBar: View {
                 })
                 Button(action: {
                     withAnimation(.easeInOut) {
-                        itemsView = itemsView == .row ? .grid : .row
+                        viewOption = viewOption == .row ? .grid : .row
                     }
                 }, label: {
-                    Image(systemName: itemsView == .row ? "rectangle.grid.3x2" : "rectangle.grid.1x2")
+                    Image(systemName: viewOption == .row ? "rectangle.grid.3x2" : "rectangle.grid.1x2")
                         .foregroundStyle(.white)
                 })
             }
@@ -87,6 +87,6 @@ struct SearchBar: View {
 }
 //
 //#Preview(traits: .sizeThatFitsLayout, body: {
-//    SearchBar(searchTerm: .constant(""), filterAction: {}, itemsView: .constant(.row))
+//    SearchBar(searchTerm: .constant(""), filterAction: {}, viewOption: .constant(.row))
 //        .background(.bw20)
 //})

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MediaGridItem: View {
-    @Environment(MoviesViewModel.self) var moviesVM
+//    @Environment(MoviesViewModel.self) var moviesVM
 //    let posterPath: URL?
     let posterPath: String?
     let voteAverage: Double?
@@ -53,7 +53,8 @@ struct MediaGridItem: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .onAppear {
             Task {
-                self.image = await moviesVM.getPosterImage(posterPath: self.posterPath)
+//                self.image = await moviesVM.getPosterImage(posterPath: self.posterPath)
+                self.image = await HTTPClient.getPosterImage(posterPath: self.posterPath)
             }
         }
     }
@@ -61,5 +62,5 @@ struct MediaGridItem: View {
 
 #Preview {
     MediaGridItem(posterPath: Movie.preview.posterPath, voteAverage: 8.7)
-        .environment(MoviesViewModel())
+//        .environment(MoviesViewModel())
 }
