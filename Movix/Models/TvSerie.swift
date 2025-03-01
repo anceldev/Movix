@@ -8,6 +8,7 @@
 import Foundation
 
 struct TvSerie: Codable, Identifiable, MediaItemProtocol {
+    var isAdult: Bool?
     var backdropPath: String?
     var releaseDate: Date? // First air date
     var genres: [Genre]?
@@ -25,6 +26,7 @@ struct TvSerie: Codable, Identifiable, MediaItemProtocol {
     var voteAverage: Double?
     
     enum CodingKeys: String, CodingKey {
+        case isAdult = "adult"
         case backdropPath = "backdrop_path"
         case releaseDate = "first_air_date"
         case genres
@@ -67,5 +69,6 @@ struct TvSerie: Codable, Identifiable, MediaItemProtocol {
         self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
 
         self.voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage)
+        self.isAdult = try container.decodeIfPresent(Bool.self, forKey: .isAdult)
     }
 }

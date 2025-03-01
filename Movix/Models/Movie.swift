@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
     var id: Int
     var title: String

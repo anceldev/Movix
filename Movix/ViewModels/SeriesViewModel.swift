@@ -20,11 +20,11 @@ final class SeriesViewModel {
     
     init() {
         Task {
-            await getTrendingTvShows()
+            await getTrendingSeries()
         }
     }
     
-    func getTrendingTvShows() async {
+    func getTrendingSeries() async {
         do {
             let resource = Resource(
                 url: SerieEndpoint.trending(.week).url,

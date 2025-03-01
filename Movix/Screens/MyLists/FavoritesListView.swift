@@ -15,8 +15,10 @@ struct FavoritesListView: View {
             ScrollView(.vertical) {
                 ForEach(movies) { movie in
                     NavigationLink {
-                        MovieScreen(movieId: movie.id)
-                            .navigationBarBackButtonHidden()
+//                        MediaScreen(movieId: movie.id)
+//                        MediaScreen(mediaId: movie.id, mediaType: .movie)
+//                            .navigationBarBackButtonHidden()
+                        Text("Media screen")
                     } label: {
                         MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: nil, voteAverage: movie.voteAverage) {
                             Button {

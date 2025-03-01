@@ -12,8 +12,8 @@ struct SearchBar: View {
     @Environment(MoviesViewModel.self) var moviesVM
 
     @Binding var searchTerm: String    
-    var filterAction: () -> Void
     @Binding var viewOption: ViewOption
+    var filterAction: () -> Void
     
 //    init(filterAction: @escaping () -> Void, viewOption: Binding<ViewOption>) {
 //        self.filterAction = filterAction

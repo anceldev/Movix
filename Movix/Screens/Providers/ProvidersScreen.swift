@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProvidersScreen: View {
     @Environment(MovieViewModel.self) var movieVM
+    @State private var providersVM = ProvidersViewModel()
     var body: some View {
             VStack {
                 BannerTopBar(true)

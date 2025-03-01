@@ -14,7 +14,7 @@ struct MediaItemsView: View {
 
     @Binding var searchTerm: String
     let viewOption: ViewOption
-    let mediaType: MediaType
+    var mediaType: MediaType
     
     var body: some View {
         @Bindable var moviesVM = moviesVM
@@ -22,12 +22,21 @@ struct MediaItemsView: View {
                 switch viewOption {
                 case .row:
                     VStack {
-                        ListItemsView(
-//                            mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
-                            mediaItems: getMediaItems()
-                            searchTerm: $searchTerm,
-                            mediaType: mediaType
-                        )
+                        switch mediaType {
+                            case .movie:
+                            ListItemsView(
+                                mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+                                searchTerm: $searchTerm,
+                                mediaType: mediaType
+                            )
+                        case .tv:
+                            ListItemsView(
+                                mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : [],
+                                searchTerm: $searchTerm,
+                                mediaType: mediaType
+                            )
+                        }
+                        
                         Button {
                             loadMediaItems()
                         } label: {
@@ -39,11 +48,23 @@ struct MediaItemsView: View {
                     }
                 case .grid:
                     VStack {
-                        GridItemsView(
-                            movies: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
-                            searchTerm: $searchTerm,
-                            mediaType: mediaType
-                        )
+                        switch mediaType {
+                        case .movie:
+                            GridItemsView(
+                                movies: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+                                searchTerm: $searchTerm,
+                                mediaType: mediaType
+                            )
+
+                        case .tv:
+                            GridItemsView(
+                                movies: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+                                searchTerm: $searchTerm,
+                                mediaType: mediaType
+                            )
+
+                        }
+
                         Button {
                             loadMediaItems()
                         } label: {
@@ -55,15 +76,11 @@ struct MediaItemsView: View {
                     }
                 }
         }
-    }
-    private func getMediaItems<T:MediaItemProtocol>() -> [T] {
-        switch mediaType {
-        case .movie:
-            return searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies
-        case .tv:
-            return searchTerm.isEmpty ? seriesVM.trendingSeries : []
+        .onChange(of: mediaType) { oldValue, newValue in
+            print("Media type is", newValue)
         }
     }
+
     private func loadMediaItems() {
         Task {
             if searchTerm.isEmpty {
@@ -71,7 +88,7 @@ struct MediaItemsView: View {
                 case .movie:
                     await moviesVM.getTrendingMovies()
                 case .tv:
-                    await seriesVM.getTrendingTvShows()
+                    await seriesVM.getTrendingSeries()
                 }
             } else {
                 switch mediaType {

@@ -97,10 +97,10 @@ struct GeneralTabView: View {
         }
     }
 }
-#Preview(body: {
-    NavigationStack {
-        MovieScreen(movieId: Movie.preview.id)
-            .environment(MovieViewModel())
-            .environment(UserViewModel(user: User.preview))
-    }
-})
+//#Preview(body: {
+//    NavigationStack {
+//        MediaScreen(mediaId: Movie.preview.id, mediaType: .movie)
+//            .environment(MovieViewModel())
+//            .environment(UserViewModel(user: User.preview))
+//    }
+//})

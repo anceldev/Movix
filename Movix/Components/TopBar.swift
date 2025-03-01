@@ -12,7 +12,7 @@ struct BannerTopBar: View {
     let shareButton: Bool
     @Environment(\.dismiss) private var dismiss
     
-    init(_ backButton: Bool, _ shareButton: Bool = false){
+    init(_ backButton: Bool = true, _ shareButton: Bool = false){
         self.backButton = backButton
         self.shareButton = shareButton
     }

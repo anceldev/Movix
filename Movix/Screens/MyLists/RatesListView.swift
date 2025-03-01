@@ -15,8 +15,10 @@ struct RatesListView: View {
             ScrollView(.vertical) {
                 ForEach(ratedList) { item in
                     NavigationLink {
-                        MovieScreen(movieId: item.id)
-                            .navigationBarBackButtonHidden()
+//                        MediaScreen(movieId: item.id)
+//                        MediaScreen(mediaId: item.id, mediaType: .movie)
+//                            .navigationBarBackButtonHidden()
+                        Text("Media screen")
                     } label: {
                         MediaRow(title: item.title, backdropPath: item.backdropPath, myRate: item.rating) {
                             Text(item.rating ?? 0, format: .number)

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Supabase
 
 enum AuthState {
     case authenticated
@@ -60,7 +59,7 @@ final class AuthViewModel {
             let sessionId = try await createSession(token: token)
             self.tmdbSession = sessionId
             UserDefaults.standard.set(sessionId, forKey: "session_id")
-            print(sessionId)
+//            print(sessionId)
             let user = try await getAccount()
             self.user = user
             self.state = .authenticated

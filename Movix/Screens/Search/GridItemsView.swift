@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct GridItemsView: View {
-    let movies: [ShortMovie]
+    let movies: [Movie]
     @Binding var searchTerm: String
-    let mediaType: MediaType
+    var mediaType: MediaType
     
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Environment(MoviesViewModel.self) var moviesVM
@@ -22,11 +22,12 @@ struct GridItemsView: View {
                 var seenMovieIDs = Set<Int>()
                 ForEach(movies.filter { seenMovieIDs.insert($0.id).inserted }) { movie in
                     NavigationLink {
-                        MovieScreen(movieId: movie.id)
-                            .navigationBarBackButtonHidden()
+//                        MediaScreen(mediaId: movie.id, mediaType: mediaType)
+//                            .navigationBarBackButtonHidden()
+                        Text("Media screen")
                     } label: {
                         MediaGridItem(posterPath: movie.posterPath, voteAverage: movie.voteAverage)
-//                            .environment(moviesVM)
+
                     }
                 }
             }
@@ -37,7 +38,7 @@ struct GridItemsView: View {
 }
 
 #Preview {
-    GridItemsView(movies: [ShortMovie.preview], searchTerm: .constant(""), mediaType: .movie)
+    GridItemsView(movies: [Movie.preview], searchTerm: .constant(""), mediaType: .movie)
         .environment(MoviesViewModel())
 }
 

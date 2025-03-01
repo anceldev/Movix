@@ -9,25 +9,22 @@ import SwiftUI
 
 struct PosterView: View {
     
-    @Environment(MovieViewModel.self) var movieVM
     let posterPath: String?
     let duration: String
     let isAdult: Bool?
     let releasedDate: String?
     let genres: [Genre]?
-    let id: Int
     
     @State private var posterImage: Image?
-
-    init(movie: Movie) {
-        self.posterPath = movie.posterPath
-        self.duration = movie.duration
-        self.isAdult = movie.isAdult
-        self.releasedDate = movie.releaseDate?.releaseDate()
-        self.genres = movie.genres
-        self.id = movie.id
-    }
     
+    init(posterPath: String?, duration: String, isAdult: Bool?, releaseDate: String?, genres: [Genre]?){
+        self.posterPath = posterPath
+        self.duration = duration
+        self.isAdult = isAdult
+        self.releasedDate = releaseDate
+        self.genres = genres
+    }
+
     var body: some View {
         ZStack {
             Color.gray
@@ -80,14 +77,14 @@ struct PosterView: View {
         .frame(maxWidth: .infinity)
         .onAppear {
             Task {
-                self.posterImage = await movieVM.getPosterImage(posterPath: self.posterPath)
+                self.posterImage = await HTTPClient.getPosterImage(posterPath: self.posterPath)
             }
         }
     }
 }
-#Preview(body: {
-    NavigationStack {
-        MovieScreen(movieId: Movie.preview.id)
-            .environment(AuthViewModel())
-    }
-})
+//#Preview(body: {
+//    NavigationStack {
+//        MediaScreen(mediaId: Movie.preview.id, mediaType: .movie)
+////            .environment(AuthViewModel())
+//    }
+//})

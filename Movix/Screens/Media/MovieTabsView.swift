@@ -12,7 +12,7 @@ enum MovieTab: String, CaseIterable, Identifiable, Hashable {
     
     var id: Self { self }
 }
-struct MovieTabsView: View {
+struct MovieTabsView<Content:View>: View {
     /// View Properties
     @State private var selectedTab: MovieTab = .general
     @Environment(\.colorScheme) private var scheme
@@ -20,7 +20,12 @@ struct MovieTabsView: View {
     @Environment(UserViewModel.self) var userVM
     /// Tab Progress
     @State private var tabProgress: CGFloat = 0
-        @State private var viewHeight: CGFloat = 300 // Add this line
+    @State private var viewHeight: CGFloat = 300 // Add this line
+    
+    let content: Content
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
 
     var body: some View {
         VStack(spacing: 15) {
@@ -30,11 +35,12 @@ struct MovieTabsView: View {
             switch selectedTab {
             case .general:
 //                GeneralTabView(cast: movieVM.cast)
-                GeneralTabView(
-                    id: movieVM.movie?.id ?? 0,
-                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
-                )
-                .environment(movieVM)
+//                GeneralTabView(
+//                    id: movieVM.movie?.id ?? 0,
+//                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
+//                )
+//                .environment(movieVM)
+                content
             case .details:
                 DetailsTabView(movie: movieVM.movie!)
             case .reviews:
