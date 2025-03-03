@@ -12,7 +12,6 @@ struct MediaView<Content: View, TabContent: View>: View {
     let overview: String?
     let poster: Content
     let tabContent: TabContent
-
     
     init(overview: String? = nil, @ViewBuilder poster: () -> Content, @ViewBuilder tabContent: () -> TabContent) {
         self.overview = overview
@@ -24,19 +23,21 @@ struct MediaView<Content: View, TabContent: View>: View {
             VStack {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical) {
-                        VStack {
-                            poster
+                        VStack(spacing: 0) {
+                            VStack {
+                                poster
+                            }
+                            // Actions bar zone
+                            MediaActionsBar(
+                                rateAction: {
+                                    proxy.scrollTo("mediaTabs")
+                                },
+                                favoriteAction: {}
+                            )
+                            OverviewView(overview: overview)
+                            tabContent
+                                .id("mediaTabs")
                         }
-                        // Actions bar zone
-                        MediaActionsBar(
-                            rateAction: {
-                                proxy.scrollTo("mediaTabs")
-                            },
-                            favoriteAction: {}
-                        )
-                        OverviewView(overview: overview)
-                        tabContent
-                        .id("mediaTabs")
                     }
                     .scrollIndicators(.hidden)
                 }

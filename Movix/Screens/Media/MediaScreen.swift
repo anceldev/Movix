@@ -106,7 +106,7 @@ struct MediaScreen<Content:View, T:MediaItemProtocol>: View {
                                 MovieTabsView {
                                     switch mediaType {
                                     case .movie:
-                                        GeneralTabView(
+                                        GeneralTabMovieView(
                                             id: movieVM.movie?.id ?? 0,
                                             currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
                                         )

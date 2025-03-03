@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import SwiftUI
 
 @Observable
 final class SerieViewModel {
@@ -34,6 +35,34 @@ final class SerieViewModel {
             self.serie = response
         } catch {
             setError(error)
+        }
+    }
+    func getSerieCredits(id: Int) async {
+        do {
+            let resource = Resource(
+                url: SerieEndpoint.agregateCredits(id).url,
+                modelType: Credit.self
+            )
+            let response = try await httpClient.load(resource)
+            self.cast = response.cast
+        } catch {
+            setError(error)
+        }
+    }
+    func loadPosterImage(imagePath: String?) async -> Image? {
+        do {
+            guard let imagePath else { return nil }
+            if let uiImage = try await ImageCacheManager.shared.getImage(forKey: imagePath) {
+                return Image(uiImage: uiImage)
+            }
+            if let posteUiImage = await HTTPClient.getPosterUIImage(posterPath: imagePath) {
+                try await ImageCacheManager.shared.saveImage(posteUiImage, forKey: imagePath)
+                return Image(uiImage: posteUiImage)
+            }
+            return nil
+        } catch {
+            setError(error)
+            return nil
         }
     }
     

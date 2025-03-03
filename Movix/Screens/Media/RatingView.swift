@@ -39,6 +39,7 @@ struct StarView: View {
 
 struct RatingView: View {
 //    @Binding var currentRate: Int
+    let mediaType: String
     @Binding var currentRate: Float
     @State private var isEditing = false
     let action: () -> Void
@@ -48,7 +49,7 @@ struct RatingView: View {
             Text("Rating")
                 .font(.hauora(size: 22, weight: .medium))
             VStack(spacing: 12) {
-                Text("Rate the movie with a touch")
+                Text("Rate the \(mediaType) with a touch")
                 VStack(spacing: 12) {
                     VStack {
                         HStack(spacing: 0) {
@@ -89,7 +90,7 @@ struct RatingView: View {
 #Preview {
     @Previewable @State var currentRate: Float = 0
     VStack {
-        RatingView(currentRate: $currentRate, action: {})
+        RatingView(mediaType: "movie", currentRate: $currentRate, action: {})
     }
     .padding(16)
 }

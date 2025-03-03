@@ -34,8 +34,8 @@ struct MovieTabsView<Content:View>: View {
             CustomSegmentedControl(state: $selectedTab)
             switch selectedTab {
             case .general:
-//                GeneralTabView(cast: movieVM.cast)
-//                GeneralTabView(
+//                GeneralTabMovieView(cast: movieVM.cast)
+//                GeneralTabMovieView(
 //                    id: movieVM.movie?.id ?? 0,
 //                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
 //                )

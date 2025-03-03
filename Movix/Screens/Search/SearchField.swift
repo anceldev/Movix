@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SearchField: View {
     @Binding var searchTerm: String
-    let action: () async -> Void
+    let loadAction: () async -> Void
+    let clearAction: () -> Void
     
     var body: some View {
 //        HStack(spacing: 16) {
@@ -30,6 +31,7 @@ struct SearchField: View {
                     }
                 Button(action: {
                     searchTerm = ""
+                    clearAction()
                 }, label: {
                     Label("Clear", systemImage: "xmark.circle.fill")
                         .labelStyle(.iconOnly)
@@ -42,19 +44,14 @@ struct SearchField: View {
             .background(.bw40)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .padding(.leading, 16)
-//        }
-//        .frame(maxWidth: .infinity)
-//        .frame(height: 44)
     }
     private func searchAction() {
         Task {
-            await action()
+            await loadAction()
         }
     }
 }
 
 #Preview {
-    SearchField(searchTerm: .constant("")){
-        print("Searching...")
-    }
+    SearchField(searchTerm: .constant(""), loadAction: {}, clearAction: {})
 }

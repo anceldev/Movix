@@ -15,6 +15,13 @@ struct MovieScreen: View {
     @State private var movieVM = MovieViewModel()
     @State private var selectedTab: MediaTab = .general
     
+    init(movieId: Int) {
+        self.movieId = movieId
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().standardAppearance = appearance
+    }
+    
     var body: some View {
         VStack {
             if let movie = movieVM.movie {
@@ -32,18 +39,27 @@ struct MovieScreen: View {
                             CustomSegmentedControl(state: $selectedTab)
                             switch selectedTab {
                             case .general:
-                                Text("General tab content")
+                                GeneralTabMovieView(
+                                    id: movieVM.movie?.id ?? 0,
+                                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
+                                )
+                                .environment(movieVM)
                             case .details:
-                                Text("Details tab content")
+                                DetailsTabView(movie: movie)
                             case .reviews:
-                                Text("Review tab content")
+                                ReviewsTabView()
                             }
                         }
                     }
                 }
+                .environment(movieVM)
             }
         }
+        .background(.bw10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .swipeToDismiss()
+//        .ignoresSafeArea(.all)
+        .ignoresSafeArea(.container, edges: .top)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -53,6 +69,7 @@ struct MovieScreen: View {
                         Image(systemName: "chevron.left")
                         Text("Movies")
                     }
+                    .foregroundStyle(.blue1)
                 }
             }
         }

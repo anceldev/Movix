@@ -16,8 +16,9 @@ struct PosterView: View {
     let genres: [Genre]?
     
     @State private var posterImage: Image?
+    @Environment(SerieViewModel.self) var serieVM
     
-    init(posterPath: String?, duration: String, isAdult: Bool?, releaseDate: String?, genres: [Genre]?){
+    init(posterPath: String? = nil, duration: String, isAdult: Bool? = nil, releaseDate: String? = nil, genres: [Genre]? = nil){
         self.posterPath = posterPath
         self.duration = duration
         self.isAdult = isAdult
@@ -75,16 +76,10 @@ struct PosterView: View {
             .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity)
-        .onAppear {
-            Task {
-                self.posterImage = await HTTPClient.getPosterImage(posterPath: self.posterPath)
+        .task {
+            if self.posterImage == nil {
+                self.posterImage = await serieVM.loadPosterImage(imagePath: posterPath)
             }
         }
     }
 }
-//#Preview(body: {
-//    NavigationStack {
-//        MediaScreen(mediaId: Movie.preview.id, mediaType: .movie)
-////            .environment(AuthViewModel())
-//    }
-//})

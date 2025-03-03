@@ -10,7 +10,7 @@ import SwiftUI
 struct SeriesScreen: View {
     @State private var searchTerm = ""
     @State private var showFilterSheet = false
-    @State private var viewOption: ViewOption = .gridx2
+    @State private var viewOption: ViewOption = .gridx3
     @Environment(SeriesViewModel.self) var seriesVM
     
     var body: some View {
@@ -23,8 +23,9 @@ struct SeriesScreen: View {
                     HStack(spacing: 16) {
                         SearchField(
                             searchTerm: $searchTerm,
-                            action: loadSeries
-                        )
+                            loadAction: loadSeries) {
+                                seriesVM.searchedSeries.removeAll()
+                            }
                         SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
                     }
                     .frame(maxWidth: .infinity)
@@ -49,11 +50,17 @@ struct SeriesScreen: View {
                             )
                         }
                     }
-                    Button {
-                        loadSeries()
-                    } label: {
-                        Image(systemName: "chevron.down")
+                    VStack {
+                        Button {
+                            loadSeries()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                                .foregroundStyle(.white)
+                        }
+                        .disabled(seriesVM.loadFlow == .loading)
                     }
+                    .padding(.top, 4)
+                    .padding(.bottom, 8)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.bw10)

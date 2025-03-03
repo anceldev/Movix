@@ -10,21 +10,22 @@ import SwiftUI
 struct MoviesScreen: View {
     @State private var searchTerm = ""
     @State private var showFilterSheet = false
-    @State private var viewOption: ViewOption = .gridx2
+    @State private var viewOption: ViewOption = .gridx3
     @Environment(MoviesViewModel.self) var moviesVM
     
     var body: some View {
         VStack {
             NavigationStack {
                 VStack(spacing: 8) {
-                    Text("Series")
+                    Text("Movies")
                         .font(.hauora(size: 22, weight: .semibold))
                         .foregroundStyle(.white)
                     HStack(spacing: 16) {
                         SearchField(
                             searchTerm: $searchTerm,
-                            action: loadMovies
-                        )
+                            loadAction: loadMovies){
+                                moviesVM.searchedMovies.removeAll()
+                            }
                         SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
                     }
                     .frame(maxWidth: .infinity)
@@ -52,15 +53,20 @@ struct MoviesScreen: View {
                             )
                         }
                     }
-                    Button {
-                        loadMovies()
-                    } label: {
-                        Image(systemName: "chevron.down")
+                    VStack {
+                        Button {
+                            loadMovies()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                        }
                     }
+                    .padding(.top, 4)
+                    .padding(.bottom, 8)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.bw10)
             }
+            .toolbarBackground(.clear, for: .navigationBar)
         }
         .animation(.easeIn, value: viewOption)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

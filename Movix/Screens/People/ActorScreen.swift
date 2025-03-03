@@ -8,9 +8,17 @@
 import SwiftUI
 
 struct ActorScreen: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var viewModel = PeopleViewModel()
     @State private var viewMoreLimit: Int? = 5
     let id: Int
+    
+    init(id: Int) {
+        self.id = id
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().standardAppearance = appearance
+    }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -30,7 +38,7 @@ struct ActorScreen: View {
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 5)
-                    BannerTopBar(true)
+//                    BannerTopBar(true)
                     
                 }
                 VStack {
@@ -45,8 +53,22 @@ struct ActorScreen: View {
             .scrollIndicators(.hidden)
 //            BannerTopBar(true)
         }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("Movie")
+                    }
+                }
+                .foregroundStyle(.blue1)
+            }
+        }
         .background(.bw10)
         .swipeToDismiss()
+        .ignoresSafeArea(.all, edges: .top)
         .onAppear {
             Task {
                 await viewModel.getActor(id: id)
@@ -105,8 +127,6 @@ struct ActorScreen: View {
         VStack(alignment: .leading) {
             Text("Bio")
                 .font(.hauora(size: 18, weight: .semibold))
-//                .fontWeight(.semibold)
-//                .font(.system(size: 18))
             Text(bio)
                 .lineLimit(viewMoreLimit)
             Button(action: {
@@ -130,5 +150,7 @@ struct ActorScreen: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout, body: {
-    ActorScreen(id: 10859)
+    NavigationStack {
+        ActorScreen(id: 10859)
+    }
 })

@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+
+enum ListControlsMedia: String, CaseIterable, Identifiable, Hashable {
+    case movies
+    case series
+    var id: Self { self }
+}
+
+
 enum ListControls: String, CaseIterable, Identifiable, Hashable {
     case favorites
     case rates
@@ -16,13 +24,15 @@ enum ListControls: String, CaseIterable, Identifiable, Hashable {
 struct MyListsScreen: View {
     @Environment(UserViewModel.self) var userVM
     @State private var selectedControl: ListControls = .favorites
+    @State private var selectedControlMedia: ListControlsMedia = .movies
     var body: some View {
         NavigationStack {
             VStack {
                 Text("My Lists")
                     .font(.hauora(size: 22, weight: .semibold))
                     .foregroundStyle(.white)
-                CustomSegmentedControl(state: $selectedControl)
+                CustomSegmentedControl(state: $selectedControlMedia)
+                
                 VStack {
                     switch selectedControl {
                     case .favorites:

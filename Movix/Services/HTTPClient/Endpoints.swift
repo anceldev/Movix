@@ -24,9 +24,21 @@ enum SerieEndpoint {
     case serie(Int)
     case season(Int, Int)
     case episode(Int, Int, Int)
+    case credits(Int)
+    case agregateCredits(Int)
+    case search
+    case addRating(Int)
+    case ratedSeries(Int)
+    case seasonDetails(Int, Int)
     
     var url: URL {
         switch self {
+        case .seasonDetails(let serieId, let seasonNumber):
+            return URL(string: baseUrlPath + "tv/\(serieId)/season/\(seasonNumber)")!
+        case .addRating(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/rating")!
+        case .ratedSeries(let accountId):
+            return URL(string: baseUrlPath + "account/\(accountId)/rated/tv")!
         case .trending(let timeWindow):
             return URL(string: baseUrlPath + "trending/tv/\(timeWindow)")!
         case .serie(let serieId):
@@ -35,6 +47,12 @@ enum SerieEndpoint {
             return URL(string: baseUrlPath + "tv/\(serieId)/season/\(season)")!
         case .episode(let serieId, let season, let episode):
             return URL(string: baseUrlPath + "tv/\(serieId)/season/\(season)/episode/\(episode)")!
+        case .credits(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/credits")!
+        case .agregateCredits(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/aggregate_credits")!
+        case .search:
+            return URL(string: baseUrlPath + "search/tv")!
         }
     }
 }

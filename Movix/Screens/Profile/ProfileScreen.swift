@@ -11,7 +11,6 @@ struct ProfileScreen: View {
     @Environment(AuthViewModel.self) var authVM
     @Environment(UserViewModel.self) var userVM
     var body: some View {
-//        @Bindable var authVM = authVM
         NavigationStack {
             VStack {
                 VStack(spacing: 10) {
@@ -58,8 +57,13 @@ struct ProfileScreen: View {
                                     .environment(userVM)
                                     .navigationBarBackButtonHidden()
                             } label: {
-                                Text("Language")
-                                    .font(.hauora(size: 16, weight: .medium))
+                                HStack {
+                                    Text("Language")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Text(userVM.lang)
+                                        .font(.hauora(size: 18, weight: .bold))
+                                }
                             }
                             .listRowBackground(Color.bw20)
                         } header: {

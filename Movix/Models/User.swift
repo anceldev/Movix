@@ -17,6 +17,10 @@ struct User: Codable, Identifiable {
     
     var favoriteMovies: [Movie]
     var ratedMovies: [Movie]
+    
+    var favoriteSeries: [TvSerie]
+    var ratedSeries: [TvSerie]
+    
     var lists: [SupList]
     
     var avatarPathURl: URL {
@@ -39,7 +43,7 @@ struct User: Codable, Identifiable {
         }
     }
     
-    init(id: Int, name: String, username: String, lang: String? = nil, avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [SupList] = []) {
+    init(id: Int, name: String, username: String, lang: String? = nil, avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [SupList] = [], ratedSeries: [TvSerie] = [], favoriteSeries: [TvSerie] = []) {
         self.id = id
         self.name = name
         self.username = username
@@ -48,6 +52,8 @@ struct User: Codable, Identifiable {
         self.favoriteMovies = favoriteMovies
         self.ratedMovies = ratedMovies
         self.lists = lists
+        self.ratedSeries = ratedSeries
+        self.favoriteSeries = favoriteSeries
     }
     
     init(from decoder: any Decoder) throws {
@@ -65,6 +71,8 @@ struct User: Codable, Identifiable {
         
         self.favoriteMovies = []
         self.ratedMovies = []
+        self.ratedSeries = []
+        self.favoriteSeries = []
         self.lists = []
     }
     

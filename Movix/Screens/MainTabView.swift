@@ -16,6 +16,7 @@ struct MainTabView: View {
     init(user: User) {
         self._userVM = State(initialValue: UserViewModel(user: user))
         UITabBar.appearance().unselectedItemTintColor = .white
+//        UITabBar.appearance().backgroundColor = .clear
     }
     
     var body: some View {
@@ -34,9 +35,6 @@ struct MainTabView: View {
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(.bw10, for: .tabBar)
-//                .toolbarBackground(.ultraThinMaterial, for: .tabBar)
-//                .preferredColorScheme(.dark)
-//                .toolbarBackground(.thinMaterial , for: .tabBar)
             
             MoviesScreen()
                 .tag(TabOption.movies)
@@ -44,7 +42,7 @@ struct MainTabView: View {
                     Label("Movies", systemImage: selectedTab == .movies ? "movieclapper.fill" : "movieclapper")
                 }
                 .toolbar(.visible, for: .tabBar)
-                .toolbarBackground(.thinMaterial, for: .tabBar)
+                .toolbarBackground(.bw10, for: .tabBar)
             
             MyListsScreen()
                 .tag(TabOption.lists)

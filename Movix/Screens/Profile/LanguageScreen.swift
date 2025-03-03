@@ -20,7 +20,7 @@ struct LanguageScreen: View {
                     Text("Current language")
                         .font(.hauora(size: 20, weight: .medium))
                     Spacer()
-                    Text(userVM.language)
+                    Text(userVM.lang)
                         .font(.hauora(size: 20, weight: .black))
                 }
                 .foregroundStyle(.white)
@@ -58,12 +58,12 @@ struct LanguageScreen: View {
         .background(.bw10)
         .onAppear {
             loadLanguages()
-            selectedLan = userVM.language
+            selectedLan = userVM.lang
         }
     }
     private func updateLanguage() {
         guard let lang = selectedLan else { return }
-        userVM.language = lang
+        userVM.lang = lang
         dismiss()
     }
     private func loadLanguages() {

@@ -10,11 +10,17 @@ import SwiftUI
 struct SerieScreen: View {
     
     let serieId: Int
-
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
     @State private var serieVM = SerieViewModel()
     @State private var selectedTab: MediaTab = .general
+    
+    init(serieId: Int) {
+        self.serieId = serieId
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().standardAppearance = appearance
+    }
     
     var body: some View {
         VStack {
@@ -33,7 +39,7 @@ struct SerieScreen: View {
                             CustomSegmentedControl(state: $selectedTab)
                             switch selectedTab {
                             case .general:
-                                Text("General tab")
+                                GeneralTabSerieView()
                             case .details:
                                 Text("Details tab")
                             case .reviews:
@@ -42,9 +48,11 @@ struct SerieScreen: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .top)
                         .frame(height: nil)
+                        .padding(.horizontal, 16)
                     }
                     Spacer()
                 }
+                .environment(serieVM)
             }
             else {
                 ProgressView()
@@ -53,7 +61,8 @@ struct SerieScreen: View {
             }
         }
         .background(.bw10)
-        .ignoresSafeArea(.all)
+        .ignoresSafeArea(.container, edges: .top)
+        .swipeToDismiss()
         .task {
             await serieVM.getSerieDetails(id: serieId)
         }
@@ -67,12 +76,15 @@ struct SerieScreen: View {
                         Text("Series")
                     }
                 }
+                .foregroundStyle(.blue1)
             }
         }
     }
 }
 
 #Preview {
-    SerieScreen(serieId: 52)
-        .environment(UserViewModel(user: User.preview))
+    NavigationStack {
+        SerieScreen(serieId: 52)
+            .environment(UserViewModel(user: User.preview))
+    }
 }

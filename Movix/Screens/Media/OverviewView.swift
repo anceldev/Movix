@@ -40,7 +40,8 @@ struct OverviewView: View {
                     }
                 }
             }
-            .padding([.horizontal, .top], 16)
+//            .padding([.horizontal, .top], 16)
+            .padding(.horizontal, 16)
         }
     }
 }

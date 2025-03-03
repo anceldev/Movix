@@ -15,9 +15,9 @@ final class UserViewModel {
     private var favoritesPage = 1
     private var ratedMoviesPage = 1
     
-    var language: String {
+    var lang: String {
         didSet {
-            UserDefaults.standard.set(language, forKey: "lang")
+            UserDefaults.standard.set(lang, forKey: "lang")
         }
     }
     
@@ -26,13 +26,12 @@ final class UserViewModel {
     
     init(user: User) {
         self.user = user
-        self.language = UserDefaults.standard.string(forKey: "lang") ?? "en"
+        self.lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
         Task {
             await getFavoriteMovies()
             await getRatedMovies()
         }
     }
-    
     
     /// Add or removes a movie from favorites
     /// - Parameter movie: movie to add or delete.
@@ -103,7 +102,25 @@ final class UserViewModel {
             setError(error)
         }
     }
-    func addRating(movie: Movie, rating: Int) async {
+    func getRatedSeries() async {
+        do {
+            let resource = Resource(
+                url: SerieEndpoint.ratedSeries(user.id).url,
+                method: .get([
+                    URLQueryItem(name: "language", value: lang),
+                    URLQueryItem(name: "page", value: "1"),
+                    URLQueryItem(name: "session_id", value: sessionId),
+                    URLQueryItem(name: "sort_by", value: "created_at.asc")
+                ]),
+                modelType: PageCollection<TvSerie>.self
+            )
+            let response = try await httpClient.load(resource)
+            self.user.ratedSeries = response.results
+        } catch {
+            setError(error)
+        }
+    }
+    func addMovieRating(movie: Movie, rating: Int) async {
         do {
             let parameters = [
                 "value": "\(rating)",
@@ -128,6 +145,32 @@ final class UserViewModel {
             setError(error)
         }
     }
+    func addSerieRating(serie: TvSerie, rating: Int) async {
+        do {
+            let parameters = [
+                "value": "\(rating)",
+            ] as [String:Any?]
+            let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            let resource = Resource(
+                url: SerieEndpoint.addRating(serie.id).url,
+                method: .post(
+                    postData,
+                    [URLQueryItem(name: "session_id", value: sessionId)]
+                ),
+                modelType: Response.self
+            )
+            
+            let rateResource = try await httpClient.load(resource)
+            if let statusCode = rateResource.statusCode, statusCode == 1 {
+                var ratedSerie = serie
+                ratedSerie.rating = rating
+                user.ratedSeries.append(ratedSerie)
+            }
+        } catch {
+            setError(error)
+        }
+    }
+    
     func getCurrentMovieRating(movieId: Int?) -> Int? {
         guard let movieId else { return nil }
         guard let movie = user.ratedMovies.first(where: { $0.id == movieId }),
