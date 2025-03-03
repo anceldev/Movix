@@ -42,8 +42,8 @@ struct MediaView<Content: View, TabContent: View>: View {
                 }
                 
             }
-            BannerTopBar()
-                .padding(.top, 44)
+//            BannerTopBar()
+//                .padding(.top, 44)
         }
     }
 }

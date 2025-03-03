@@ -17,6 +17,7 @@ final class MoviesViewModel {
     var tvGenre = [Genre]()
     
     var movieCredits: MovieCredits?
+//    var searchFlow: SearchFlow = .
     
     var errorMessage: String?
     

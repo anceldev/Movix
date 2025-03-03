@@ -15,7 +15,9 @@ struct HomeScreen: View {
                 .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .border(.yellow, width: 1)
         .background(.bw10)
+//        .background(.red)
     }
 }
 

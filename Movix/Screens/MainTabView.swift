@@ -8,47 +8,58 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var selectedTab: TabOption = .home
+    @State private var selectedTab: TabOption = .series
     @State var moviesVM = MoviesViewModel()
     @State var userVM: UserViewModel
     @State private var seriesVM = SeriesViewModel()
     
     init(user: User) {
         self._userVM = State(initialValue: UserViewModel(user: user))
+        UITabBar.appearance().unselectedItemTintColor = .white
     }
-
+    
     var body: some View {
         TabView(selection: $selectedTab) {
-            Group {
-                HomeScreen()
-                    .tag(TabOption.home)
-                    .tabItem {
-                        Label("Home", image: .homeIcon)
-                    }
-                    .toolbar(.visible, for: .tabBar)
-                    .toolbarBackground(.bw10, for: .tabBar)
-                SearchScreen()
-                    .tag(TabOption.search)
-                    .tabItem {
-                        Label("Search", image: .searchIcon)
-                    }
-                    .toolbar(.visible, for: .tabBar)
-                    .toolbarBackground(.bw10, for: .tabBar)
-                MyListsScreen()
-                    .tag(TabOption.lists)
-                    .tabItem {
-                        Label("My Lists", image: .heartIcon)
-                    }
-                    .toolbar(.visible, for: .tabBar)
-                    .toolbarBackground(.bw10, for: .tabBar)
-                ProfileScreen()
-                    .tag(TabOption.profile)
-                    .tabItem {
-                        Label("Profile", image: .profileIcon)
-                    }
-                    .toolbar(.visible, for: .tabBar)
-                    .toolbarBackground(.bw10, for: .tabBar)
-            }
+            HomeScreen()
+                .tag(TabOption.home)
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
+                }
+                .toolbar(.visible, for: .tabBar)
+                .toolbarBackground(.bw10, for: .tabBar)
+            SeriesScreen()
+                .tag(TabOption.series)
+                .tabItem {
+                    Label("Series", systemImage: selectedTab == .series ? "tv" : "tv.fill")
+                }
+                .toolbar(.visible, for: .tabBar)
+                .toolbarBackground(.bw10, for: .tabBar)
+//                .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+//                .preferredColorScheme(.dark)
+//                .toolbarBackground(.thinMaterial , for: .tabBar)
+            
+            MoviesScreen()
+                .tag(TabOption.movies)
+                .tabItem {
+                    Label("Movies", systemImage: selectedTab == .movies ? "movieclapper.fill" : "movieclapper")
+                }
+                .toolbar(.visible, for: .tabBar)
+                .toolbarBackground(.thinMaterial, for: .tabBar)
+            
+            MyListsScreen()
+                .tag(TabOption.lists)
+                .tabItem {
+                    Label("My lists", systemImage: "heart.fill")
+                }
+                .toolbar(.visible, for: .tabBar)
+                .toolbarBackground(.bw10, for: .tabBar)
+            ProfileScreen()
+                .tag(TabOption.profile)
+                .tabItem {
+                    Label("Profile", systemImage: selectedTab == .profile ? "person" : "person.fill")
+                }
+                .toolbar(.visible, for: .tabBar)
+                .toolbarBackground(.bw10, for: .tabBar)
         }
         .tint(.blue1)
         .background(.bw10)

@@ -9,23 +9,18 @@ import SwiftUI
 import Combine
 
 struct SearchBar: View {
-    @Environment(MoviesViewModel.self) var moviesVM
 
     @Binding var searchTerm: String    
     @Binding var viewOption: ViewOption
-    var filterAction: () -> Void
-    
-//    init(filterAction: @escaping () -> Void, viewOption: Binding<ViewOption>) {
-//        self.filterAction = filterAction
-//        self._itemsView = viewOption
-//    }
+    @Binding var showFilter: Bool
+    let action: () async -> Void
     
     var body: some View {
-        @Bindable var moviesVM = moviesVM
         HStack(spacing: 16) {
             HStack {
                 Button {
-                    searchMovies()
+                    searchAction()
+//                    await action()
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .foregroundStyle(.white)
@@ -36,13 +31,11 @@ struct SearchBar: View {
                     .tint(Color.bw90)
                     .submitLabel(.search)
                     .onSubmit {
-                        moviesVM.searchedMovies = []
-                        searchMovies()
+//                        searchAction()
                     }
                 
                 Button(action: {
                     searchTerm = ""
-                    moviesVM.searchedMovies = []
                 }, label: {
                     Label("Clear", systemImage: "xmark.circle.fill")
                         .labelStyle(.iconOnly)
@@ -55,22 +48,29 @@ struct SearchBar: View {
             .background(.bw40)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .padding(.leading, 16)
-            //            .padding(.horizontal)
             HStack(spacing: 8) {
                 Button(action: {
-                    filterAction()
+                    showFilter.toggle()
                 }, label: {
                     Label("Filter", systemImage: "line.3.horizontal.decrease")
                         .labelStyle(.iconOnly)
                         .foregroundStyle(.white)
                 })
                 Button(action: {
-                    withAnimation(.easeInOut) {
-                        viewOption = viewOption == .row ? .grid : .row
+                    switch viewOption {
+                    case .row: viewOption = .gridx2
+                    case .gridx2: viewOption = .gridx3
+                    case .gridx3: viewOption = .row
                     }
                 }, label: {
-                    Image(systemName: viewOption == .row ? "rectangle.grid.3x2" : "rectangle.grid.1x2")
-                        .foregroundStyle(.white)
+                    Group {
+                        switch viewOption {
+                        case .row: return Image(systemName: "rectangle.grid.1x2.fill")
+                        case .gridx2: return Image(systemName: "rectangle.grid.2x2.fill")
+                        case .gridx3: return Image(systemName: "square.grid.3x2.fill")
+                        }
+                    }
+                    .foregroundStyle(.white)
                 })
             }
             .frame(height: 42)
@@ -79,14 +79,23 @@ struct SearchBar: View {
         .frame(maxWidth: .infinity)
         .frame(height: 44)
     }
-    private func searchMovies() {
+    private func searchAction() {
         Task {
-            await moviesVM.searchMovies(searchTerm: searchTerm)
+            await action()
         }
     }
+//    private func searchAction() {
+//        print("Tapped")
+//        Task {
+//            await action()
+//        }
+//    }
 }
-//
-//#Preview(traits: .sizeThatFitsLayout, body: {
-//    SearchBar(searchTerm: .constant(""), filterAction: {}, viewOption: .constant(.row))
-//        .background(.bw20)
-//})
+
+#Preview(traits: .sizeThatFitsLayout, body: {
+    @Previewable @State var viewOption: ViewOption = .row
+    SearchBar(searchTerm: .constant(""), viewOption: $viewOption, showFilter: .constant(false)) {
+        print("Searching...")
+    }
+    .background(.bw20)        
+})

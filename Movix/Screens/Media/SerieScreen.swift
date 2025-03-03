@@ -12,6 +12,7 @@ struct SerieScreen: View {
     let serieId: Int
 
     @Environment(UserViewModel.self) var userVM
+    @Environment(\.dismiss) private var dismiss
     @State private var serieVM = SerieViewModel()
     @State private var selectedTab: MediaTab = .general
     
@@ -55,6 +56,18 @@ struct SerieScreen: View {
         .ignoresSafeArea(.all)
         .task {
             await serieVM.getSerieDetails(id: serieId)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("Series")
+                    }
+                }
+            }
         }
     }
 }

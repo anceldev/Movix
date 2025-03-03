@@ -13,6 +13,11 @@ enum SearchTab: String, CaseIterable, Identifiable, Hashable {
     case tv
     var id: Self { self }
 }
+//enum SearchFlow {
+//    case searching
+//    case success
+//    case error(Error)
+//}
 
 struct SearchScreen: View {
     
@@ -33,8 +38,8 @@ struct SearchScreen: View {
                 Text("Search")
                     .font(.hauora(size: 22, weight: .semibold))
                     .foregroundStyle(.white)
-                SearchBar(searchTerm: $searchTerm, viewOption: $viewOption) {
-                    showFilterSheet = true
+                SearchBar(searchTerm: $searchTerm, viewOption: $viewOption, showFilter: $showFilterSheet) {
+                    searchMovies()
                 }
                 VStack(spacing: 0) {
                     CustomSegmentedControl(state: $selectedTab)
@@ -69,6 +74,11 @@ struct SearchScreen: View {
         .environment(moviesVM)
         .environment(userVM)
         .environment(seriesVM)
+    }
+    private func searchMovies() {
+        Task {
+            await moviesVM.getTrendingMovies()
+        }
     }
 }
 

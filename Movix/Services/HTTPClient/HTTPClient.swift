@@ -79,6 +79,7 @@ struct HTTPClient {
         configuration.httpAdditionalHeaders = defaultHeaders
         let session = URLSession(configuration: configuration)
         let (data, response) = try await session.data(for: request)
+//        print(String(decoding: data, as: UTF8.self))
         guard let _ = response as? HTTPURLResponse else {
             throw NetworkError.invalidResponse
         }
