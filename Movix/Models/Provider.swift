@@ -26,7 +26,7 @@ struct Providers: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let resultsContainer = try container.nestedContainer(keyedBy: CountryCodes.self, forKey: .results)
     
-        let savedUserCountry = UserDefaults.standard.value(forKey: "countryCode") as? String ?? "US"
+        let savedUserCountry = UserDefaults.standard.value(forKey: "country") as? String ?? "US"
         let userCountry = CountryCodes(rawValue: savedUserCountry) ?? .US
     
         let esContainer = try? resultsContainer.nestedContainer(keyedBy: ProviderTypes.self, forKey: userCountry)

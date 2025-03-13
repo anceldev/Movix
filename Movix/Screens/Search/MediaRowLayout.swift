@@ -12,7 +12,8 @@ struct MediaRowLayout<T: MediaItemProtocol>: View {
     let mediaType: MediaType
     var body: some View {
         ScrollView(.vertical) {
-            LazyVStack(alignment: .leading) {
+//            LazyVStack(alignment: .leading) {
+            VStack(alignment: .leading) {
                 var seenMediaIDS = Set<Int>()
                 ForEach(mediaItems.filter { seenMediaIDS.insert($0.id).inserted }) { media in
                     NavigationLink {

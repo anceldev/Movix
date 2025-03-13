@@ -27,7 +27,9 @@ final class ProvidersViewModel {
             let resource = Resource(
                 url: endpoint,
                 method: .get([
-                    URLQueryItem(name: "language", value: lang)
+//                    URLQueryItem(name: "language", value: lang)
+                    URLQueryItem(name: "language", value: "en-US")
+//                    URLQueryItem(name: "region", value: "US")
                 ]),
                 modelType: Providers.self
             )

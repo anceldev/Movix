@@ -43,9 +43,6 @@ final class AuthViewModel {
             do {
                 self.tmdbSession = currentSessionId
                 self.user = try await getAccount()
-                if let country = user?.country {
-                    UserDefaults.standard.set(country, forKey: "countryCode")
-                }
                 self.state = .authenticated
                
             } catch {
@@ -65,8 +62,8 @@ final class AuthViewModel {
             UserDefaults.standard.set(sessionId, forKey: "session_id")
             let user = try await getAccount()
             self.user = user
-            print(user.country)
-            UserDefaults.standard.set(user.country, forKey: "countryCode")
+            UserDefaults.standard.set(user.lang, forKey: "lang")
+            UserDefaults.standard.set(user.country, forKey: "country")
             self.state = .authenticated
             
         } catch {

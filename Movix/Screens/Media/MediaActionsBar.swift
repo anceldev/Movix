@@ -12,7 +12,6 @@ struct MediaActionsBar: View {
     let mediaType: MediaType
     let rateAction: () -> Void
     let favoriteAction: () async -> Void
-//    let mediaType: MediaType
     @Environment(UserViewModel.self) var userVM
     
     var body: some View {
@@ -22,11 +21,13 @@ struct MediaActionsBar: View {
                     rateAction()
                 }
             } label: {
-                ActionBarButtonLabel(label: "Rate", imageName: "rate", isOn: false)
+                ActionBarButtonLabel(
+                    label: "Rate",
+                    imageName: "rate",
+                    isOn: mediaType == .movie ? userVM.isRatedMovie(id: mediaId) : userVM.isRatedSerie(id: mediaId)
+                )
             }
             Button {
-//                await toggleFavoriteMedia()
-                
                 Task {
                     await favoriteAction()
                 }
@@ -34,7 +35,7 @@ struct MediaActionsBar: View {
                 ActionBarButtonLabel(
                     label: "Favorites",
                     imageName: "heart-icon",
-                    isOn: false
+                    isOn: mediaType == .movie ? userVM.isFavoriteMovie(id: mediaId) : userVM.isFavoriteSerie(id: mediaId)
                 )
             }
             NavigationLink {
@@ -42,8 +43,8 @@ struct MediaActionsBar: View {
             } label: {
                 ActionBarButtonLabel(label: "My List", imageName: "shop", isOn: false)
             }
+            
             NavigationLink {
-                Text("ProvidersScreen")
                 ProvidersScreen(mediaId: mediaId, mediaType: mediaType)
                     .navigationBarBackButtonHidden()
             } label: {
@@ -75,8 +76,3 @@ struct MediaActionsBar: View {
         }
     }
 }
-
-//#Preview {
-//    MediaActionsBar(rateAction: {}, favoriteAction: {})
-//        .environment(UserViewModel(user: User.preview))
-//}

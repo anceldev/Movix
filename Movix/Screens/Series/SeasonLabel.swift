@@ -20,8 +20,9 @@ struct SeasonLabel: View {
                         .resizable()
                 }
                 else {
-                    ProgressView()
-                        .tint(.marsA)
+                    TimeoutProgressView()
+                    // ProgressView()
+                    //     .tint(.marsA)
                 }
             }
             .aspectRatio(2/3, contentMode: .fit)

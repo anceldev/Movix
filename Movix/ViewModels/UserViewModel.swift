@@ -11,13 +11,21 @@ import SwiftUI
 final class UserViewModel {
     var user: User
     var languages = [Language]()
+    var countries = [Country]()
     var errorMessage: String?
     private var favoritesPage = 1
     private var ratedMoviesPage = 1
+    private var favoriteSeriesPage = 1
+    private var ratedSeriesPage = 1
     
     var lang: String {
         didSet {
             UserDefaults.standard.set(lang, forKey: "lang")
+        }
+    }
+    var country: String {
+        didSet {
+            UserDefaults.standard.set(country, forKey: "country")
         }
     }
     
@@ -27,9 +35,12 @@ final class UserViewModel {
     init(user: User) {
         self.user = user
         self.lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
+        self.country = UserDefaults.standard.string(forKey: "country") ?? "US"
         Task {
             await getFavoriteMovies()
             await getRatedMovies()
+            await getRatedSeries()
+            await getFavoriteSeries()
         }
     }
     
@@ -83,6 +94,35 @@ final class UserViewModel {
             setError(error)
         }
     }
+    
+    func isFavoriteMovie(id: Int) -> Bool {
+        let favorite = user.favoriteMovies.first { $0.id == id }
+        if favorite != nil {
+            return true
+        }
+        return false
+    }
+    func isFavoriteSerie(id: Int) -> Bool {
+        let favorite = user.favoriteSeries.first { $0.id == id }
+        if favorite != nil {
+            return true
+        }
+        return false
+    }
+    func isRatedMovie(id: Int) -> Bool {
+        let rated = user.ratedMovies.first { $0.id == id }
+        if rated != nil {
+            return true
+        }
+        return false
+    }
+    func isRatedSerie(id: Int) -> Bool {
+        let ratedSeries = user.ratedSeries.first { $0.id == id }
+        if ratedSeries != nil {
+            return true
+        }
+        return false
+    }
 
     
     func getFavoriteMovies() async {
@@ -121,6 +161,25 @@ final class UserViewModel {
             setError(error)
         }
     }
+    func getFavoriteSeries() async {
+        do {
+            let resource = Resource(
+                url: SerieEndpoint.favorites(user.id).url,
+                method: .get([
+                    URLQueryItem(name: "language", value: user.lang),
+                    URLQueryItem(name: "page", value: "\(self.favoriteSeriesPage)"),
+                    URLQueryItem(name: "session_id", value: sessionId),
+                    URLQueryItem(name: "sort_by", value: "created_at.asc")
+                ]),
+                modelType: PageCollection<TvSerie>.self
+            )
+            let response = try await httpClient.load(resource)
+            self.user.favoriteSeries = response.results
+        } catch {
+            setError(error)
+        }
+    }
+    
     func getRatedSeries() async {
         do {
             let resource = Resource(
@@ -196,6 +255,12 @@ final class UserViewModel {
               let ratingValue = movie.rating else { return nil }
         return ratingValue
     }
+    func getCurrentSerieRating(serieId: Int?) -> Int? {
+        guard let serieId else { return nil }
+        guard let serie = user.ratedSeries.first(where: { $0.id == serieId }),
+              let ratingValue = serie.rating else { return nil }
+        return ratingValue
+    }
     
     func createList(name: String, description: String, language: String) async {
         do {
@@ -229,10 +294,29 @@ final class UserViewModel {
         do {
             let resource = Resource(
                 url: ConfigEndpoints.languages.url,
+                method: .get([
+                    URLQueryItem(name: "language", value: user.lang),
+                ]),
                 modelType: [Language].self
             )
             let response = try await httpClient.load(resource)
             self.languages = response
+        } catch {
+            setError(error)
+        }
+    }
+    func getCountries() async {
+        do {
+            let langCountries = "\(lang ?? "en")-\(country ?? "US")"
+            let resource = Resource(
+                url: ConfigEndpoints.countries.url,
+                method: .get([
+                    URLQueryItem(name: "language", value: langCountries)
+                ]),
+                modelType: [Country].self
+            )
+            let response = try await httpClient.load(resource)
+            self.countries = response
         } catch {
             setError(error)
         }

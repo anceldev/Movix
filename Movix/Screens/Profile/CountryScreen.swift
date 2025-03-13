@@ -1,39 +1,43 @@
 //
-//  LanguageScreen.swift
+//  CountryScreen.swift
 //  Movix
 //
-//  Created by Ancel Dev account on 26/2/25.
+//  Created by Ancel Dev account on 13/3/25.
 //
 
 import SwiftUI
+import FlagsKit
 
-struct LanguageScreen: View {
+struct CountryScreen: View {
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedLan: String?
+    @State private var selectedCountry: String?
     
     var body: some View {
         VStack {
             VStack(spacing: 16) {
                 HStack {
-                    Text("Current language")
+                    Text("Country")
                         .font(.hauora(size: 20, weight: .medium))
                     Spacer()
-                    Text(userVM.lang)
+                    FlagView(countryCode: userVM.country)
+                        .scaledToFit()
+                        .frame(maxWidth: 24)
+                        .clipShape(RoundedRectangle(cornerRadius: 2 ))
+                    Text(userVM.country.uppercased())
                         .font(.hauora(size: 20, weight: .black))
                 }
                 .foregroundStyle(.white)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("AVAILABLE LANGUAGES")
+                    Text("AVAILABLE COUNTRIES")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
-//                        .foregroundStyle(.bw50)
                     ScrollView(.vertical) {
-                        ForEach(userVM.languages, id: \.iso6391) { lang in
-                            LanguageRow(lang)
+                        ForEach(userVM.countries, id: \.iso31661) { country in
+                            CountryRow(country)
                                 .onTapGesture {
                                     withAnimation(.easeIn) {
-                                        selectedLan = lang.iso6391
+                                        selectedCountry = country.iso31661
                                     }
                                 }
                             Divider()
@@ -41,19 +45,19 @@ struct LanguageScreen: View {
                     }
                     .scrollIndicators(.hidden)
                     Button {
-                        updateLanguage()
+                        updateCountry()
                     } label: {
                         Text("Save")
                             .frame(maxWidth: .infinity)
                             .font(.hauora(size: 20, weight: .medium))
                     }
                     .buttonStyle(.capsuleButton)
-                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .swipeToDismiss()
             }
             .padding([.horizontal, .bottom], 16)
+            
         }
         .background(.bw10)
         .toolbar {
@@ -70,31 +74,34 @@ struct LanguageScreen: View {
             }
         }
         .onAppear {
-            loadLanguages()
-            selectedLan = userVM.lang
+            loadCountries()
+            selectedCountry = userVM.country
         }
     }
-    private func updateLanguage() {
-        guard let lang = selectedLan else { return }
-        userVM.lang = lang
-        print(userVM.lang)
+    private func updateCountry() {
+        guard let country = selectedCountry else { return }
+        userVM.country = country
         dismiss()
     }
-    private func loadLanguages() {
+    private func loadCountries() {
         Task {
-            await userVM.getLanguages()
-            userVM.languages.sort { $0.englishName < $1.englishName }
+            await userVM.getCountries()
+            userVM.countries.sort { $0.nativeName < $1.nativeName }
         }
     }
-    @ViewBuilder
-    func LanguageRow(_ lang: Language) -> some View {
+    func CountryRow(_ country: Country) -> some View {
         HStack(alignment: .center, spacing: 8) {
-            Text(lang.englishName)
+            FlagView(countryCode: country.iso31661)
+                .scaledToFit()
+                .frame(maxWidth: 24)
+                .opacity(selectedCountry == country.iso31661 ? 1 : 0.4)
+                .clipShape(RoundedRectangle(cornerRadius: 2 ))
+//                .aspectRatio(contentMode: .fill)
+            Text(country.nativeName)
                 .font(.hauora(size: 16))
-                .foregroundStyle(selectedLan == lang.iso6391 ? .white : .bw50)
-            
+                .foregroundStyle(selectedCountry == country.iso31661 ? .white : .bw50)
             Spacer(minLength: 0)
-            if selectedLan == lang.iso6391 {
+            if selectedCountry == country.iso31661 {
                 Image(systemName: "checkmark")
                     .foregroundStyle(.white)
                     .fontWeight(.black)
@@ -109,6 +116,6 @@ struct LanguageScreen: View {
 }
 
 #Preview {
-    LanguageScreen()
+    CountryScreen()
         .environment(UserViewModel(user: User.preview))
 }

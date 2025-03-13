@@ -39,24 +39,22 @@ struct SerieScreen: View {
                                 selectedTab = .general
                                 proxy.scrollTo( "mediaTabs")
                             }, favoriteAction: toggleFavoriteSerie)
-//                            if let title = serieVM.serie?.title {
-//                                Text(title)
-//                                    .font(.hauora(size: 20, weight: .semibold))
-//                            }
                             OverviewView(title: serieVM.serie?.title, overview: serie.overview)
                             VStack {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {
                                 case .general:
 //                                    Text("General")
-                                    GeneralTabSerieView()
+                                    GeneralTabSerieView(currentRate: userVM.getCurrentSerieRating(serieId: serie.id))
                                 case .details:
                                     Text("Details")
                                 case .reviews:
                                     Text("Reviews")
                                 }
+                                
                             }
                             .padding()
+                            .id("mediaTabs")
                         }
                          .environment(serieVM)
                         .environment(userVM)

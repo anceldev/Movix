@@ -40,8 +40,7 @@ struct PosterView: View {
                     .aspectRatio(27/40, contentMode: .fill)
             }
             else {
-                ProgressView()
-                    .tint(.marsB)
+                TimeoutProgressView()
             }
             LinearGradient(
                 stops: [
@@ -82,7 +81,10 @@ struct PosterView: View {
         .frame(maxWidth: .infinity)
         .task {
             if self.posterImage == nil {
-                self.posterImage = await userVM.loadPosterImage(imagePath: posterPath)
+                let poster = await userVM.loadPosterImage(imagePath: posterPath)
+                withAnimation(.easeIn) {
+                    self.posterImage = poster
+                }
                 // if mediaType == .tv {
                 //     self.posterImage = await u.loadPosterImage(imagePath: posterPath)
                 // }

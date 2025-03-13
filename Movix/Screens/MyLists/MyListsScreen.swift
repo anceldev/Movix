@@ -29,11 +29,11 @@ struct MyListsScreen: View {
     @State private var mediaPopover = false
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 0) {
                 HStack {
-                    Text("My lists")
-                        .font(.hauora(size: 22, weight: .semibold))
+                    Text("My \(selectedMedia.rawValue.capitalized)")
                         .foregroundStyle(.white)
+                        .font(.hauora(size: 20, weight: .semibold))
                     Spacer()
                     Button {
                         mediaPopover.toggle()
@@ -60,33 +60,59 @@ struct MyListsScreen: View {
                         .presentationCompactAdaptation(.popover)
                     }
                 }
-                VStack {
-                    CustomSegmentedControl(state: $selectedList)
-                    switch selectedList {
-                    case .favorites:
-                        FavoritesListView<Movie>(mediaItems: userVM.user.favoriteMovies)
-                    case .rates:
-                        RatesListView(ratedList: userVM.user.ratedMovies)
+                Group {
+                    if selectedMedia == .movies {
+                        VStack {
+                            CustomSegmentedControl(state: $selectedList)
+                            switch selectedList {
+                            case .favorites:
+                                GridItemsView<Movie>(
+                                    mediaItems: userVM.user.favoriteMovies,
+                                    searchTerm: .constant(""),
+                                    mediaType: .movie,
+                                    columns: [
+                                        GridItem(.flexible()),
+                                        GridItem(.flexible()),
+                                        GridItem(.flexible())
+                                    ]
+                                )
+                            case .rates:
+                                GridItemsView<Movie>(
+                                    mediaItems: userVM.user.ratedMovies,
+                                    searchTerm: .constant(""),
+                                    mediaType: .movie,
+                                    columns: [
+                                        GridItem(.flexible()),
+                                        GridItem(.flexible()),
+                                        GridItem(.flexible())
+                                    ]
+                                )
+                            }
+                        }
+                    }
+                    else {
+                        VStack {
+                            CustomSegmentedControl(state: $selectedList)
+                            switch selectedList {
+                            case .favorites:
+                                GridItemsView<TvSerie>(
+                                    mediaItems: userVM.user.favoriteSeries,
+                                    searchTerm: .constant(""),
+                                    mediaType: .tv,
+                                    columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                                )
+                            case .rates:
+                                GridItemsView<TvSerie>(
+                                    mediaItems: userVM.user.ratedSeries,
+                                    searchTerm: .constant(""),
+                                    mediaType: .tv,
+                                    columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                                )
+                            }
+                        }
                     }
                 }
                 Spacer()
-                
-//                Text("My Lists")
-//                    .font(.hauora(size: 22, weight: .semibold))
-//                    .foregroundStyle(.white)
-//                CustomSegmentedControl(state: $selectedControlMedia)
-//                
-//                VStack {
-//                    switch selectedControl {
-//                    case .favorites:
-//                        FavoritesListView(movies: userVM.user.favoriteMovies)
-//                    case .rates:
-//                        RatesListView(ratedList: userVM.user.ratedMovies)
-//                    }
-//                    Spacer()
-//                }
-//                .padding(.horizontal, 16)
-//                .frame(maxWidth: .infinity)
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)

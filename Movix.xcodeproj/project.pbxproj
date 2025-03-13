@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B41449332D8330230099E201 /* FlagsKit in Frameworks */ = {isa = PBXBuildFile; productRef = B41449322D8330230099E201 /* FlagsKit */; };
 		B4C2E55B2D707D5B00A6CE99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B41449332D8330230099E201 /* FlagsKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +94,7 @@
 			);
 			name = Movix;
 			packageProductDependencies = (
+				B41449322D8330230099E201 /* FlagsKit */,
 			);
 			productName = Movix;
 			productReference = B43A86F02D562D9500E4EC34 /* Movix.app */;
@@ -122,6 +125,7 @@
 			mainGroup = B43A86E72D562D9500E4EC34;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				B41449312D8330230099E201 /* XCRemoteSwiftPackageReference "FlagsKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B43A86F12D562D9500E4EC34 /* Products */;
@@ -368,6 +372,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B41449312D8330230099E201 /* XCRemoteSwiftPackageReference "FlagsKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pichukov/FlagsKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B41449322D8330230099E201 /* FlagsKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B41449312D8330230099E201 /* XCRemoteSwiftPackageReference "FlagsKit" */;
+			productName = FlagsKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B43A86E82D562D9500E4EC34 /* Project object */;
 }

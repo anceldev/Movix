@@ -42,7 +42,7 @@ struct ProvidersScreen: View {
         }
         .background(.bw10)
         .frame(maxHeight: .infinity)
-        .ignoresSafeArea(.container, edges: .top)
+//        .ignoresSafeArea(.container, edges: .top)
         .swipeToDismiss()
         .toolbar {
             ToolbarItem(placement: .navigation) {

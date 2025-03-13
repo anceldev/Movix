@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MediaRow<Content:View>: View {
-//    @Environment(MoviesViewModel.self) var moviesVM
     
     let title: String
     let backdropPath: String?
@@ -43,8 +42,9 @@ struct MediaRow<Content:View>: View {
                                 }
                             }
                             else {
-                                ProgressView()
-                                    .tint(.marsB)
+                                TimeoutProgressView()
+//                                ProgressView()
+//                                    .tint(.marsB)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -78,7 +78,10 @@ struct MediaRow<Content:View>: View {
         .frame(height: 104)
         .onAppear {
             Task {
-                self.image = await HTTPClient.getBackdropImage(backdropPath: backdropPath)
+                let backdrop = await HTTPClient.getBackdropImage(backdropPath: backdropPath)
+                withAnimation(.easeIn) {
+                    self.image = backdrop
+                }
             }
         }
     }

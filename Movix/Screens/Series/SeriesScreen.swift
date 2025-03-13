@@ -10,7 +10,7 @@ import SwiftUI
 struct SeriesScreen: View {
     @State private var searchTerm = ""
     @State private var showFilterSheet = false
-    @State private var viewOption: ViewOption = .gridx3
+    @State private var viewOption: ViewOption = .row
     @Environment(SeriesViewModel.self) var seriesVM
    
     

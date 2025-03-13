@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FlagsKit
 
 struct ProfileScreen: View {
     @Environment(AuthViewModel.self) var authVM
@@ -62,6 +63,24 @@ struct ProfileScreen: View {
                                         .font(.hauora(size: 16, weight: .medium))
                                     Spacer()
                                     Text(userVM.lang)
+                                        .font(.hauora(size: 18, weight: .bold))
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                            NavigationLink {
+                                CountryScreen()
+                                    .environment(userVM)
+                                    .navigationBarBackButtonHidden()
+                            } label: {
+                                HStack {
+                                    FlagView(countryCode: userVM.country)
+                                        .scaledToFit()
+                                        .frame(maxWidth: 24)
+                                        .clipShape(RoundedRectangle(cornerRadius: 2 ))
+                                    Text("Country")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Text(userVM.lang.uppercased())
                                         .font(.hauora(size: 18, weight: .bold))
                                 }
                             }
