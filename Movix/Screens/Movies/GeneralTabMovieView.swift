@@ -26,7 +26,6 @@ struct GeneralTabMovieView: View {
             }
             RatingView(mediaType: "movie", currentRate: $currentRate, action: rateMovie)
         }
-        .padding(16)
         .onChange(of: currentRate) {
             print(Int(currentRate))
         }

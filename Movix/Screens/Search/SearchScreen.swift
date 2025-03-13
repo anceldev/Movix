@@ -38,7 +38,11 @@ struct SearchScreen: View {
                 Text("Search")
                     .font(.hauora(size: 22, weight: .semibold))
                     .foregroundStyle(.white)
-                SearchBar(searchTerm: $searchTerm, viewOption: $viewOption, showFilter: $showFilterSheet) {
+                SearchBar(
+                    searchTerm: $searchTerm,
+                    viewOption: $viewOption,
+                    showFilter: $showFilterSheet
+                ) {
                     searchMovies()
                 }
                 VStack(spacing: 0) {

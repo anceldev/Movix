@@ -63,9 +63,9 @@ struct MovieActionsBar: View {
                     ActionBarButtonLabel(label: "My List", imageName: "heart-icon", isOn: false)
                 })
                 NavigationLink {
-                    ProvidersScreen()
-                        .navigationBarBackButtonHidden()
-                        .environment(movieVM)
+//                    ProvidersScreen()
+//                        .navigationBarBackButtonHidden()
+//                        .environment(movieVM)
                 } label: {
                     VStack(spacing: 8) {
                         VStack {

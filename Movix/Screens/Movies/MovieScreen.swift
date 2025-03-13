@@ -25,40 +25,56 @@ struct MovieScreen: View {
     var body: some View {
         VStack {
             if let movie = movieVM.movie {
-                VStack {
-                    MediaView(overview: movie.overview) {
-                        PosterView(
-                            posterPath: movie.posterPath,
-                            duration: movie.duration,
-                            isAdult: movie.isAdult,
-                            releaseDate: movie.releaseDate?.releaseDate(),
-                            genres: movie.genres
-                        )
-                    } tabContent: {
-                        VStack {
-                            CustomSegmentedControl(state: $selectedTab)
-                            switch selectedTab {
-                            case .general:
-                                GeneralTabMovieView(
-                                    id: movieVM.movie?.id ?? 0,
-                                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
-                                )
-                                .environment(movieVM)
-                            case .details:
-                                DetailsTabView(movie: movie)
-                            case .reviews:
-                                ReviewsTabView()
+                ScrollViewReader { proxy in
+                    ScrollView(.vertical) {
+                        VStack(spacing: 0) {
+                            PosterView(
+                                posterPath: movie.posterPath,
+                                duration: movie.duration,
+                                isAdult: movie.isAdult,
+                                releaseDate: movie.releaseDate?.releaseDate(),
+                                genres: movie.genres,
+                                mediaType: .movie
+                            )
+
+                            MediaActionsBar(mediaId: movieId, mediaType: .movie, rateAction: {
+                                selectedTab = .general
+                                proxy.scrollTo( "mediaTabs")
+                            }, favoriteAction: toggleFavoriteMovie)
+                            OverviewView(title: movieVM.movie?.title, overview: movie.overview)
+                            VStack {
+                                CustomSegmentedControl(state: $selectedTab)
+                                switch selectedTab {
+                                case .general:
+                                    GeneralTabMovieView(
+                                        id: movieVM.movie?.id ?? 0,
+                                        currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
+                                    )
+                                    .id("mediaTabs")
+                                case .details:
+                                    DetailsTabView(movie: movie)
+                                    
+                                case .reviews:
+                                    ReviewsTabView()
+                                }
                             }
+                            .padding()
                         }
+                        .environment(movieVM)
+                        .environment(userVM)
                     }
+                    .scrollIndicators(.hidden)
                 }
-                .environment(movieVM)
+            } else {
+                ProgressView()
+                    .tint(.marsB)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.bw10)
             }
         }
         .background(.bw10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .swipeToDismiss()
-//        .ignoresSafeArea(.all)
         .ignoresSafeArea(.container, edges: .top)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -77,7 +93,11 @@ struct MovieScreen: View {
             await movieVM.getMovieDetails(id: movieId)
         }
     }
-    
+    private func toggleFavoriteMovie() async {
+        if let movie = movieVM.movie {
+            await userVM.toggleFavoriteMovie(media: movie, mediaType: .movie)
+        }
+    }
 }
 #Preview {
     NavigationStack {

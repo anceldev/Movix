@@ -31,7 +31,7 @@ struct SeasonScreen: View {
                 )
                 .environment(serieVM)
                 if let seasonOverview = seasonVM.season?.overview, !seasonOverview.isEmpty {
-                    OverviewView(overview: seasonVM.season?.overview)
+                    OverviewView(title: seasonVM.season?.name, overview: seasonVM.season?.overview)
                 }
                 if let episodes = seasonVM.season?.episodes {
                     LazyVStack(spacing: 32) {

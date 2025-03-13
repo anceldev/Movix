@@ -12,6 +12,7 @@ struct SeriesScreen: View {
     @State private var showFilterSheet = false
     @State private var viewOption: ViewOption = .gridx3
     @Environment(SeriesViewModel.self) var seriesVM
+   
     
     var body: some View {
         VStack {

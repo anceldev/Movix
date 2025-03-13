@@ -8,20 +8,28 @@
 import SwiftUI
 
 struct ProvidersScreen: View {
-    @Environment(MovieViewModel.self) var movieVM
-    @State private var providersVM = ProvidersViewModel()
+//    @Environment(MovieViewModel.self) var movieVM
+    @Environment(\.dismiss) private var dismiss
+    let mediaType: MediaType
+    @State private var providersVM: ProvidersViewModel
+    
+    init(mediaId: Int, mediaType: MediaType) {
+        self.mediaType = mediaType
+        self._providersVM = State(initialValue: ProvidersViewModel(mediaType: mediaType, mediaId: mediaId))
+    }
+    var providers: Providers?
+
     var body: some View {
-            VStack {
-                BannerTopBar(true)
+        VStack {
                 ScrollView(.vertical) {
                     VStack(alignment: .leading, spacing: 24) {
                         Text("Providers")
                             .font(.hauora(size: 32, weight: .medium))
-                        ProvidersList(title: "Stream", providers: movieVM.providers.streamProviders)
+                        ProvidersList(title: "Stream", providers: providersVM.providers.streamProviders)
                             .background(.clear)
-                        ProvidersList(title: "Rent", providers: movieVM.providers.rentProviders)
+                        ProvidersList(title: "Rent", providers: providersVM.providers.rentProviders)
                             .background(.clear)
-                        ProvidersList(title: "Buy", providers: movieVM.providers.buyProviders)
+                        ProvidersList(title: "Buy", providers: providersVM.providers.buyProviders)
                             .background(.clear)
                         Spacer()
                     }
@@ -31,17 +39,24 @@ struct ProvidersScreen: View {
                     Spacer()
                 }
                 .scrollIndicators(.hidden)
-            }
-            .background(.bw10)
-            .frame(maxHeight: .infinity)
-            .swipeToDismiss()
-            .onAppear {
-                Task {
-                    await movieVM.getProviders(id: movieVM.movie?.id ?? 0)
+        }
+        .background(.bw10)
+        .frame(maxHeight: .infinity)
+        .ignoresSafeArea(.container, edges: .top)
+        .swipeToDismiss()
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text(mediaType == .movie ? "Movie" : "Serie")
+                    }
+                    .foregroundStyle(.blue1)
                 }
             }
-//        }
-//        .background(.bw10)
+        }
     }
     @ViewBuilder
     func ProvidersList(title: String, providers: [Providers.Provider]) -> some View {
@@ -87,10 +102,4 @@ struct ProvidersScreen: View {
             }
         }
     }
-}
-
-#Preview {
-//    ProvidersScreen(id: 533535)
-    ProvidersScreen()
-        .environment(MovieViewModel())
 }

@@ -149,12 +149,11 @@ final class MoviesViewModel {
     func getSimilarMovies(movieId: Int) async {
         do {
             let resource = Resource(
-                url: MovieEndpoint.simiarMovies(movieId).url,
+                url: MovieEndpoint.similar(movieId).url,
                 method: .get([
                     URLQueryItem(name: "language", value: "en"),
                     URLQueryItem(name: "page", value: "1")
                 ]),
-//                modelType: PageCollection<ShortMovie>.self
                 modelType: PageCollection<Movie>.self
             )
             let similarMovies = try await httpClient.load(resource)

@@ -11,12 +11,13 @@ struct Providers: Codable {
     var rentProviders: [Provider]
     var buyProviders: [Provider]
     var streamProviders: [Provider]
-    
     enum CodingKeys: String, CodingKey {
         case results
     }
     enum CountryCodes: String, CodingKey {
-        case ES
+        case AE, AR, AT, AU, BE, BG, BR, CA, CH, CL, CO, CZ, DE, DK, EC, EE, ES, FI, FR, GB
+        case GR, HU, ID, IE, IN, IT, JP, KR, LT, LV, MX, MY, NL, NO, NZ, PE, PH, PL, PT, RO
+        case RU, SE, SG, TH, TR, US, VE, ZA
     }
     enum ProviderTypes: String, CodingKey {
         case rent, buy, flatrate
@@ -24,7 +25,12 @@ struct Providers: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let resultsContainer = try container.nestedContainer(keyedBy: CountryCodes.self, forKey: .results)
-        let esContainer = try? resultsContainer.nestedContainer(keyedBy: ProviderTypes.self, forKey: .ES)
+    
+        let savedUserCountry = UserDefaults.standard.value(forKey: "countryCode") as? String ?? "US"
+        let userCountry = CountryCodes(rawValue: savedUserCountry) ?? .US
+    
+        let esContainer = try? resultsContainer.nestedContainer(keyedBy: ProviderTypes.self, forKey: userCountry)
+
         self.rentProviders = try esContainer?.decodeIfPresent([Provider].self, forKey: .rent) ?? []
         self.buyProviders = try esContainer?.decodeIfPresent([Provider].self, forKey: .buy) ?? []
         self.streamProviders = try esContainer?.decodeIfPresent([Provider].self, forKey: .flatrate) ?? []

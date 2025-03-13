@@ -21,7 +21,7 @@ final class SeasonViewModel {
     func getSeasonDetails(seasonId: Int, seasonNumber: Int) async {
         do {
             let resource = Resource(
-                url: SerieEndpoint.seasonDetails(seasonId, seasonNumber).url,
+                url: SerieEndpoint.details(seasonId, seasonNumber).url,
                 method: .get([
                     URLQueryItem(name: "language", value: lang)
                 ]),

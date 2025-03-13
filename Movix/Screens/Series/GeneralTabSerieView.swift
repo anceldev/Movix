@@ -17,11 +17,13 @@ struct GeneralTabSerieView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            if let seasons = serieVM.serie?.seasons,
+            if let seasons = serieVM.serie?.seasons, seasons.count > 0,
                seasons.count > 0 {
-                SeasonsView(seasons)
+                SeasonsView(seasons: seasons)
             }
-            CastView(cast: serieVM.cast)
+            if serieVM.cast.count > 0 {
+                CastView(cast: serieVM.cast)
+            }
             RatingView(mediaType: "serie", currentRate: $currentRate, action: rateSerie)
         }
         .task {

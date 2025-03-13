@@ -7,22 +7,29 @@
 
 import SwiftUI
 
-struct FavoritesListView: View {
-    let movies: [Movie]
+struct FavoritesListView<T: MediaItemProtocol>: View {
+//    let movies: [Movie]
+    let mediaItems: [T]
     @Environment(UserViewModel.self) var userVM
     var body: some View {
         VStack {
             ScrollView(.vertical) {
-                ForEach(movies) { movie in
+                ForEach(mediaItems) { media  in
                     NavigationLink {
 //                        MediaScreen(movieId: movie.id)
 //                        MediaScreen(mediaId: movie.id, mediaType: .movie)
 //                            .navigationBarBackButtonHidden()
                         Text("Media screen")
                     } label: {
-                        MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: nil, voteAverage: movie.voteAverage) {
+                        MediaRow(
+                            title: media.title,
+                            backdropPath: media.backdropPath,
+                            releaseDate: nil,
+                            voteAverage: media.voteAverage
+                        ) {
                             Button {
-                                toggleFavorite(movie: movie)
+//                                toggleFavorite(movie: movie)
+//                                favoriteAction(movie)
                             } label: {
                                 Image(.heartIcon)
                                     .foregroundStyle(.blue1)
@@ -38,16 +45,21 @@ struct FavoritesListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animation(.easeOut, value: userVM.user.favoriteMovies)
     }
+//    private func toggleFavorite(movie: Movie) {
+//        Task {
+//            await favoriteAction(movie)
+//        }
+//    }
     private func toggleFavorite(movie: Movie) {
         Task {
-            await userVM.toggleFavoriteMovie(movie: movie)
+//            await userVM.toggleFavoriteMovie(movie: movie)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        FavoritesListView(movies: [Movie.preview])
+        FavoritesListView(mediaItems: [Movie.preview])
             .environment(UserViewModel(user: User.preview))
     }
 }

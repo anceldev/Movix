@@ -149,4 +149,22 @@ final class MovieViewModel {
             return nil
         }
     }
+    func loadPosterImage(imagePath: String?) async -> Image? {
+        do {
+            guard let imagePath else { return nil }
+            if let uiImage = try await ImageCacheManager.shared.getImage(forKey: imagePath) {
+                return Image(uiImage: uiImage)
+            }
+            if let posteUiImage = await HTTPClient.getPosterUIImage(posterPath: imagePath) {
+                try await ImageCacheManager.shared.saveImage(posteUiImage, forKey: imagePath)
+                return Image(uiImage: posteUiImage)
+            }
+            return nil
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            self.errorMessage = error.localizedDescription
+            return nil
+        }
+    }
 }

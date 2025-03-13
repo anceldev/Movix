@@ -9,13 +9,20 @@ import SwiftUI
 
 struct SwipeToDismissModifier: ViewModifier {
     @Environment(\.dismiss) private var dismiss
+    var action: (() -> Void)?
     func body(content: Content) -> some View {
         content
             .gesture(
                 DragGesture()
                     .onEnded({ value in
                         if value.translation.width > 80 {
-                            dismiss()
+                            if let action {
+                                action()
+                                dismiss()
+                            }
+                            else {
+                                dismiss()
+                            }
                         }
                     })
             )
@@ -23,7 +30,7 @@ struct SwipeToDismissModifier: ViewModifier {
 }
 
 extension View {
-    func swipeToDismiss() -> some View {
+    func swipeToDismiss(action: (() -> Void)? = nil) -> some View {
         self.modifier(SwipeToDismissModifier())
     }
 }

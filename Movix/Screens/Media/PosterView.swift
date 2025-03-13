@@ -14,16 +14,20 @@ struct PosterView: View {
     let isAdult: Bool?
     let releasedDate: String?
     let genres: [Genre]?
+    let mediaType: MediaType
     
     @State private var posterImage: Image?
-    @Environment(SerieViewModel.self) var serieVM
-    
-    init(posterPath: String? = nil, duration: String, isAdult: Bool? = nil, releaseDate: String? = nil, genres: [Genre]? = nil){
+    // @Environment(SerieViewModel.self) var serieVM
+    // @Environment(MovieViewModel.self) var movieVM
+    @Environment(UserViewModel.self) var userVM
+
+    init(posterPath: String? = nil, duration: String, isAdult: Bool? = nil, releaseDate: String? = nil, genres: [Genre]? = nil, mediaType: MediaType = .tv){
         self.posterPath = posterPath
         self.duration = duration
         self.isAdult = isAdult
         self.releasedDate = releaseDate
         self.genres = genres
+        self.mediaType = mediaType
     }
 
     var body: some View {
@@ -78,7 +82,13 @@ struct PosterView: View {
         .frame(maxWidth: .infinity)
         .task {
             if self.posterImage == nil {
-                self.posterImage = await serieVM.loadPosterImage(imagePath: posterPath)
+                self.posterImage = await userVM.loadPosterImage(imagePath: posterPath)
+                // if mediaType == .tv {
+                //     self.posterImage = await u.loadPosterImage(imagePath: posterPath)
+                // }
+                // else {
+                //     self.posterImage = await movieVM.loadPosterImage(imagePath: posterPath)
+                // }
             }
         }
     }

@@ -71,9 +71,9 @@ struct MediaScreen<Content:View, T:MediaItemProtocol>: View {
                                         ActionBarButtonLabel(label: "My List", imageName: "shop", isOn: false)
                                     }
                                     NavigationLink {
-                                        ProvidersScreen()
-                                            .navigationBarBackButtonHidden()
-                                            .environment(movieVM)
+//                                        ProvidersScreen()
+//                                            .navigationBarBackButtonHidden()
+//                                            .environment(movieVM)
                                     } label: {
                                         VStack(spacing: 12) {
                                             VStack {
@@ -153,9 +153,9 @@ struct MediaScreen<Content:View, T:MediaItemProtocol>: View {
     }
     private func addToFavorites() {
         Task {
-            guard let movie = movieVM.movie else { return }
-        
-            await userVM.toggleFavoriteMovie(movie: movie)
+//            guard let movie = movieVM.movie else { return }
+//        
+//            await userVM.toggleFavoriteMovie(movie: movie)
             
         }
     }

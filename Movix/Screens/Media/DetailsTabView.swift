@@ -65,7 +65,6 @@ struct DetailsTabView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(16)
         .padding(.bottom, 24)
         .onAppear {
             getSimilar(movieId: movie.id)

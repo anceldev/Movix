@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct MediaActionsBar: View {
+    let mediaId: Int
+    let mediaType: MediaType
     let rateAction: () -> Void
-    let favoriteAction: () -> Void
+    let favoriteAction: () async -> Void
+//    let mediaType: MediaType
+    @Environment(UserViewModel.self) var userVM
     
     var body: some View {
         HStack {
@@ -21,7 +25,11 @@ struct MediaActionsBar: View {
                 ActionBarButtonLabel(label: "Rate", imageName: "rate", isOn: false)
             }
             Button {
-                favoriteAction()
+//                await toggleFavoriteMedia()
+                
+                Task {
+                    await favoriteAction()
+                }
             } label: {
                 ActionBarButtonLabel(
                     label: "Favorites",
@@ -36,6 +44,8 @@ struct MediaActionsBar: View {
             }
             NavigationLink {
                 Text("ProvidersScreen")
+                ProvidersScreen(mediaId: mediaId, mediaType: mediaType)
+                    .navigationBarBackButtonHidden()
             } label: {
                 VStack(spacing: 12) {
                     VStack {
@@ -59,8 +69,14 @@ struct MediaActionsBar: View {
         }
         .padding(.vertical)
     }
+    private func toggleFavoriteMedia() {
+        Task {
+            await favoriteAction()
+        }
+    }
 }
 
-#Preview {
-    MediaActionsBar(rateAction: {}, favoriteAction: {})
-}
+//#Preview {
+//    MediaActionsBar(rateAction: {}, favoriteAction: {})
+//        .environment(UserViewModel(user: User.preview))
+//}

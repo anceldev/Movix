@@ -10,11 +10,13 @@ import SwiftUI
 struct MediaView<Content: View, TabContent: View>: View {
 
     let overview: String?
+    let mediaType: MediaType
     let poster: Content
     let tabContent: TabContent
     
-    init(overview: String? = nil, @ViewBuilder poster: () -> Content, @ViewBuilder tabContent: () -> TabContent) {
+    init(overview: String? = nil, mediaType: MediaType, @ViewBuilder poster: () -> Content, @ViewBuilder tabContent: () -> TabContent) {
         self.overview = overview
+        self.mediaType = mediaType
         self.poster = poster()
         self.tabContent = tabContent()
     }
@@ -28,13 +30,14 @@ struct MediaView<Content: View, TabContent: View>: View {
                                 poster
                             }
                             // Actions bar zone
-                            MediaActionsBar(
-                                rateAction: {
-                                    proxy.scrollTo("mediaTabs")
-                                },
-                                favoriteAction: {}
-                            )
-                            OverviewView(overview: overview)
+//                            MediaActionsBar(
+//                                rateAction: {
+//                                    proxy.scrollTo("mediaTabs")
+//                                },
+//                                mediaType: mediaType
+////                                favoriteAction: {}
+//                            )
+//                            OverviewView(overview: overview)
                             tabContent
                                 .id("mediaTabs")
                         }

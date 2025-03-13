@@ -25,34 +25,44 @@ struct SerieScreen: View {
     var body: some View {
         VStack {
             if let serie = serieVM.serie {
-                VStack {
-                    MediaView(overview: serie.overview) {
-                        PosterView(
-                            posterPath: serie.posterPath,
-                            duration: "\(serie.numberOfSeasons ?? 0) Se.",
-                            isAdult: serie.isAdult,
-                            releaseDate: serie.releaseDate?.releaseDate(),
-                            genres: serie.genres
-                        )
-                    } tabContent: {
-                        VStack {
-                            CustomSegmentedControl(state: $selectedTab)
-                            switch selectedTab {
-                            case .general:
-                                GeneralTabSerieView()
-                            case .details:
-                                Text("Details tab")
-                            case .reviews:
-                                Text("Reviews tab")
+                ScrollViewReader { proxy in
+                    ScrollView(.vertical) {
+                        LazyVStack(spacing: 0) {
+                            PosterView(
+                                posterPath: serie.posterPath,
+                                duration: "\(serie.numberOfSeasons ?? 0) Se.",
+                                isAdult: serie.isAdult,
+                                releaseDate: serie.releaseDate?.releaseDate(),
+                                genres: serie.genres
+                            )
+                            MediaActionsBar(mediaId: serieId, mediaType: .tv, rateAction: {
+                                selectedTab = .general
+                                proxy.scrollTo( "mediaTabs")
+                            }, favoriteAction: toggleFavoriteSerie)
+//                            if let title = serieVM.serie?.title {
+//                                Text(title)
+//                                    .font(.hauora(size: 20, weight: .semibold))
+//                            }
+                            OverviewView(title: serieVM.serie?.title, overview: serie.overview)
+                            VStack {
+                                CustomSegmentedControl(state: $selectedTab)
+                                switch selectedTab {
+                                case .general:
+//                                    Text("General")
+                                    GeneralTabSerieView()
+                                case .details:
+                                    Text("Details")
+                                case .reviews:
+                                    Text("Reviews")
+                                }
                             }
+                            .padding()
                         }
-                        .frame(maxWidth: .infinity, alignment: .top)
-                        .frame(height: nil)
-                        .padding(.horizontal, 16)
+                         .environment(serieVM)
+                        .environment(userVM)
                     }
-                    Spacer()
+                    .scrollIndicators(.hidden)
                 }
-                .environment(serieVM)
             }
             else {
                 ProgressView()
@@ -61,6 +71,7 @@ struct SerieScreen: View {
             }
         }
         .background(.bw10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.container, edges: .top)
         .swipeToDismiss()
         .task {
@@ -78,6 +89,11 @@ struct SerieScreen: View {
                 }
                 .foregroundStyle(.blue1)
             }
+        }
+    }
+    private func toggleFavoriteSerie() async {
+        if let serie = serieVM.serie {
+            await userVM.toggleFavoriteMovie(media: serie, mediaType: .tv)
         }
     }
 }

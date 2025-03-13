@@ -40,7 +40,7 @@ struct CustomSegmentedControl<T: Hashable & CaseIterable & Identifiable>: View {
             .frame(height: 40)
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 56)
+        .padding(.horizontal, 36)
         .background(
             Rectangle()
                 .fill(.blue1)

@@ -21,9 +21,9 @@ struct EpisodeView: View {
                     .resizable()
                     .aspectRatio(16/9, contentMode: .fit)
             }
-            Text(name)
+//            Text(name)
             if let overview {
-                OverviewView(overview: overview)
+                OverviewView(title: name, overview: overview)
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 10))

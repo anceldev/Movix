@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftUI
 @Observable
 final class UserViewModel {
     var user: User
@@ -35,12 +35,19 @@ final class UserViewModel {
     
     /// Add or removes a movie from favorites
     /// - Parameter movie: movie to add or delete.
-    func toggleFavoriteMovie(movie: Movie) async {
+    func toggleFavoriteMovie<T: MediaItemProtocol>(media: T, mediaType: MediaType) async {
         do {
-            let isFavorite = user.favoriteMovies.contains { $0.id == movie.id }
+            var isFavorite: Bool
+            if mediaType == .movie {
+                isFavorite = user.favoriteMovies.contains { $0.id == media.id }
+            }
+            else {
+                isFavorite = user.favoriteSeries.contains(where: { $0.id == media.id })
+            }
+            
             let parameters = [
-                "media_type": "movie",
-                "media_id": movie.id,
+                "media_type": mediaType.rawValue,
+                "media_id": media.id,
                 "favorite": !isFavorite
             ] as [String:Any?]
             
@@ -56,16 +63,28 @@ final class UserViewModel {
             guard let succes = response.success, succes == true else {
                 throw RequestError.failedRequest
             }
-            if isFavorite {
-                user.favoriteMovies.removeAll { $0.id == movie.id }
+            if mediaType == .movie {
+                if isFavorite {
+                    user.favoriteMovies.removeAll { $0.id == media.id }
+                }
+                else {
+                    user.favoriteMovies.append(media as! Movie)
+                }
             }
             else {
-                user.favoriteMovies.append(movie)
+                if isFavorite {
+                    user.favoriteSeries.removeAll { $0.id == media.id }
+                }
+                else {
+                    user.favoriteSeries.append(media as! TvSerie)
+                }
             }
         } catch {
             setError(error)
         }
     }
+
+    
     func getFavoriteMovies() async {
         do {
             let resource = Resource(
@@ -105,7 +124,7 @@ final class UserViewModel {
     func getRatedSeries() async {
         do {
             let resource = Resource(
-                url: SerieEndpoint.ratedSeries(user.id).url,
+                url: SerieEndpoint.rated(user.id).url,
                 method: .get([
                     URLQueryItem(name: "language", value: lang),
                     URLQueryItem(name: "page", value: "1"),
@@ -216,6 +235,23 @@ final class UserViewModel {
             self.languages = response
         } catch {
             setError(error)
+        }
+    }
+
+    func loadPosterImage(imagePath: String?) async -> Image? {
+        do {
+            guard let imagePath else { return nil }
+            if let uiImage = try await ImageCacheManager.shared.getImage(forKey: imagePath) {
+                return Image(uiImage: uiImage)
+            }
+            if let posteUiImage = await HTTPClient.getPosterUIImage(posterPath: imagePath) {
+                try await ImageCacheManager.shared.saveImage(posteUiImage, forKey: imagePath)
+                return Image(uiImage: posteUiImage)
+            }
+            return nil
+        } catch {
+            setError(error)
+            return nil
         }
     }
     

@@ -23,28 +23,72 @@ enum ListControls: String, CaseIterable, Identifiable, Hashable {
 
 struct MyListsScreen: View {
     @Environment(UserViewModel.self) var userVM
-    @State private var selectedControl: ListControls = .favorites
-    @State private var selectedControlMedia: ListControlsMedia = .movies
+    @State private var selectedList: ListControls = .favorites
+//    @State private var selectedControlMedia: ListControlsMedia = .movies
+    @State private var selectedMedia: ListControlsMedia = .movies
+    @State private var mediaPopover = false
     var body: some View {
         NavigationStack {
             VStack {
-                Text("My Lists")
-                    .font(.hauora(size: 22, weight: .semibold))
-                    .foregroundStyle(.white)
-                CustomSegmentedControl(state: $selectedControlMedia)
-                
+                HStack {
+                    Text("My lists")
+                        .font(.hauora(size: 22, weight: .semibold))
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Button {
+                        mediaPopover.toggle()
+                    } label: {
+                        Text(selectedMedia.rawValue.capitalized)
+                            .font(.hauora(size: 14, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 12)
+                            .background(.bw40)
+                            .clipShape(.capsule)
+                    }
+                    .popover(isPresented: $mediaPopover) {
+                        VStack {
+                            ForEach(ListControlsMedia.allCases) { btn in
+                                Text(btn.rawValue.capitalized)
+                                    .onTapGesture {
+                                        withAnimation(.easeIn) {
+                                            selectedMedia = btn
+                                        }
+                                    }
+                            }
+                        }
+                        .presentationCompactAdaptation(.popover)
+                    }
+                }
                 VStack {
-                    switch selectedControl {
+                    CustomSegmentedControl(state: $selectedList)
+                    switch selectedList {
                     case .favorites:
-                        FavoritesListView(movies: userVM.user.favoriteMovies)
+                        FavoritesListView<Movie>(mediaItems: userVM.user.favoriteMovies)
                     case .rates:
                         RatesListView(ratedList: userVM.user.ratedMovies)
                     }
-                    Spacer()
                 }
-                .padding(.horizontal, 16)
-                .frame(maxWidth: .infinity)
+                Spacer()
+                
+//                Text("My Lists")
+//                    .font(.hauora(size: 22, weight: .semibold))
+//                    .foregroundStyle(.white)
+//                CustomSegmentedControl(state: $selectedControlMedia)
+//                
+//                VStack {
+//                    switch selectedControl {
+//                    case .favorites:
+//                        FavoritesListView(movies: userVM.user.favoriteMovies)
+//                    case .rates:
+//                        RatesListView(ratedList: userVM.user.ratedMovies)
+//                    }
+//                    Spacer()
+//                }
+//                .padding(.horizontal, 16)
+//                .frame(maxWidth: .infinity)
             }
+            .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.bw10)
         }
