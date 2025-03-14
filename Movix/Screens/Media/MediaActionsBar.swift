@@ -68,7 +68,7 @@ struct MediaActionsBar: View {
                 .frame(width: 60)
             }
         }
-        .padding(.vertical)
+        .padding(.vertical, 32)
     }
     private func toggleFavoriteMedia() {
         Task {

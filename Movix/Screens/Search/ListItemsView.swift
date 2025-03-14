@@ -46,11 +46,11 @@ struct ListItemsView<T: MediaItemProtocol>: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        ListItemsView(mediaItems: [ShortMovie.preview], searchTerm: .constant(""), mediaType: .movie)
-            .environment(MoviesViewModel())
-            .environment(SeriesViewModel())
-            .environment(UserViewModel(user: User.preview))
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        ListItemsView(mediaItems: [ShortMovie.preview], searchTerm: .constant(""), mediaType: .movie)
+//            .environment(MoviesViewModel())
+//            .environment(SeriesViewModel())
+//            .environment(UserViewModel(user: User.preview))
+//    }
+//}

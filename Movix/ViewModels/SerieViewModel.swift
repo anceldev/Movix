@@ -49,6 +49,25 @@ final class SerieViewModel {
             setError(error)
         }
     }
+    
+    func getRecommendedSeries(serieId: Int) async -> [TvSerie] {
+        do {
+            let resource = Resource(
+                url: SerieEndpoint.recommended(serieId).url,
+                method: .get([
+                    URLQueryItem(name: "language", value: lang),
+                    URLQueryItem(name: "page", value: "1")
+                ]),
+                modelType: PageCollection<TvSerie>.self
+            )
+            let response = try await httpClient.load(resource)
+            return response.results
+        } catch {
+            setError(error)
+            return []
+        }
+    }
+    
     func loadPosterImage(imagePath: String?) async -> Image? {
         do {
             guard let imagePath else { return nil }

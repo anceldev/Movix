@@ -32,6 +32,8 @@ enum SerieEndpoint {
     case details(Int, Int)
     case providers(Int)
     case favorites(Int)
+    case reviews(Int)
+    case recommended(Int)
     
     var url: URL {
         switch self {
@@ -59,29 +61,36 @@ enum SerieEndpoint {
             return URL(string: baseUrlPath + "tv/\(serieId)/watch/providers")!
         case .favorites(let accountId):
             return URL(string: baseUrlPath + "account/\(accountId)/favorite/tv")!
+        case .reviews(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/reviews")!
+        case .recommended(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/recommendations")!
         }
     }
 }
 
 enum MovieEndpoint {
     case addRating(Int)
-    case similar(Int)
+    case recommended(Int)
     case createList
     case credits(Int)
     case providers(Int)
+    case reviews(Int)
     
     var url: URL {
         switch self {
         case .addRating(let movieId):
             return URL(string: baseUrlPath + "movie/\(movieId)/rating")!
-        case .similar(let movieId):
-            return URL(string: baseUrlPath + "movie/\(movieId)/similar")!
+        case .recommended(let movieId):
+            return URL(string: baseUrlPath + "movie/\(movieId)/recommendations")!
         case .createList:
             return URL(string: baseUrlPath + "list")!
         case .credits(let peopleId):
             return URL(string: baseUrlPath + "person/\(peopleId)/movie_credits")!
         case .providers(let movieId):
             return URL(string: baseUrlPath + "movie/\(movieId)/watch/providers")!
+        case .reviews(let movieId):
+            return URL(string: baseUrlPath + "movie/\(movieId)/reviews")!
         }
     }
 }

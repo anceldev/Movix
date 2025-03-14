@@ -51,11 +51,12 @@ struct SearchScreen: View {
                     case .all:
                         Text("This is all")
                     case .movies, .tv:
-                        MediaItemsView(
-                            searchTerm: $searchTerm,
-                            viewOption: viewOption,
-                            mediaType: mediaType
-                        )
+//                        MediaItemsView(
+//                            searchTerm: $searchTerm,
+//                            viewOption: viewOption,
+//                            mediaType: mediaType
+//                        )
+                        Text("This is movies or tv")
                     }
                 }
                 Spacer()

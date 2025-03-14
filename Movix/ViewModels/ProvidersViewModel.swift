@@ -43,7 +43,4 @@ final class ProvidersViewModel {
             
         }
     }
-    deinit {
-        print("Closing providers class...")
-    }
 }

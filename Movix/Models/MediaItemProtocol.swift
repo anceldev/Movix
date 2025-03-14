@@ -14,4 +14,8 @@ protocol MediaItemProtocol: Identifiable {
     var posterPath: String? { get set }
     var releaseDate: Date? { get set }
     var voteAverage: Double? { get set }
+    var genres: [Genre]? { get set }
+    var originCountry: [String] { get set }
+    var homepage: URL? { get set }
+    var status: String? { get set }
 }

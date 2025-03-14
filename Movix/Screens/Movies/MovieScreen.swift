@@ -8,20 +8,22 @@
 import SwiftUI
 
 struct MovieScreen: View {
-    
+
     let movieId: Int
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
     @State private var movieVM = MovieViewModel()
     @State private var selectedTab: MediaTab = .general
-    
+
+    @State private var showIcon = false
+
     init(movieId: Int) {
         self.movieId = movieId
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        UINavigationBar.appearance().standardAppearance = appearance
+        //        let appearance = UINavigationBarAppearance()
+        //        appearance.configureWithTransparentBackground()
+        //        UINavigationBar.appearance().standardAppearance = appearance
     }
-    
+
     var body: some View {
         VStack {
             if let movie = movieVM.movie {
@@ -37,25 +39,35 @@ struct MovieScreen: View {
                                 mediaType: .movie
                             )
 
-                            MediaActionsBar(mediaId: movieId, mediaType: .movie, rateAction: {
-                                selectedTab = .general
-                                proxy.scrollTo( "mediaTabs")
-                            }, favoriteAction: toggleFavoriteMovie)
-                            OverviewView(title: movieVM.movie?.title, overview: movie.overview)
+                            MediaActionsBar(
+                                mediaId: movieId, mediaType: .movie,
+                                rateAction: {
+                                    selectedTab = .general
+                                    proxy.scrollTo("mediaTabs")
+                                }, favoriteAction: toggleFavoriteMovie)
+                            OverviewView(
+                                title: movieVM.movie?.title,
+                                overview: movie.overview)
                             VStack {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {
                                 case .general:
                                     GeneralTabMovieView(
                                         id: movieVM.movie?.id ?? 0,
-                                        currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
+                                        currentRate:
+                                            userVM.getCurrentMovieRating(
+                                                movieId: movieVM.movie?.id)
                                     )
                                     .id("mediaTabs")
                                 case .details:
-                                    DetailsTabView(movie: movie)
-                                    
+                                    DetailsTabView<Movie>(
+                                        media: movieVM.movie!,
+                                        similarAction: getSimilarSeries
+                                    )
                                 case .reviews:
-                                    ReviewsTabView()
+                                    ReviewsList(
+                                        id: movie.id, title: movie.title,
+                                        mediaType: .movie)
                                 }
                             }
                             .padding()
@@ -73,6 +85,20 @@ struct MovieScreen: View {
             }
         }
         .background(.bw10)
+        //        .background(
+        //            GeometryReader(content: { proxy in
+        //                Color.bw10
+        //                    .onChange(of: proxy.frame(in: .global).minY) { oldValue, newValue in
+        //                        withAnimation {
+        //                            if newValue < 0 {
+        //                                showIcon = true
+        //                            } else {
+        //                                showIcon = false
+        //                            }
+        //                        }
+        //                    }
+        //            })
+        //        )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .swipeToDismiss()
         .ignoresSafeArea(.container, edges: .top)
@@ -93,6 +119,9 @@ struct MovieScreen: View {
             await movieVM.getMovieDetails(id: movieId)
         }
     }
+    private func getSimilarSeries() async -> [Movie] {
+        return await movieVM.getRecommendedMovies(movieId: movieId)
+    }
     private func toggleFavoriteMovie() async {
         if let movie = movieVM.movie {
             await userVM.toggleFavoriteMovie(media: movie, mediaType: .movie)
@@ -104,4 +133,4 @@ struct MovieScreen: View {
         MovieScreen(movieId: 11235)
             .environment(UserViewModel(user: User.preview))
     }
-} 
+}

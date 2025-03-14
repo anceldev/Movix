@@ -53,6 +53,7 @@ struct MoviesScreen: View {
                             )
                         }
                     }
+                    .padding(.horizontal)
                     VStack {
                         Button {
                             loadMovies()

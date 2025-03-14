@@ -42,10 +42,14 @@ struct MovieTabsView<Content:View>: View {
 //                .environment(movieVM)
                 content
             case .details:
-                DetailsTabView(movie: movieVM.movie!)
+//                DetailsTabView(movie: movieVM.movie!)
+//                Text("Details tab View")
+//                DetailsTabView<Movie>(media: movieVM.movie!)
+                Text("Details tab view")
             case .reviews:
-                ReviewsTabView()
-                    .environment(movieVM)
+                Text("Reviews tab View")
+//                ReviewsList()
+//                    .environment(movieVM)
             }
         }
         .frame(maxWidth: .infinity, alignment: .top)

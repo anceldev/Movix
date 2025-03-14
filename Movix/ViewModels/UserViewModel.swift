@@ -307,7 +307,7 @@ final class UserViewModel {
     }
     func getCountries() async {
         do {
-            let langCountries = "\(lang ?? "en")-\(country ?? "US")"
+            let langCountries = "\(lang)-\(country)"
             let resource = Resource(
                 url: ConfigEndpoints.countries.url,
                 method: .get([
@@ -337,6 +337,16 @@ final class UserViewModel {
             setError(error)
             return nil
         }
+    }
+    func getMediaCountries(_ codes: [String]) -> String {
+        if self.countries.isEmpty { return "" }
+        var foundedCountries: [Country] = []
+        for code in codes {
+            if let newCountry = self.countries.first(where: { $0.iso31661 == code }) {
+                foundedCountries.append(newCountry)
+            }
+        }
+        return foundedCountries.map { $0.nativeName }.joined(separator: ", ")
     }
     
     private func setError(_ error: Error) {

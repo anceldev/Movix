@@ -10,27 +10,29 @@ import SwiftUI
 struct SeriesScreen: View {
     @State private var searchTerm = ""
     @State private var showFilterSheet = false
-    @State private var viewOption: ViewOption = .row
+    @State private var viewOption: ViewOption = .gridx3
     @Environment(SeriesViewModel.self) var seriesVM
    
     
     var body: some View {
         VStack {
             NavigationStack {
-                VStack(spacing: 8) {
-                    Text("Series")
-                        .font(.hauora(size: 22, weight: .semibold))
-                        .foregroundStyle(.white)
-                    HStack(spacing: 16) {
-                        SearchField(
-                            searchTerm: $searchTerm,
-                            loadAction: loadSeries) {
-                                seriesVM.searchedSeries.removeAll()
-                            }
-                        SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
+                VStack(spacing: 16) {
+                    VStack(spacing: 8) {
+                        Text("Series")
+                            .font(.hauora(size: 22, weight: .semibold))
+                            .foregroundStyle(.white)
+                        HStack(spacing: 16) {
+                            SearchField(
+                                searchTerm: $searchTerm,
+                                loadAction: loadSeries) {
+                                    seriesVM.searchedSeries.removeAll()
+                                }
+                            SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 44)
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
                     Group {
                         switch viewOption {
                         case .row:
@@ -51,6 +53,7 @@ struct SeriesScreen: View {
                             )
                         }
                     }
+                    .padding(.horizontal, 16)
                     VStack {
                         Button {
                             loadSeries()
@@ -88,4 +91,5 @@ struct SeriesScreen: View {
 #Preview {
     SeriesScreen()
         .environment(SeriesViewModel())
+        .environment(UserViewModel(user: User.preview))
 }

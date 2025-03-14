@@ -17,9 +17,6 @@ struct SerieScreen: View {
     
     init(serieId: Int) {
         self.serieId = serieId
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        UINavigationBar.appearance().standardAppearance = appearance
     }
     
     var body: some View {
@@ -44,14 +41,12 @@ struct SerieScreen: View {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {
                                 case .general:
-//                                    Text("General")
                                     GeneralTabSerieView(currentRate: userVM.getCurrentSerieRating(serieId: serie.id))
                                 case .details:
-                                    Text("Details")
+                                    DetailsTabView<TvSerie>(media: serieVM.serie!, similarAction: getSimilarSeries)
                                 case .reviews:
-                                    Text("Reviews")
+                                    ReviewsList(id: serie.id, title: serie.title, mediaType: .tv)
                                 }
-                                
                             }
                             .padding()
                             .id("mediaTabs")
@@ -88,6 +83,9 @@ struct SerieScreen: View {
                 .foregroundStyle(.blue1)
             }
         }
+    }
+    private func getSimilarSeries() async -> [TvSerie]{
+        return await serieVM.getRecommendedSeries(serieId: serieId)
     }
     private func toggleFavoriteSerie() async {
         if let serie = serieVM.serie {

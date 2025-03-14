@@ -21,12 +21,14 @@ struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
     var genreIds: [Int]?
     var backdropPath: String?
     var budget: Double?
-    var homepageURL: URL?
+    var homepage: URL?
     var popularity: Double?
     var voteAverage: Double?
     var voteCount: Int?
     var isAdult: Bool?
     var rating: Int?
+    var originCountry: [String]
+    var status: String?
     
     var character: String?
     
@@ -55,6 +57,9 @@ struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
         case voteCount = "vote_count"
         case isAdult = "adult"
         case rating
+        case originCountry = "origin_country"
+        case status
+        
         
         case character
     }
@@ -74,20 +79,23 @@ struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
             dateFormatter.dateFormat = "yyyy-MM-dd"
             self.releaseDate = dateFormatter.date(from: releasedOn)
         }
-
+        
         let posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
         self.posterPath = posterPath
         self.posterPathUrl = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath ?? "")")
         
         self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
-//        self.backdropPath = URL(string: "https://image.tmdb.org/t/p/w780\(backdropPath ?? "")")
+        //        self.backdropPath = URL(string: "https://image.tmdb.org/t/p/w780\(backdropPath ?? "")")
         
         self.budget = try container.decodeIfPresent(Double.self, forKey: .budget)
         if let homePageString = try container.decodeIfPresent(String.self, forKey: .homepageURL) {
-            self.homepageURL = URL(string: homePageString)
+            self.homepage = URL(string: homePageString)
         }
-//        self.homepageURL = try container.decodeIfPresent(URL.self, forKey: .homepageURL)
-//        self.homepageURL = nil
+        else {
+            self.homepage = nil
+        }
+        //        self.homepage = try container.decodeIfPresent(URL.self, forKey: .homepage)
+        //        self.homepage = nil
         self.popularity = try container.decodeIfPresent(Double.self, forKey: .popularity)
         self.voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage)
         self.voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount)
@@ -95,7 +103,12 @@ struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
         self.genreIds = try container.decodeIfPresent([Int].self, forKey: .genreIds)
         self.rating = try container.decodeIfPresent(Int.self, forKey: .rating)
-//        self.genreIds = try container.decode([Int].self, forKey: .genreIds)
+        //        self.genreIds = try container.decode([Int].self, forKey: .genreIds)
+        
+        let originCountry = try container.decodeIfPresent([String].self, forKey: .originCountry)
+        self.originCountry = originCountry != nil ? originCountry! : []
+        self.status = try container.decodeIfPresent(String.self, forKey: .status)
+        
         
         self.character = try container.decodeIfPresent(String.self, forKey: .character)
     }
@@ -119,7 +132,9 @@ extension Movie {
          popularity: Double? = nil,
          voteAverage: Double? = nil,
          voteCount: Int? = nil,
-         isAdult: Bool? = nil
+         isAdult: Bool? = nil,
+         originCountry: [String] = [],
+         status: String = ""
     ) {
         self.id = id
         self.title = title
@@ -131,12 +146,14 @@ extension Movie {
         self.backdropPath = backdropPath
         self.genres = genres
         self.budget = budget
-        self.homepageURL = homepageURL
+        self.homepage = homepageURL
         self.popularity = popularity
         self.voteAverage = voteAverage
         self.voteCount = voteCount
         self.isAdult = isAdult
         self.genres = []
+        self.originCountry = originCountry
+        self.status = status
     }
     
     static var preview: Movie = .init(
@@ -154,6 +171,8 @@ extension Movie {
         popularity: 2178.995,
         voteAverage: 8.202,
         voteCount: 141,
-        isAdult: false
+        isAdult: false,
+        originCountry: ["US"],
+        status: "Released"
     )
 }

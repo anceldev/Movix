@@ -24,7 +24,6 @@ enum ListControls: String, CaseIterable, Identifiable, Hashable {
 struct MyListsScreen: View {
     @Environment(UserViewModel.self) var userVM
     @State private var selectedList: ListControls = .favorites
-//    @State private var selectedControlMedia: ListControlsMedia = .movies
     @State private var selectedMedia: ListControlsMedia = .movies
     @State private var mediaPopover = false
     var body: some View {
@@ -47,14 +46,17 @@ struct MyListsScreen: View {
                             .clipShape(.capsule)
                     }
                     .popover(isPresented: $mediaPopover) {
-                        VStack {
+                        VStack(spacing: 12) {
                             ForEach(ListControlsMedia.allCases) { btn in
                                 Text(btn.rawValue.capitalized)
+                                    .opacity(selectedMedia == btn ? 1 : 0.6)
                                     .onTapGesture {
                                         withAnimation(.easeIn) {
                                             selectedMedia = btn
+                                            mediaPopover.toggle()
                                         }
                                     }
+                                    .padding(.horizontal, 12)
                             }
                         }
                         .presentationCompactAdaptation(.popover)

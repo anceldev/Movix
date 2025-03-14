@@ -7,77 +7,108 @@
 
 import SwiftUI
 
-struct DetailsTabView: View {
-    let movie: Movie
-    @Environment(MoviesViewModel.self) var moviesVM
-    @State private var showSimilar = false
+struct DetailsTabView<T: MediaItemProtocol>: View {
+    let media: T
+    let similarAction: () async -> [T]
+    @State private var similarMedia: [T] = []
+    @Environment(UserViewModel.self) var userVM
     
     let columns: [GridItem] = [
         GridItem(.flexible(minimum: 0, maximum: 130), spacing: 10, alignment: .topLeading),
         GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 0, alignment: .topLeading)
     ]
     
-    let orderedKeys = ["Duration", "Release date", "Genres", "Homepage"]
-    
-    var movieDetails: [String : String] {
-        var details: [String : String] = [:]
-        if let homepageURL = movie.homepageURL {
-            details["Homepage"] = homepageURL.absoluteString
-        }
-        if !movie.duration.isEmpty {
-            details["Duration"] = movie.duration
-        }
-        if let genres = movie.genres, !genres.isEmpty {
-            details["Genres"] = genres.map { $0.name }.joined(separator: ", ")
-        }
-        if let releaseDate = movie.releaseDate {
-            details["Release Date"] = DateFormatter.localizedString(from: releaseDate, dateStyle: .medium, timeStyle: .none)
-        }
-        
-        return details
-    }
-    
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 20) {
             LazyVGrid(columns: columns, alignment: .leading, spacing: 20) {
-                ForEach(orderedKeys, id: \.self) { key in
-                    if let value = movieDetails[key] {
-                        Text(key)
+                if !media.originCountry.isEmpty {
+                    Text("Countries")
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.white)
+                    Text(userVM.getMediaCountries(media.originCountry))
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.bw50)
+                }
+                
+                if let genres = media.genres, !genres.isEmpty {
+                    Text("Genres")
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.white)
+                    Text(genres.map({ $0.name }).joined(separator: ", "))
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.bw50)
+                }
+                if let releaseDate = media.releaseDate {
+                    Text(type(of: media) == Movie.Type.self ? "Release date" : "First air episode")
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.white)
+                    Text(DateFormatter.localizedString(from: releaseDate, dateStyle: .medium, timeStyle: .none))
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.bw50)
+                }
+                if let homepage = media.homepage {
+                    Text("Homepage")
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.white)
+                    Link(destination: homepage) {
+                        Text(homepage.absoluteString)
                             .font(.hauora(size: 14))
-                            .foregroundStyle(.white)
-                        Text(value)
-                            .font(.hauora(size: 14))
-                            .foregroundStyle(.bw50)
+                            .foregroundStyle(.blue1)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+
+                if let status = media.status, status != "" {
+                    Text("Status")
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.white)
+                    Text(status)
+                        .font(.hauora(size: 14))
+                        .foregroundStyle(.bw50)
+                }
+                
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Similar")
+                    .font(.system(size: 22, weight: .medium))
+                VStack {
+                    if !similarMedia.isEmpty {
+                        GridItemsView(
+                            mediaItems: similarMedia,
+                            searchTerm: .constant(""),
+                            mediaType: type(of: T.self) == type(of: Movie.self) ? .movie : .tv,
+                            columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                        )
                     }
                 }
             }
-//            VStack {
-//                ScrollView(.vertical) {
-//                    
-//                GridItemsView(
-//                    mediaItems: moviesVM.similarMovies,
-//                    searchTerm: .constant("")
-//                )
-//                .environment(moviesVM)
-//                }
-//            }
-//            .frame(maxHeight: showSimilar ? .infinity : nil)
             Spacer()
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 24)
-        .onAppear {
-            getSimilar(movieId: movie.id)
+        .task {
+            await userVM.getCountries()
+            let similar = await similarAction()
+            withAnimation(.easeIn) {
+                self.similarMedia = similar
+            }
         }
-    }
-    private func getSimilar(movieId: Int) {
-        Task {
-            await moviesVM.getSimilarMovies(movieId: movieId)
+        .onAppear {
+            print(type(of: T.self))
+            if (type(of: T.self) == type(of: Movie.self)) {
+                print("Is Movie")
+            }
+            else {
+                print("Is serie")
+            }
         }
     }
 }
 
 #Preview {
-    DetailsTabView(movie: Movie.preview)
-        .environment(MoviesViewModel())
+    NavigationStack {
+        DetailsTabView<Movie>(media: Movie.preview, similarAction: {  return []})
+            .environment(UserViewModel(user: User.preview))
+            .padding(24)
+    }
 }

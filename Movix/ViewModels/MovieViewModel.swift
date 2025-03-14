@@ -65,6 +65,27 @@ final class MovieViewModel {
         }
     }
     
+    func getRecommendedMovies(movieId: Int) async -> [Movie] {
+        do {
+            let resource = Resource(
+                url: MovieEndpoint.recommended(movieId).url,
+                method: .get([
+                    URLQueryItem(name: "language", value: "en"),
+                    URLQueryItem(name: "page", value: "1")
+                ]),
+                modelType: PageCollection<Movie>.self
+            )
+            let similarMovies = try await httpClient.load(resource)
+            return similarMovies.results
+            
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            self.errorMessage = error.localizedDescription
+            return []
+        }
+    }
+    
     func getMovieReviews(id: Int) async {
         do {
             let resource = Resource(

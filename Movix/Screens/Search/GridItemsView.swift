@@ -37,7 +37,10 @@ struct GridItemsView<T: MediaItemProtocol>: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            .padding(.horizontal, 16)
+//            .padding(.horizontal, 16)
+        }
+        .onAppear {
+            print(mediaType.rawValue)
         }
     }
 }

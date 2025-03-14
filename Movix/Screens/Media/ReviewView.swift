@@ -52,7 +52,7 @@ struct ReviewView: View {
                 .foregroundStyle(.white)
                 .font(.system(size: 14))
         }
-        .padding(16)
+        .padding(.vertical, 16)
     }
 }
 

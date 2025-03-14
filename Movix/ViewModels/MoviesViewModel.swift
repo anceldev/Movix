@@ -13,11 +13,9 @@ final class MoviesViewModel {
     var trendingMovies = [Movie]()
     var searchedMovies = [Movie]()
     var similarMovies = [Movie]()
-//    var movieGenres = [Genre]()
     var tvGenre = [Genre]()
     
     var movieCredits: MovieCredits?
-//    var searchFlow: SearchFlow = .
     
     var errorMessage: String?
     
@@ -31,7 +29,6 @@ final class MoviesViewModel {
     
     init() {
         Task {
-//            self.movieGenres = await getGenres(lang: lang, mediaType: .movie)
             self.tvGenre = await getGenres(lang: lang, mediaType: .tv)
             await getTrendingMovies()
         }
@@ -146,10 +143,10 @@ final class MoviesViewModel {
         }
     }
     
-    func getSimilarMovies(movieId: Int) async {
+    func getSimilarMovies(movieId: Int) async -> [Movie] {
         do {
             let resource = Resource(
-                url: MovieEndpoint.similar(movieId).url,
+                url: MovieEndpoint.recommended(movieId).url,
                 method: .get([
                     URLQueryItem(name: "language", value: "en"),
                     URLQueryItem(name: "page", value: "1")
@@ -158,10 +155,12 @@ final class MoviesViewModel {
             )
             let similarMovies = try await httpClient.load(resource)
             self.similarMovies = similarMovies.results
+            return self.similarMovies
         } catch {
             print(error)
             print(error.localizedDescription)
             self.errorMessage = error.localizedDescription
+            return []
         }
     }
     
