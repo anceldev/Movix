@@ -12,6 +12,7 @@ struct LanguageScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedLan: String?
     @State private var showConfirmation: Bool = false
+    @State private var searchTerm: String = ""
     
     var body: some View {
         VStack {
@@ -28,9 +29,14 @@ struct LanguageScreen: View {
                     Text("AVAILABLE LANGUAGES")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
-//                        .foregroundStyle(.bw50)
+                    HStack(spacing: 16) {
+                        SearchField(searchTerm: $searchTerm, loadAction: {}, clearAction: {})
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
                     ScrollView(.vertical) {
-                        ForEach(userVM.languages, id: \.iso6391) { lang in
+//                        ForEach(userVM.languages, id: \.iso6391) { lang in
+                        ForEach(searchTerm.isEmpty ? userVM.languages : userVM.languages.filter({ $0.englishName.contains(searchTerm) }), id: \.iso6391) { lang in
                             LanguageRow(lang)
                                 .onTapGesture {
                                     withAnimation(.easeIn) {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProvidersScreen: View {
-//    @Environment(MovieViewModel.self) var movieVM
+
     @Environment(\.dismiss) private var dismiss
     let mediaType: MediaType
     @State private var providersVM: ProvidersViewModel
@@ -17,7 +17,7 @@ struct ProvidersScreen: View {
         self.mediaType = mediaType
         self._providersVM = State(initialValue: ProvidersViewModel(mediaType: mediaType, mediaId: mediaId))
     }
-    var providers: Providers?
+//    var providers: Providers? 
 
     var body: some View {
         VStack {
@@ -42,7 +42,6 @@ struct ProvidersScreen: View {
         }
         .background(.bw10)
         .frame(maxHeight: .infinity)
-//        .ignoresSafeArea(.container, edges: .top)
         .swipeToDismiss()
         .toolbar {
             ToolbarItem(placement: .navigation) {

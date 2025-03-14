@@ -13,6 +13,7 @@ struct CountryScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedCountry: String?
     @State private var showConfirmation: Bool = false
+    @State private var searchTerm = ""
     
     var body: some View {
         VStack {
@@ -33,8 +34,13 @@ struct CountryScreen: View {
                     Text("AVAILABLE COUNTRIES")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
+                    HStack(spacing: 16) {
+                        SearchField(searchTerm: $searchTerm, loadAction: {}, clearAction: {})
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
                     ScrollView(.vertical) {
-                        ForEach(userVM.countries, id: \.iso31661) { country in
+                        ForEach(searchTerm.isEmpty ? userVM.countries : userVM.countries.filter({ $0.englishName.contains(searchTerm) }), id: \.iso31661) { country in
                             CountryRow(country)
                                 .onTapGesture {
                                     withAnimation(.easeIn) {

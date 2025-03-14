@@ -38,7 +38,7 @@ struct MediaRowLayout<T: MediaItemProtocol>: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
+//            .padding(.horizontal, 16)
         }
         .scrollIndicators(.hidden)
     }

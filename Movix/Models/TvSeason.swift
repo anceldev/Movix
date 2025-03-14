@@ -50,7 +50,7 @@ struct TvSeason: Codable, Identifiable {
         self.episodes = try container.decodeIfPresent([TvEpisode].self, forKey: .episodes)
     }
     
-    init(id: Int, airDate: String? = nil, name: String, overview: String? = nil, posterPath: String? = nil, seasonNumer: Int, voteAverage: Double? = nil, episodeCount: Int) {
+    init(id: Int, airDate: String? = nil, name: String, overview: String? = nil, posterPath: String? = nil, seasonNumer: Int, voteAverage: Double? = nil, episodeCount: Int, episodes: [TvEpisode] = []) {
         self.id = id
         if let airDate {
             let dateFormatter = DateFormatter()
@@ -63,6 +63,23 @@ struct TvSeason: Codable, Identifiable {
         self.seasonNumer = seasonNumer
         self.voteAverage = voteAverage
         self.episodeCount = episodeCount
-        self.episodes = []
+        self.episodes = episodes
     }
+}
+
+extension TvSeason {
+    static let preview = TvSeason(
+            id: 94,
+            airDate: "1998-08-23",
+            name: "Season 1",
+            overview: "",
+            posterPath: "/d3jLBFnqub6rYXifgus5fkNt2H6.jpg",
+            seasonNumer: 1,
+            voteAverage: 7.5,
+            episodeCount: 25,
+            episodes: [
+                TvEpisode.pilotPreview,
+                TvEpisode.regularPreview
+            ]
+        )
 }

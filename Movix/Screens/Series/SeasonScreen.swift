@@ -30,21 +30,30 @@ struct SeasonScreen: View {
 //                    releaseDate: season.airDate?.releaseDate()
                 )
                 .environment(serieVM)
-                if let seasonOverview = seasonVM.season?.overview, !seasonOverview.isEmpty {
-                    OverviewView(title: seasonVM.season?.name, overview: seasonVM.season?.overview)
-                }
-                if let episodes = seasonVM.season?.episodes {
-                    LazyVStack(spacing: 32) {
-                        ForEach(episodes) { episode in
-                            EpisodeView(name: episode.name, overview: episode.overview, stillPath: episode.stillPath)
-                        }
+                VStack {
+                    Text("Season \(seasonVM.season?.seasonNumer ?? 0)")
+                        .font(.hauora(size: 20, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .padding(.top)
+                    if let seasonOverview = seasonVM.season?.overview, !seasonOverview.isEmpty {
+                        OverviewView(title: seasonVM.season?.name, overview: seasonVM.season?.overview)
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                    if let episodes = seasonVM.season?.episodes {
+                        LazyVStack(spacing: 32) {
+                            ForEach(episodes) { episode in
+                                EpisodeView(name: episode.name, overview: episode.overview, stillPath: episode.stillPath)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                    }
                 }
             }
             .scrollIndicators(.hidden)
         }
+        .onAppear(perform: {
+            print(season.seasonNumer)
+        })
         .background(.bw10)
         .ignoresSafeArea(.container, edges: .top)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -69,4 +78,10 @@ struct SeasonScreen: View {
             )
         }
     }
+}
+
+#Preview {
+    SeasonScreen(season: TvSeason.preview, serieId: 52)
+        .environment(SerieViewModel())
+        .environment(UserViewModel(user: User.preview))
 }

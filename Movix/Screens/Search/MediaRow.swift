@@ -43,8 +43,6 @@ struct MediaRow<Content:View>: View {
                             }
                             else {
                                 TimeoutProgressView()
-//                                ProgressView()
-//                                    .tint(.marsB)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -63,11 +61,12 @@ struct MediaRow<Content:View>: View {
                 .frame(maxHeight: .infinity)
                 VStack(alignment: .leading) {
                     Text(title)
-                        .font(.hauora(size: 20, weight: .semibold))
+                        .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                         .padding(.top, 8)
                     if let releaseDate = releaseDate {
                         Text(releaseDate.releaseDate())
+                            .font(.hauora(size: 14))
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

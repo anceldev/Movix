@@ -43,7 +43,7 @@ struct SearchField: View {
             .frame(maxWidth: .infinity, maxHeight: 44)
             .background(.bw40)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding(.leading, 16)
+//            .padding(.leading, 16)
     }
     private func searchAction() {
         Task {

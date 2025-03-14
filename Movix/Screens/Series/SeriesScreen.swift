@@ -28,6 +28,7 @@ struct SeriesScreen: View {
                                 loadAction: loadSeries) {
                                     seriesVM.searchedSeries.removeAll()
                                 }
+                                .padding(.leading)
                             SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
                         }
                         .frame(maxWidth: .infinity)

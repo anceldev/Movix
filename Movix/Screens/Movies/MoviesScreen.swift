@@ -16,20 +16,23 @@ struct MoviesScreen: View {
     var body: some View {
         VStack {
             NavigationStack {
-                VStack(spacing: 8) {
-                    Text("Movies")
-                        .font(.hauora(size: 22, weight: .semibold))
-                        .foregroundStyle(.white)
-                    HStack(spacing: 16) {
-                        SearchField(
-                            searchTerm: $searchTerm,
-                            loadAction: loadMovies){
-                                moviesVM.searchedMovies.removeAll()
-                            }
-                        SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
+                VStack(spacing: 16) {
+                    VStack(spacing: 8) {
+                        Text("Movies")
+                            .font(.hauora(size: 22, weight: .semibold))
+                            .foregroundStyle(.white)
+                        HStack(spacing: 16) {
+                            SearchField(
+                                searchTerm: $searchTerm,
+                                loadAction: loadMovies){
+                                    moviesVM.searchedMovies.removeAll()
+                                }
+                                .padding(.leading)
+                            SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 44)
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
                     Group {
                         switch viewOption {
                         case .row:

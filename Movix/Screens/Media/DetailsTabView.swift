@@ -69,7 +69,7 @@ struct DetailsTabView<T: MediaItemProtocol>: View {
                 
             }
             VStack(alignment: .leading, spacing: 12) {
-                Text("Similar")
+                Text("Recommendations")
                     .font(.system(size: 22, weight: .medium))
                 VStack {
                     if !similarMedia.isEmpty {

@@ -21,19 +21,17 @@ struct EpisodeView: View {
                     .resizable()
                     .aspectRatio(16/9, contentMode: .fit)
             }
-//            Text(name)
             if let overview {
                 OverviewView(title: name, overview: overview)
             }
         }
+        .padding(.bottom, 16)
+        .background(.bw40)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .task {
             if stillImage == nil {
                 self.stillImage = await serieVM.loadPosterImage(imagePath: stillPath)
             }
-        }
-        .onAppear {
-            print("Appear new episode")
         }
     }
 }
