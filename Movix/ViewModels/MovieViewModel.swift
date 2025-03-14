@@ -65,6 +65,27 @@ final class MovieViewModel {
         }
     }
     
+    func getRecommendedMovies(movieId: Int) async -> [Movie] {
+        do {
+            let resource = Resource(
+                url: MovieEndpoint.recommended(movieId).url,
+                method: .get([
+                    URLQueryItem(name: "language", value: "en"),
+                    URLQueryItem(name: "page", value: "1")
+                ]),
+                modelType: PageCollection<Movie>.self
+            )
+            let similarMovies = try await httpClient.load(resource)
+            return similarMovies.results
+            
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            self.errorMessage = error.localizedDescription
+            return []
+        }
+    }
+    
     func getMovieReviews(id: Int) async {
         do {
             let resource = Resource(
@@ -140,6 +161,24 @@ final class MovieViewModel {
             if let uiImage = UIImage(data: dataOriginal) {
 //                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
                 return Image(uiImage: uiImage)
+            }
+            return nil
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            self.errorMessage = error.localizedDescription
+            return nil
+        }
+    }
+    func loadPosterImage(imagePath: String?) async -> Image? {
+        do {
+            guard let imagePath else { return nil }
+            if let uiImage = try await ImageCacheManager.shared.getImage(forKey: imagePath) {
+                return Image(uiImage: uiImage)
+            }
+            if let posteUiImage = await HTTPClient.getPosterUIImage(posterPath: imagePath) {
+                try await ImageCacheManager.shared.saveImage(posteUiImage, forKey: imagePath)
+                return Image(uiImage: posteUiImage)
             }
             return nil
         } catch {

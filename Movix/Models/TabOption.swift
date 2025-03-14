@@ -10,6 +10,8 @@ import Foundation
 enum TabOption {
     case home
     case search
+    case movies
+    case series
     case lists
     case profile
     

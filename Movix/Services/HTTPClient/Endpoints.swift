@@ -24,9 +24,25 @@ enum SerieEndpoint {
     case serie(Int)
     case season(Int, Int)
     case episode(Int, Int, Int)
+    case credits(Int)
+    case agregateCredits(Int)
+    case search
+    case addRating(Int)
+    case rated(Int)
+    case details(Int, Int)
+    case providers(Int)
+    case favorites(Int)
+    case reviews(Int)
+    case recommended(Int)
     
     var url: URL {
         switch self {
+        case .details(let serieId, let seasonNumber):
+            return URL(string: baseUrlPath + "tv/\(serieId)/season/\(seasonNumber)")!
+        case .addRating(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/rating")!
+        case .rated(let accountId):
+            return URL(string: baseUrlPath + "account/\(accountId)/rated/tv")!
         case .trending(let timeWindow):
             return URL(string: baseUrlPath + "trending/tv/\(timeWindow)")!
         case .serie(let serieId):
@@ -35,37 +51,61 @@ enum SerieEndpoint {
             return URL(string: baseUrlPath + "tv/\(serieId)/season/\(season)")!
         case .episode(let serieId, let season, let episode):
             return URL(string: baseUrlPath + "tv/\(serieId)/season/\(season)/episode/\(episode)")!
+        case .credits(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/credits")!
+        case .agregateCredits(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/aggregate_credits")!
+        case .search:
+            return URL(string: baseUrlPath + "search/tv")!
+        case .providers(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/watch/providers")!
+        case .favorites(let accountId):
+            return URL(string: baseUrlPath + "account/\(accountId)/favorite/tv")!
+        case .reviews(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/reviews")!
+        case .recommended(let serieId):
+            return URL(string: baseUrlPath + "tv/\(serieId)/recommendations")!
         }
     }
 }
 
 enum MovieEndpoint {
     case addRating(Int)
-    case simiarMovies(Int)
+    case recommended(Int)
     case createList
-    case movieCredits(Int)
+    case credits(Int)
+    case providers(Int)
+    case reviews(Int)
     
     var url: URL {
         switch self {
         case .addRating(let movieId):
             return URL(string: baseUrlPath + "movie/\(movieId)/rating")!
-        case .simiarMovies(let movieId):
-            return URL(string: baseUrlPath + "movie/\(movieId)/similar")!
+        case .recommended(let movieId):
+            return URL(string: baseUrlPath + "movie/\(movieId)/recommendations")!
         case .createList:
             return URL(string: baseUrlPath + "list")!
-        case .movieCredits(let peopleId):
+        case .credits(let peopleId):
             return URL(string: baseUrlPath + "person/\(peopleId)/movie_credits")!
+        case .providers(let movieId):
+            return URL(string: baseUrlPath + "movie/\(movieId)/watch/providers")!
+        case .reviews(let movieId):
+            return URL(string: baseUrlPath + "movie/\(movieId)/reviews")!
         }
     }
 }
 
+
 enum ConfigEndpoints {
     case languages
+    case countries
     
     var url: URL {
         switch self {
         case .languages:
             return URL(string: baseUrlPath + "configuration/languages")!
+        case .countries:
+            return URL(string: baseUrlPath + "configuration/countries")!
         }
     }
 }
@@ -92,6 +132,8 @@ enum Endpoints {
     case validateTokenWithLogin
     case createSession
     
+    case getProviders(MediaType)
+    
     private static let apiKey = Bundle.main.infoDictionary?["MovixAPIKey"] as! String
     private static let baseUrlPath = "https://api.themoviedb.org/3/"
     
@@ -116,6 +158,8 @@ enum Endpoints {
         case .requestToken: return "authentication/token/"
         case .validateTokenWithLogin: return "authentication/token/validate_with_login"
         case .createSession: return "authentication/session/"
+        case .getProviders(.movie): return ""
+        case .getProviders(.tv): return ""
         }
     }
     
@@ -158,6 +202,8 @@ enum Endpoints {
             return URL(string: Self.baseUrlPath + self.endpoint + "?api_key=\(Self.apiKey)")!
         case .createSession:
             return URL(string: Self.baseUrlPath + self.endpoint + "new?api_key=\(Self.apiKey)")!
+        case .getProviders(let mediaType):
+            return URL(string: Self.baseUrlPath + "watch/profiders/\(mediaType.rawValue)")!
         }
     }
 }

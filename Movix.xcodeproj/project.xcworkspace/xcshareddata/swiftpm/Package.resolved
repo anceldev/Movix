@@ -1,0 +1,15 @@
+{
+  "originHash" : "f80a43583045f2660b08dc27cf4396a06b6f3cea64cbc957edfcc3456eb5218a",
+  "pins" : [
+    {
+      "identity" : "flagskit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pichukov/FlagsKit.git",
+      "state" : {
+        "revision" : "fc98238228d15285eb1b89ec3c5c96c83170101d",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

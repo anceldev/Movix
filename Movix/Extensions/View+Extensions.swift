@@ -19,7 +19,7 @@ import SwiftUI
 //                        if value.translation.width > 80 {
 //                            dismiss()
 //                        }
-//                    })
+//                    })s
 //            )
 //    }
 //}

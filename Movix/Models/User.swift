@@ -13,10 +13,15 @@ struct User: Codable, Identifiable {
     var name: String
     var username: String
     var lang: String?
+    var country: String?
     var avatarPath: String?
     
     var favoriteMovies: [Movie]
     var ratedMovies: [Movie]
+    
+    var favoriteSeries: [TvSerie]
+    var ratedSeries: [TvSerie]
+    
     var lists: [SupList]
     
     var avatarPathURl: URL {
@@ -28,6 +33,7 @@ struct User: Codable, Identifiable {
         case name
         case username
         case lang = "iso_639_1"
+        case country = "iso_3166_1"
         case avatar
         
         enum AvatarType: String, CodingKey {
@@ -39,7 +45,7 @@ struct User: Codable, Identifiable {
         }
     }
     
-    init(id: Int, name: String, username: String, lang: String? = nil, avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [SupList] = []) {
+    init(id: Int, name: String, username: String, lang: String? = nil, avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [SupList] = [], ratedSeries: [TvSerie] = [], favoriteSeries: [TvSerie] = []) {
         self.id = id
         self.name = name
         self.username = username
@@ -48,6 +54,8 @@ struct User: Codable, Identifiable {
         self.favoriteMovies = favoriteMovies
         self.ratedMovies = ratedMovies
         self.lists = lists
+        self.ratedSeries = ratedSeries
+        self.favoriteSeries = favoriteSeries
     }
     
     init(from decoder: any Decoder) throws {
@@ -56,7 +64,7 @@ struct User: Codable, Identifiable {
         self.name = try container.decode(String.self, forKey: .name)
         self.username = try container.decode(String.self, forKey: .username)
         self.lang = try container.decodeIfPresent(String.self, forKey: .lang)
-        
+        self.country = try container.decodeIfPresent(String.self, forKey: .country)
         let avatarContainer = try container.nestedContainer(keyedBy: CodingKeys.AvatarType.self, forKey: .avatar)
         let tmdbAvatarContainer = try avatarContainer.nestedContainer(keyedBy: CodingKeys.AvatarType.AvatarPath.self, forKey: .tmdb)
         if let avatarPath = try tmdbAvatarContainer.decodeIfPresent(String.self, forKey: .avatarPath) {
@@ -65,6 +73,8 @@ struct User: Codable, Identifiable {
         
         self.favoriteMovies = []
         self.ratedMovies = []
+        self.ratedSeries = []
+        self.favoriteSeries = []
         self.lists = []
     }
     

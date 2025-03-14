@@ -6,20 +6,21 @@
 //
 
 import SwiftUI
+import FlagsKit
 
 struct ProfileScreen: View {
     @Environment(AuthViewModel.self) var authVM
     @Environment(UserViewModel.self) var userVM
     var body: some View {
-//        @Bindable var authVM = authVM
         NavigationStack {
             VStack {
                 VStack(spacing: 10) {
-                    AsyncImage(url: userVM.user.avatarPathURl) { phase in
+                    AsyncImage(url: userVM.user.avatarPathURl, transaction: Transaction(animation: .easeIn(duration: 0.5))) { phase in
                         switch phase {
                         case .empty:
-                            ProgressView()
-                                .tint(.marsA)
+                                Image(.profileDefault)
+                                    .resizable()
+                                    .frame(width: 104, height: 104)
                         case .success(let image):
                             ZStack {
                                 Color.bw50
@@ -58,8 +59,31 @@ struct ProfileScreen: View {
                                     .environment(userVM)
                                     .navigationBarBackButtonHidden()
                             } label: {
-                                Text("Language")
-                                    .font(.hauora(size: 16, weight: .medium))
+                                HStack {
+                                    Text("Language")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Text(userVM.lang)
+                                        .font(.hauora(size: 18, weight: .bold))
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                            NavigationLink {
+                                CountryScreen()
+                                    .environment(userVM)
+                                    .navigationBarBackButtonHidden()
+                            } label: {
+                                HStack {
+                                    FlagView(countryCode: userVM.country)
+                                        .scaledToFit()
+                                        .frame(maxWidth: 24)
+                                        .clipShape(RoundedRectangle(cornerRadius: 2 ))
+                                    Text("Country")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Text(userVM.lang.uppercased())
+                                        .font(.hauora(size: 18, weight: .bold))
+                                }
                             }
                             .listRowBackground(Color.bw20)
                         } header: {

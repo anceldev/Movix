@@ -9,25 +9,27 @@ import SwiftUI
 
 struct PosterView: View {
     
-    @Environment(MovieViewModel.self) var movieVM
     let posterPath: String?
     let duration: String
     let isAdult: Bool?
     let releasedDate: String?
     let genres: [Genre]?
-    let id: Int
+    let mediaType: MediaType
     
     @State private var posterImage: Image?
+    // @Environment(SerieViewModel.self) var serieVM
+    // @Environment(MovieViewModel.self) var movieVM
+    @Environment(UserViewModel.self) var userVM
 
-    init(movie: Movie) {
-        self.posterPath = movie.posterPath
-        self.duration = movie.duration
-        self.isAdult = movie.isAdult
-        self.releasedDate = movie.releaseDate?.releaseDate()
-        self.genres = movie.genres
-        self.id = movie.id
+    init(posterPath: String? = nil, duration: String, isAdult: Bool? = nil, releaseDate: String? = nil, genres: [Genre]? = nil, mediaType: MediaType = .tv){
+        self.posterPath = posterPath
+        self.duration = duration
+        self.isAdult = isAdult
+        self.releasedDate = releaseDate
+        self.genres = genres
+        self.mediaType = mediaType
     }
-    
+
     var body: some View {
         ZStack {
             Color.gray
@@ -38,8 +40,7 @@ struct PosterView: View {
                     .aspectRatio(27/40, contentMode: .fill)
             }
             else {
-                ProgressView()
-                    .tint(.marsB)
+                TimeoutProgressView()
             }
             LinearGradient(
                 stops: [
@@ -78,16 +79,19 @@ struct PosterView: View {
             .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity)
-        .onAppear {
-            Task {
-                self.posterImage = await movieVM.getPosterImage(posterPath: self.posterPath)
+        .task {
+            if self.posterImage == nil {
+                let poster = await userVM.loadPosterImage(imagePath: posterPath)
+                withAnimation(.easeIn) {
+                    self.posterImage = poster
+                }
+                // if mediaType == .tv {
+                //     self.posterImage = await u.loadPosterImage(imagePath: posterPath)
+                // }
+                // else {
+                //     self.posterImage = await movieVM.loadPosterImage(imagePath: posterPath)
+                // }
             }
         }
     }
 }
-#Preview(body: {
-    NavigationStack {
-        MovieScreen(movieId: Movie.preview.id)
-            .environment(AuthViewModel())
-    }
-})

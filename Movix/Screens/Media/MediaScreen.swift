@@ -1,5 +1,5 @@
 //
-//  MovieScreen.swift
+//  MediaScreen.swift
 //  Movix
 //
 //  Created by Ancel Dev account on 7/2/25.
@@ -7,29 +7,43 @@
 
 import SwiftUI
 
-struct MovieScreen: View {
+struct MediaScreen<Content:View, T:MediaItemProtocol>: View {
     
-    let movieId: Int
-    @State private var showRateSlider = false
-    @State private var currentRate: Int = 0
+//    let mediaId: Int
+//    @State private var showRateSlider = false
+//    @State private var currentRate: Int = 0
+    let mediaId: Int
+    let mediaType: MediaType
     @State private var movieVM = MovieViewModel()
+    @State private var serieVM = SerieViewModel()
     @Environment(UserViewModel.self) var userVM
-    @Environment(AuthViewModel.self) var authVM
+//    @Environment(SeriesViewModel.self) var seriesVM
+//    
+//    var mediaType: MediaType
+    let poster: Content
+    @State private var media: T?
     
+//    init(mediaId: Int, mediaType: MediaType, @ViewBuilder poster: () -> Content) {
+//        self.poster = poster()
+//    }
     
-    init(movieId: Int) {
-        self.movieId = movieId
-    }
     
     var body: some View {
         ZStack(alignment: .top) {
             VStack {
-                if let movie = movieVM.movie {
+//                if let movie = movieVM.movie {
+                if let media{
                     ScrollViewReader { proxy in
                         ScrollView(.vertical) {
                             VStack(spacing: 0) {
-                                PosterView(movie: movie)
-                                    .environment(movieVM)
+//                                PosterView(
+//                                    posterPath: <#T##String?#>,
+//                                    duration: <#T##String#>,
+//                                    isAdult: <#T##Bool?#>,
+//                                    releaseDate: <#T##String?#>,
+//                                    genres: <#T##[Genre]?#>
+//                                )
+                                
                                 HStack(spacing: 16) {
                                     Button(action: {
                                         withAnimation {
@@ -47,7 +61,8 @@ struct MovieScreen: View {
                                             ActionBarButtonLabel(
                                                 label: "Favorites",
                                                 imageName: "heart-icon",
-                                                isOn: userVM.user.favoriteMovies.contains(where: { $0.id == movie.id })
+//                                                isOn: userVM.user.favoriteMovies.contains(where: { $0.id == movie.id })
+                                                isOn: false
                                             )
                                     })
                                     NavigationLink {
@@ -56,9 +71,9 @@ struct MovieScreen: View {
                                         ActionBarButtonLabel(label: "My List", imageName: "shop", isOn: false)
                                     }
                                     NavigationLink {
-                                        ProvidersScreen()
-                                            .navigationBarBackButtonHidden()
-                                            .environment(movieVM)
+//                                        ProvidersScreen()
+//                                            .navigationBarBackButtonHidden()
+//                                            .environment(movieVM)
                                     } label: {
                                         VStack(spacing: 12) {
                                             VStack {
@@ -81,13 +96,27 @@ struct MovieScreen: View {
                                     }
                                 }
                                 .padding(.top, 26)
-                                MovieInfoView(
-                                    cast: movieVM.cast,
-                                    overview: movie.overview
-                                )
-                                MovieTabsView()
-                                    .environment(movieVM)
-                                    .id("movieTabs")
+//                                OverviewView(
+//                                    overview: media.overview
+//                                )
+
+//                                MovieTabsView()
+//                                    .environment(movieVM)
+//                                    .id("movieTabs")
+                                MovieTabsView {
+                                    switch mediaType {
+                                    case .movie:
+                                        GeneralTabMovieView(
+                                            id: movieVM.movie?.id ?? 0,
+                                            currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
+                                        )
+                                        .environment(movieVM)
+                                    case .tv:
+                                        Text("General tab view for series")
+                                    }
+                                }
+                                .environment(movieVM)
+                                .id("movieTabs")
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -110,25 +139,31 @@ struct MovieScreen: View {
         .ignoresSafeArea(.all)
         .onAppear {
             Task {
-                await movieVM.getMovieDetails(id: movieId)
+                switch mediaType {
+                case .movie:
+                    await movieVM.getMovieDetails(id: mediaId)
+//                    self.medi
+                case .tv:
+                    await serieVM.getSerieDetails(id: mediaId)
+//                    self.media = serieVM.serie
+                }
             }
         }
         .swipeToDismiss()
     }
     private func addToFavorites() {
         Task {
-            guard let movie = movieVM.movie else { return }
-        
-            await userVM.toggleFavoriteMovie(movie: movie)
+//            guard let movie = movieVM.movie else { return }
+//        
+//            await userVM.toggleFavoriteMovie(movie: movie)
             
         }
     }
 
 }
-#Preview(body: {
-    NavigationStack {
-        MovieScreen(movieId: Movie.preview.id)
-    }
-    .environment(UserViewModel(user: User.preview))
-    .environment(AuthViewModel())
-})
+//#Preview(body: {
+//    NavigationStack {
+//        MediaScreen(mediaId: Movie.preview.id, mediaType: .movie)
+//    }
+//    .environment(UserViewModel(user: User.preview))
+//})

@@ -7,56 +7,46 @@
 
 import SwiftUI
 
-struct GridItemsView: View {
-    let movies: [ShortMovie]
+struct GridItemsView<T: MediaItemProtocol>: View {
+    let mediaItems: [T]
     @Binding var searchTerm: String
-    
-    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-    @Environment(MoviesViewModel.self) var moviesVM
-
+    var mediaType: MediaType
+    let columns: [GridItem]
     var body: some View {
-        @Bindable var moviesVM = moviesVM
         VStack {
-            LazyVGrid(columns: columns, spacing: 8) {
-                var seenMovieIDs = Set<Int>()
-                ForEach(movies.filter { seenMovieIDs.insert($0.id).inserted }) { movie in
-                    NavigationLink {
-                        MovieScreen(movieId: movie.id)
-                            .navigationBarBackButtonHidden()
-                    } label: {
-                        MediaGridItem(posterPath: movie.posterPath, voteAverage: movie.voteAverage)
-                            .environment(moviesVM)
+            ScrollView(.vertical) {
+                LazyVGrid(columns: columns, spacing: 8) {
+                    var seenMovieIDs = Set<Int>()
+                    ForEach(mediaItems.filter { seenMovieIDs.insert($0.id).inserted }) { media in
+                        NavigationLink {
+                            Group {
+                                switch mediaType {
+                                case .movie:
+                                    MovieScreen(movieId: media.id)
+                                        .navigationBarBackButtonHidden()
+                                case .tv:
+                                    SerieScreen(serieId: media.id)
+                                        .navigationBarBackButtonHidden()
+                                }
+                            }
+                        } label: {
+                            MediaGridItem(posterPath: media.posterPath, voteAverage: media.voteAverage)
+                        }
                     }
+                    
                 }
+                .scrollIndicators(.hidden)
             }
-            Button {
-                loadMoreMovies()
-            } label: {
-                Label("Ver más", systemImage: "chevron.down")
-                    .foregroundStyle(.blue1)
-                    .frame(maxWidth: .infinity)
-                    .labelStyle(.iconOnly)
-            }
-            .padding()
+//            .padding(.horizontal, 16)
         }
-        .padding(16)
-        .animation(.easeIn, value: moviesVM.searchedMovies)
-    }
-    private func loadMoreMovies() {
-        Task {
-            if searchTerm.isEmpty {
-                await moviesVM.getTrendingMovies()
-            }
-            else {
-                await moviesVM.searchMovies(searchTerm: searchTerm)
-            }
+        .onAppear {
+            print(mediaType.rawValue)
         }
     }
 }
 
 #Preview {
-    GridItemsView(movies: [ShortMovie.preview], searchTerm: .constant(""))
-//        .environment(AuthViewModel())
+    GridItemsView(mediaItems: [Movie.preview], searchTerm: .constant(""), mediaType: .movie, columns: [GridItem(.flexible()), GridItem(.flexible())])
         .environment(MoviesViewModel())
 }
 

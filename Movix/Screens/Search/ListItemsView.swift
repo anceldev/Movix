@@ -8,54 +8,49 @@
 import SwiftUI
 
 struct ListItemsView<T: MediaItemProtocol>: View {
-//    let movies: [ShortMovie]
-    let movies: [T]
+    
+    let mediaItems: [T]
     @Binding var searchTerm: String
     @Environment(MoviesViewModel.self) var moviesVM
+    @Environment(SeriesViewModel.self) var seriesVM
+    @Environment(UserViewModel.self) var userVM
     @State private var showLoadButton = false
+    var mediaType: MediaType
 
     var body: some View {
         @Bindable var viewModel = moviesVM
         LazyVStack(alignment: .leading) {
-            var seenMovieIDs = Set<Int>()
-            ForEach(movies.filter { seenMovieIDs.insert($0.id).inserted }) { movie in
+            var seenMediaIDs = Set<Int>()
+            ForEach(mediaItems.filter { seenMediaIDs.insert($0.id).inserted }) { media in
                 NavigationLink {
-//                    MovieScreen(movieId: movie.id)
-//                        .navigationBarBackButtonHidden()
-//                        .toolbar(.hidden, for: .tabBar)
-                    Text(movie.title)
-
+                    Group {
+                        switch mediaType {
+                        case .movie:
+                            Text("Movies")
+                        case .tv:
+                            SerieScreen(serieId: media.id)
+                                .navigationBarBackButtonHidden()
+                        }
+                    }
                 } label: {
-                    MediaRow(title: movie.title, backdropPath: movie.backdropPath, releaseDate: movie.releaseDate, voteAverage: movie.voteAverage) {
+                    MediaRow(title: media.title, backdropPath: media.backdropPath, releaseDate: media.releaseDate, voteAverage: media.voteAverage) {
                         Image(.heartIcon)
                     }
                 }
             }
-            Button {
-                loadMoreMovies()
-            } label: {
-                Label("Ver más", systemImage: "chevron.down")
-                    .labelStyle(.iconOnly)
-                    .foregroundStyle(.blue1)
-                    .frame(maxWidth: .infinity)
-            }
         }
         .padding()
-    }
-    private func loadMoreMovies() {
-        Task {
-            if searchTerm.isEmpty {
-                await moviesVM.getTrendingMovies()
-            } else {
-                await moviesVM.searchMovies(searchTerm: searchTerm)
-            }
+        .onAppear {
+            print("mediaItems is type: ", type(of: T.self))
         }
     }
 }
 
-#Preview {
-    NavigationStack {
-        ListItemsView(movies: [ShortMovie.preview], searchTerm: .constant(""))
-            .environment(MoviesViewModel())
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        ListItemsView(mediaItems: [ShortMovie.preview], searchTerm: .constant(""), mediaType: .movie)
+//            .environment(MoviesViewModel())
+//            .environment(SeriesViewModel())
+//            .environment(UserViewModel(user: User.preview))
+//    }
+//}

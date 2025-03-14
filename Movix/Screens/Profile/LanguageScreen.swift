@@ -11,16 +11,17 @@ struct LanguageScreen: View {
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
     @State private var selectedLan: String?
+    @State private var showConfirmation: Bool = false
+    @State private var searchTerm: String = ""
     
     var body: some View {
         VStack {
-            BannerTopBar(true)
             VStack(spacing: 16) {
                 HStack {
                     Text("Current language")
                         .font(.hauora(size: 20, weight: .medium))
                     Spacer()
-                    Text(userVM.language)
+                    Text(userVM.lang)
                         .font(.hauora(size: 20, weight: .black))
                 }
                 .foregroundStyle(.white)
@@ -28,9 +29,14 @@ struct LanguageScreen: View {
                     Text("AVAILABLE LANGUAGES")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
-//                        .foregroundStyle(.bw50)
+                    HStack(spacing: 16) {
+                        SearchField(searchTerm: $searchTerm, loadAction: {}, clearAction: {})
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
                     ScrollView(.vertical) {
-                        ForEach(userVM.languages, id: \.iso6391) { lang in
+//                        ForEach(userVM.languages, id: \.iso6391) { lang in
+                        ForEach(searchTerm.isEmpty ? userVM.languages : userVM.languages.filter({ $0.englishName.contains(searchTerm) }), id: \.iso6391) { lang in
                             LanguageRow(lang)
                                 .onTapGesture {
                                     withAnimation(.easeIn) {
@@ -42,7 +48,8 @@ struct LanguageScreen: View {
                     }
                     .scrollIndicators(.hidden)
                     Button {
-                        updateLanguage()
+//                        updateLanguage()
+                        showConfirmation.toggle()
                     } label: {
                         Text("Save")
                             .frame(maxWidth: .infinity)
@@ -52,18 +59,38 @@ struct LanguageScreen: View {
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .swipeToDismiss()
             }
             .padding([.horizontal, .bottom], 16)
         }
+        .popView(isPresented: $showConfirmation, onDismiss: {
+            showConfirmation.toggle()
+        }, content: {
+            CustomDialog(show: $showConfirmation, dialogType: .changeLanguage, onAccept: updateLanguage)
+        })
         .background(.bw10)
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("Profile")
+                    }
+                    .foregroundStyle(.blue1)
+                }
+            }
+        }
         .onAppear {
             loadLanguages()
-            selectedLan = userVM.language
+            selectedLan = userVM.lang
         }
     }
     private func updateLanguage() {
         guard let lang = selectedLan else { return }
-        userVM.language = lang
+        userVM.lang = lang
+        print(userVM.lang)
         dismiss()
     }
     private func loadLanguages() {

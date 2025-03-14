@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MediaGridItem: View {
-    @Environment(MoviesViewModel.self) var moviesVM
+//    @Environment(MoviesViewModel.self) var moviesVM
 //    let posterPath: URL?
     let posterPath: String?
     let voteAverage: Double?
@@ -26,9 +26,10 @@ struct MediaGridItem: View {
                     }
                     .clipped()
                 } else {
-                    ProgressView()
-                        .aspectRatio(2/3, contentMode: .fill)
-                        .tint(.marsB)
+//                    ProgressView()
+//                        .aspectRatio(2/3, contentMode: .fill)
+//                        .tint(.marsB)
+                    TimeoutProgressView()
                 }
             }
             .frame(maxWidth: .infinity)
@@ -51,9 +52,20 @@ struct MediaGridItem: View {
         .background(.clear)
         .aspectRatio(2/3, contentMode: .fill)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .onAppear {
-            Task {
-                self.image = await moviesVM.getPosterImage(posterPath: self.posterPath)
+//        .onAppear {
+//            Task {
+//                //                self.image = await moviesVM.getPosterImage(posterPath: self.posterPath)
+//                let poster = await HTTPClient.getPosterImage(posterPath: self.posterPath)
+//                withAnimation(.easeIn) {
+//                    self.image = poster
+//                }
+//                print("Loading again")
+//            }
+//        }
+        .task {
+            let poster = await HTTPClient.getPosterImage(posterPath: self.posterPath)
+            withAnimation(.easeIn) {
+                self.image = poster
             }
         }
     }
@@ -61,5 +73,5 @@ struct MediaGridItem: View {
 
 #Preview {
     MediaGridItem(posterPath: Movie.preview.posterPath, voteAverage: 8.7)
-        .environment(MoviesViewModel())
+//        .environment(MoviesViewModel())
 }
