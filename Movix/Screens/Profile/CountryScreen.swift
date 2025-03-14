@@ -12,6 +12,7 @@ struct CountryScreen: View {
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
     @State private var selectedCountry: String?
+    @State private var showConfirmation: Bool = false
     
     var body: some View {
         VStack {
@@ -45,7 +46,8 @@ struct CountryScreen: View {
                     }
                     .scrollIndicators(.hidden)
                     Button {
-                        updateCountry()
+//                        updateCountry()
+                        showConfirmation.toggle()
                     } label: {
                         Text("Save")
                             .frame(maxWidth: .infinity)
@@ -59,6 +61,11 @@ struct CountryScreen: View {
             .padding([.horizontal, .bottom], 16)
             
         }
+        .popView(isPresented: $showConfirmation, onDismiss: {
+            showConfirmation.toggle()
+        }, content: {
+            CustomDialog(show: $showConfirmation, dialogType: .changeCountry, onAccept: updateCountry)
+        })
         .background(.bw10)
         .toolbar {
             ToolbarItem(placement: .navigation) {

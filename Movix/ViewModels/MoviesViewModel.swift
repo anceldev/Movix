@@ -13,7 +13,7 @@ final class MoviesViewModel {
     var trendingMovies = [Movie]()
     var searchedMovies = [Movie]()
     var similarMovies = [Movie]()
-    var movieGenres = [Genre]()
+//    var movieGenres = [Genre]()
     var tvGenre = [Genre]()
     
     var movieCredits: MovieCredits?
@@ -31,7 +31,7 @@ final class MoviesViewModel {
     
     init() {
         Task {
-            self.movieGenres = await getGenres(lang: lang, mediaType: .movie)
+//            self.movieGenres = await getGenres(lang: lang, mediaType: .movie)
             self.tvGenre = await getGenres(lang: lang, mediaType: .tv)
             await getTrendingMovies()
         }

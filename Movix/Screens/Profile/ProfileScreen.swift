@@ -15,11 +15,12 @@ struct ProfileScreen: View {
         NavigationStack {
             VStack {
                 VStack(spacing: 10) {
-                    AsyncImage(url: userVM.user.avatarPathURl) { phase in
+                    AsyncImage(url: userVM.user.avatarPathURl, transaction: Transaction(animation: .easeIn(duration: 0.5))) { phase in
                         switch phase {
                         case .empty:
-                            ProgressView()
-                                .tint(.marsA)
+                                Image(.profileDefault)
+                                    .resizable()
+                                    .frame(width: 104, height: 104)
                         case .success(let image):
                             ZStack {
                                 Color.bw50

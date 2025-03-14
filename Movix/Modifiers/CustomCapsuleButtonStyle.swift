@@ -16,6 +16,7 @@ struct CustomCapsuleButtonStyle: ButtonStyle {
     
     let color: CapsuleColor
     let height: CGFloat
+    let fontSize: CGFloat
     
     var bg: LinearGradient {
         switch color {
@@ -30,7 +31,7 @@ struct CustomCapsuleButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 20))
+            .font(.system(size: fontSize))
             .foregroundStyle(.white)
 //                    .frame(maxWidth: .infinity)
             .frame(height: height)
@@ -40,8 +41,8 @@ struct CustomCapsuleButtonStyle: ButtonStyle {
 }
 
 extension ButtonStyle where Self == CustomCapsuleButtonStyle {
-    static var capsuleButton: CustomCapsuleButtonStyle { .init(color: .orangeGradient, height: 56)}
-    static func capsuleButton(_ color: CustomCapsuleButtonStyle.CapsuleColor = .orangeGradient, height: CGFloat = 56) -> CustomCapsuleButtonStyle {
-        CustomCapsuleButtonStyle(color: color, height: height)
+    static var capsuleButton: CustomCapsuleButtonStyle { .init(color: .orangeGradient, height: 56, fontSize: 20)}
+    static func capsuleButton(_ color: CustomCapsuleButtonStyle.CapsuleColor = .orangeGradient, height: CGFloat = 56, fontSize: CGFloat = 20) -> CustomCapsuleButtonStyle {
+        CustomCapsuleButtonStyle(color: color, height: height, fontSize: fontSize)
     }
 }

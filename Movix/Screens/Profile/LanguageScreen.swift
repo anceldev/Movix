@@ -11,6 +11,7 @@ struct LanguageScreen: View {
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
     @State private var selectedLan: String?
+    @State private var showConfirmation: Bool = false
     
     var body: some View {
         VStack {
@@ -41,7 +42,8 @@ struct LanguageScreen: View {
                     }
                     .scrollIndicators(.hidden)
                     Button {
-                        updateLanguage()
+//                        updateLanguage()
+                        showConfirmation.toggle()
                     } label: {
                         Text("Save")
                             .frame(maxWidth: .infinity)
@@ -55,6 +57,11 @@ struct LanguageScreen: View {
             }
             .padding([.horizontal, .bottom], 16)
         }
+        .popView(isPresented: $showConfirmation, onDismiss: {
+            showConfirmation.toggle()
+        }, content: {
+            CustomDialog(show: $showConfirmation, dialogType: .changeLanguage, onAccept: updateLanguage)
+        })
         .background(.bw10)
         .toolbar {
             ToolbarItem(placement: .navigation) {
