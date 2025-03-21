@@ -22,16 +22,12 @@ struct AuthenticatedScreen: View {
                         Text("Error getting account")
                     }
                 }
-//                MainTabView()
-//                    .environment(authVM)
             case .authenticating:
                 ProgressView()
                     .tint(.marsB)
             case .unauthenticated:
                 SignInScreen()
                     .environment(authVM)
-//                AuthenticationScreen()
-//                    .environment(authVM)
             }
         }
     }
