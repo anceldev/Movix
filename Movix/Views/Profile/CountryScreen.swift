@@ -20,7 +20,7 @@ struct CountryScreen: View {
         VStack {
             VStack(spacing: 16) {
                 HStack {
-                    Text("Country")
+                    Text("account-country-label")
                         .font(.hauora(size: 20, weight: .medium))
                     Spacer()
                     FlagView(countryCode: userVM.country)
@@ -32,7 +32,7 @@ struct CountryScreen: View {
                 }
                 .foregroundStyle(.white)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("AVAILABLE COUNTRIES")
+                    Text("account-country-sub-title")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                     HStack(spacing: 16) {
@@ -56,7 +56,7 @@ struct CountryScreen: View {
 //                        updateCountry()
                         showConfirmation.toggle()
                     } label: {
-                        Text("Save")
+                        Text("save-button-label")
                             .frame(maxWidth: .infinity)
                             .font(.hauora(size: 20, weight: .medium))
                     }
@@ -77,15 +77,11 @@ struct CountryScreen: View {
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Button {
-//                    dismiss()
                     navigationManager.navigateBack()
                 } label: {
-//                    HStack {
-//                        Image(systemName: "chevron.left")
-//                        Text("Profile")
-//                    }
-//                    .foregroundStyle(.blue1)
-                    BackButton(label: "Profile")
+                    BackButton {
+                        Text("Profile")
+                    }
                 }
             }
         }

@@ -13,6 +13,7 @@ struct MainTabView: View {
     @State var userVM: UserViewModel
     @State private var seriesVM = SeriesViewModel()
     @State private var navigationManager = NavigationManager()
+
     init(user: User) {
         self._userVM = State(initialValue: UserViewModel(user: user))
         UITabBar.appearance().unselectedItemTintColor = .white

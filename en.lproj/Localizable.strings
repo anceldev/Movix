@@ -1,0 +1,57 @@
+/* 
+  Localizable.strings
+  Movix
+
+  Created by Ancel Dev account on 26/3/25.
+  
+*/
+
+"login-email-label" = "Email";
+"login-password-label" = "Password";
+"login-submit-button-label" = "Sign In";
+"login-privacy-link-label" = "By clicking the login button, you accept";
+"login-privacy-link" = "privacy policy rules.";
+"login-question" = "Don't have an account?";
+"login-question-link" = "Join";
+
+"search-field-placeholder" = "Search";
+
+"home-tab-label" = "Home";
+
+"series-tab-label" = "Series";
+
+"movies-tab-label" = "Movies";
+"movie-tabbar-rate-label" = "Rate";
+"movie-tabbar-favorites-label" = "Favourite";
+"movie-tabbar-lists-label" = "My Lists";
+"movie-tabbar-providers-label" = "Providers";
+"movie-tabs-general" = "General";
+"movie-tabs-details" = "Details";
+"movie-tabs-reviews" = "Reviews";
+"movie-tabs-general-actors-title" = "Actors";
+"movie-tabs-general-rating-title" = "Rating";
+"movie-tabs-details-recommendations-title" = "Recommendations";
+
+
+"lists-tab-label" = "My Lists";
+
+"account-tab-label" = "Account";
+"account-section-settings-label" = "Account settings";
+"account-section-info-label" = "More info";
+
+"account-personal-details-label" = "Personal details";
+"account-personal-details-text" = "You can update your personal details on:";
+
+"account-language-label" = "Language";
+"account-language-title" = "Current language";
+"account-language-sub-title" = "Available languages";
+
+"account-country-label" = "Country";
+"account-country-title" = "Current country";
+"account-country-sub-title" = "Available countries";
+
+"account-about-label" = "About";
+"account-support-label" = "Support";
+
+"save-button-label" = "Save";
+"signout-button-label" = "Sign out";

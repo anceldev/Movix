@@ -1,0 +1,58 @@
+/* 
+  Localizable.strings
+  Movix
+
+  Created by Ancel Dev account on 26/3/25.
+  
+*/
+
+"login-email-label" = "Correo";
+"login-password-label" = "Contraseña";
+"login-submit-button-label" = "Iniciar sesión";
+"login-privacy-link-label" = "Dando al boton de iniciar sesión, aceptas nuetra ";
+"login-privacy-link" = "política de privacidad.";
+"login-question" = "¿Todavía no tienes cuenta?";
+"login-question-link" = "Unete a";
+
+"search-field-placeholder" = "Buscar";
+
+"home-tab-label" = "Inicio";
+
+"series-tab-label" = "Series";
+
+"movies-tab-label" = "Películas";
+"movie-tabbar-rate-label" = "Valorar";
+"movie-tabbar-favorites-label" = "Favorito";
+"movie-tabbar-lists-label" = "Mis listas";
+"movie-tabbar-providers-label" = "Proveedores";
+"movie-tabs-general" = "General";
+"movie-tabs-details" = "Detalles";
+"movie-tabs-reviews" = "Reseñas";
+"movie-tabs-general-actors-title" = "Actores";
+"movie-tabs-general-rating-title" = "Valoración";
+"movie-tabs-details-recommendations-title" = "Recomendaciones";
+
+"lists-tab-label" = "Mis listas";
+
+"account-tab-label" = "Cuenta";
+
+"account-section-settings-label" = "Ajustes de cuenta";
+"account-section-info-label" = "Más información";
+
+"account-personal-details-label" = "Información personal";
+"account-personal-details-text" = "Para cambiar tus datos personales necesitas acceder a tu cuenta en:";
+
+"account-language-label" = "Idioma";
+"account-language-title" = "Idioma actual";
+"account-language-sub-title" = "Idiomas disponibles";
+
+"account-country-label" = "País";
+"account-country-title" = "País actual";
+"account-country-sub-title" = "Países disponibles";
+
+"account-about-label" = "Sobre";
+"account-support-label" = "Soporte";
+
+
+"save-button-label" = "Guardar";
+"signout-button-label" = "Cerrar sesión";

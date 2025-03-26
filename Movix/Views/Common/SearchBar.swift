@@ -20,7 +20,6 @@ struct SearchBar: View {
             HStack {
                 Button {
                     searchAction()
-//                    await action()
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .foregroundStyle(.white)
@@ -57,20 +56,10 @@ struct SearchBar: View {
                         .foregroundStyle(.white)
                 })
                 Button(action: {
-                    switch viewOption {
-                    case .row: viewOption = .gridx2
-                    case .gridx2: viewOption = .gridx3
-                    case .gridx3: viewOption = .row
-                    }
+                    viewOption = viewOption == .gridx2 ? .gridx3 : .gridx2
                 }, label: {
-                    Group {
-                        switch viewOption {
-                        case .row: return Image(systemName: "rectangle.grid.1x2.fill")
-                        case .gridx2: return Image(systemName: "rectangle.grid.2x2.fill")
-                        case .gridx3: return Image(systemName: "square.grid.3x2.fill")
-                        }
-                    }
-                    .foregroundStyle(.white)
+                    Image(systemName: viewOption == .gridx2 ? "rectangle.grid.2x2.fill" : "square.grid.3x2.fill")
+                        .foregroundStyle(.white)
                 })
             }
             .frame(height: 42)
@@ -84,16 +73,10 @@ struct SearchBar: View {
             await action()
         }
     }
-//    private func searchAction() {
-//        print("Tapped")
-//        Task {
-//            await action()
-//        }
-//    }
 }
 
 #Preview(traits: .sizeThatFitsLayout, body: {
-    @Previewable @State var viewOption: ViewOption = .row
+    @Previewable @State var viewOption: ViewOption = .gridx2
     SearchBar(searchTerm: .constant(""), viewOption: $viewOption, showFilter: .constant(false)) {
         print("Searching...")
     }

@@ -19,6 +19,9 @@ enum RouterDestination: Hashable {
     case languages
     case countries
     case people(id: Int)
+    case about
+    case support
+    case personalDetails
 }
 
 
@@ -69,6 +72,15 @@ final class NavigationManager: Observable {
                      .navigationBarBackButtonHidden()
              case .people(let actorId):
                  ActorScreen(id: actorId)
+                     .navigationBarBackButtonHidden()
+             case .about:
+                 AboutScreen()
+                     .navigationBarBackButtonHidden()
+             case .support:
+                 SupportScreen()
+                     .navigationBarBackButtonHidden()
+             case .personalDetails:
+                 PersonalDetailsScreen()
                      .navigationBarBackButtonHidden()
              }
          }

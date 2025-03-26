@@ -8,10 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		B41449332D8330230099E201 /* FlagsKit in Frameworks */ = {isa = PBXBuildFile; productRef = B41449322D8330230099E201 /* FlagsKit */; };
+		B432A5AF2D8F8C4E009D5400 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = B432A5AE2D8F8C4E009D5400 /* Inject */; };
+		B43A796C2D94662F00B71CEE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B43A796A2D94662F00B71CEE /* Localizable.strings */; };
 		B4C2E55B2D707D5B00A6CE99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B43A796B2D94662F00B71CEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B43A796D2D9466E200B71CEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B43A86F02D562D9500E4EC34 /* Movix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -43,6 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B41449332D8330230099E201 /* FlagsKit in Frameworks */,
+				B432A5AF2D8F8C4E009D5400 /* Inject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +57,7 @@
 		B43A86E72D562D9500E4EC34 = {
 			isa = PBXGroup;
 			children = (
+				B43A796A2D94662F00B71CEE /* Localizable.strings */,
 				B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */,
 				B43A86F22D562D9500E4EC34 /* Movix */,
 				B4CAFB432D57715A005BEB0B /* Frameworks */,
@@ -95,6 +101,7 @@
 			name = Movix;
 			packageProductDependencies = (
 				B41449322D8330230099E201 /* FlagsKit */,
+				B432A5AE2D8F8C4E009D5400 /* Inject */,
 			);
 			productName = Movix;
 			productReference = B43A86F02D562D9500E4EC34 /* Movix.app */;
@@ -121,11 +128,13 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = B43A86E72D562D9500E4EC34;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				B41449312D8330230099E201 /* XCRemoteSwiftPackageReference "FlagsKit" */,
+				B432A5AD2D8F8C4E009D5400 /* XCRemoteSwiftPackageReference "Inject" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B43A86F12D562D9500E4EC34 /* Products */;
@@ -143,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4C2E55B2D707D5B00A6CE99 /* LaunchScreen.storyboard in Resources */,
+				B43A796C2D94662F00B71CEE /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,12 +168,25 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		B43A796A2D94662F00B71CEE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B43A796B2D94662F00B71CEE /* en */,
+				B43A796D2D9466E200B71CEE /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		B43A86FC2D562D9600E4EC34 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -216,6 +239,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -227,6 +254,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -272,6 +300,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
@@ -382,6 +411,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		B432A5AD2D8F8C4E009D5400 /* XCRemoteSwiftPackageReference "Inject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -389,6 +426,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B41449312D8330230099E201 /* XCRemoteSwiftPackageReference "FlagsKit" */;
 			productName = FlagsKit;
+		};
+		B432A5AE2D8F8C4E009D5400 /* Inject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B432A5AD2D8F8C4E009D5400 /* XCRemoteSwiftPackageReference "Inject" */;
+			productName = Inject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

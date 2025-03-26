@@ -42,11 +42,11 @@ struct MoviesScreen: View {
                     }
                     Group {
                         switch viewOption {
-                        case .row:
-                            MediaRowLayout<Movie>(
-                                mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
-                                mediaType: .movie
-                            )
+//                        case .row:
+//                            MediaRowLayout<Movie>(
+//                                mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+//                                mediaType: .movie
+//                            )
                         case .gridx2:
                             GridItemsView<Movie>(
                                 mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,

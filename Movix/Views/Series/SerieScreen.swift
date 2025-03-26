@@ -10,12 +10,14 @@ import SwiftUI
 struct SerieScreen: View {
     
     let serieId: Int
+
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
+    @Environment(NavigationManager.self) var routerDestination
+
     @State private var serieVM = SerieViewModel()
     @State private var selectedTab: MediaTab = .general
     
-    @Environment(NavigationManager.self) var routerDestination
     
     init(serieId: Int) {
         self.serieId = serieId
@@ -27,7 +29,15 @@ struct SerieScreen: View {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical) {
                         LazyVStack(spacing: 0) {
-                            PosterView(
+//                            HeaderMediaView(
+//                                backdropPath: serie.backdropPath,
+//                                posterPath: serie.posterPath,
+//                                duration: "\(serie.numberOfSeasons ?? 0) Se.",
+//                                isAdult: serie.isAdult,
+//                                releaseDate: serie.releaseDate?.releaseDate(),
+//                                genres: serie.genres
+//                            )
+                            HeaderMediaView(
                                 posterPath: serie.posterPath,
                                 duration: "\(serie.numberOfSeasons ?? 0) Se.",
                                 isAdult: serie.isAdult,
@@ -81,7 +91,10 @@ struct SerieScreen: View {
                 Button {
                     routerDestination.navigateBack()
                 } label: {
-                    BackButton(label: "Series")
+//                    BackButton(label: "Series")
+                    BackButton {
+                        Text("Series")
+                    }
                 }
             }
         }
@@ -100,5 +113,6 @@ struct SerieScreen: View {
     NavigationStack {
         SerieScreen(serieId: 52)
             .environment(UserViewModel(user: User.preview))
+            .environment(NavigationManager())
     }
 }

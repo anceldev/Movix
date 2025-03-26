@@ -20,7 +20,7 @@ struct LanguageScreen: View {
         VStack {
             VStack(spacing: 16) {
                 HStack {
-                    Text("Current language")
+                    Text("account-language-title")
                         .font(.hauora(size: 20, weight: .medium))
                     Spacer()
                     Text(userVM.lang)
@@ -28,7 +28,7 @@ struct LanguageScreen: View {
                 }
                 .foregroundStyle(.white)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("AVAILABLE LANGUAGES")
+                    Text("account-language-sub-title")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                     HStack(spacing: 16) {
@@ -51,7 +51,7 @@ struct LanguageScreen: View {
                     Button {
                         showConfirmation.toggle()
                     } label: {
-                        Text("Save")
+                        Text("save-button-label")
                             .frame(maxWidth: .infinity)
                             .font(.hauora(size: 20, weight: .medium))
                     }
@@ -74,7 +74,10 @@ struct LanguageScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-                    BackButton(label: "Profile")
+//                    BackButton(label: "account-tab-label")
+                    BackButton {
+                        Text("account-tab-label")
+                    }
                 }
             }
         }

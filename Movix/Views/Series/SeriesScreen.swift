@@ -10,7 +10,7 @@ import SwiftUI
 struct SeriesScreen: View {
     @State private var searchTerm = ""
     @State private var showFilterSheet = false
-    @State private var viewOption: ViewOption = .row
+    @State private var viewOption: ViewOption = .gridx3
     @Environment(SeriesViewModel.self) var seriesVM
     @Environment(NavigationManager.self) var navigationManager
 
@@ -37,11 +37,6 @@ struct SeriesScreen: View {
                     }
                     Group {
                         switch viewOption {
-                        case .row:
-                            MediaRowLayout<TvSerie>(
-                                mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries, 
-                                mediaType: .tv
-                                )
                         case .gridx2:
                             GridItemsView<TvSerie>(
                                 mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,

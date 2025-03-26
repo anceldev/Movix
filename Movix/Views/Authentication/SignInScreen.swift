@@ -23,7 +23,7 @@ struct SignInScreen: View {
                 Title()
                     .padding(.top, 44)
                 VStack(spacing: 16) {
-                    TextField("Email", text: $authVM.username)
+                    TextField("login-email-label", text: $authVM.username)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -35,7 +35,7 @@ struct SignInScreen: View {
                         .onSubmit {
                             focusedField = .password
                         }
-                    SecureField("Password", text: $authVM.password)
+                    SecureField("login-password-label", text: $authVM.password)
                         .customCapsule(focusedField == .password || authVM.password != "" ? .white : .bw50, input: true)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -48,17 +48,17 @@ struct SignInScreen: View {
                     Button(action: {
                         login()
                     }, label: {
-                        Text("Login")
+                        Text("login-submit-button-label")
                             .frame(maxWidth: .infinity)
                     })
                     .buttonStyle(.capsuleButton(.orangeGradient))
                     .disabled(authVM.state == .authenticating)
                     VStack {
-                        Text("By clicking the login button, you accept our")
+                        Text("login-privacy-link-label")
                         Button {
                             showPrivacyRules.toggle()
                         } label: {
-                            Text("privacy policy rules.")
+                            Text("login-privacy-link")
                                 .underline()
                         }
                     }
@@ -68,12 +68,18 @@ struct SignInScreen: View {
                     .padding(.top, 2)
                     Spacer()
                     VStack {
-                        Text("Don't have an account?")
+                        Text("login-question")
                             .foregroundStyle(.bw50)
                             .font(.hauora(size: 16))
                         Link(destination: URL(string: "https://www.themoviedb.org/signup")!) {
-                            Text("Join TMDB")
-                                .foregroundStyle(.blue1)
+                            HStack(spacing: 8) {
+                                Text("login-question-link")
+                                    .foregroundStyle(.blue1)
+                                Image(.tmdbLogo)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxHeight: 14)
+                            }
                         }
                     }
                 }

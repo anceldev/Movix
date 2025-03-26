@@ -22,7 +22,7 @@ enum SearchTab: String, CaseIterable, Identifiable, Hashable {
 struct SearchScreen: View {
     
     @State private var showFilterSheet: Bool = false
-    @State private var viewOption: ViewOption = .row
+    @State private var viewOption: ViewOption = .gridx2
     @State private var searchTerm = ""
     @State private var selectedTab: SearchTab = .tv
     @State private var mediaType: MediaType = .tv

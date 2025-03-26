@@ -27,20 +27,16 @@ struct GridItemsView<T: MediaItemProtocol>: View {
                              MediaGridItem(posterPath: media.posterPath, voteAverage: media.voteAverage)
                          }
                      }
-                    
                 }
                 .scrollIndicators(.hidden)
             }
-//            .padding(.horizontal, 16)
-        }
-        .onAppear {
-            print(mediaType.rawValue)
         }
     }
 }
 
-//#Preview {
-//    GridItemsView(mediaItems: [Movie.preview], searchTerm: .constant(""), mediaType: .movie, columns: [GridItem(.flexible()), GridItem(.flexible())])
-//        .environment(MoviesViewModel())
-//}
+#Preview {
+    GridItemsView(mediaItems: [Movie.preview], searchTerm: .constant(""), mediaType: .movie, columns: [GridItem(.flexible()), GridItem(.flexible())])
+        .environment(MoviesViewModel())
+        .environment(NavigationManager())
+}
 

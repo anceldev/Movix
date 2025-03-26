@@ -25,7 +25,7 @@ enum PosterSize: String, CaseIterable {
 }
 
 enum ViewOption {
-    case row
+//    case row
     case gridx2
     case gridx3
 }

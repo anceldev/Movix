@@ -28,7 +28,7 @@ struct MovieScreen: View {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical) {
                         VStack(spacing: 0) {
-                            PosterView(
+                            HeaderMediaView(
                                 posterPath: movie.posterPath,
                                 duration: movie.duration,
                                 isAdult: movie.isAdult,
@@ -91,15 +91,11 @@ struct MovieScreen: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
-//                    dismiss()
                     navigationManager.navigateBack()
                 } label: {
-//                    HStack {
-//                        Image(systemName: "chevron.left")
-//                        Text("Movies")
-//                    }
-//                    .foregroundStyle(.blue1)
-                    BackButton(label: "Movies")
+                    BackButton {
+                        Text("Movies")
+                    }
                 }
             }
         }

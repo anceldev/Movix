@@ -11,10 +11,8 @@ import FlagsKit
 struct ProfileScreen: View {
     @Environment(AuthViewModel.self) var authVM
     @Environment(UserViewModel.self) var userVM
-//    @Environment(NavigationManager.self) var navigationManager
-    
     @Environment(NavigationManager.self) var navigationManager
-    
+
     var body: some View {
         @Bindable var navigationManager = navigationManager
         NavigationStack(path: $navigationManager.path) {
@@ -58,52 +56,34 @@ struct ProfileScreen: View {
                     
                     List {
                         Section {
-//                            NavigationLink {
-//                                LanguageScreen()
-//                                    .environment(userVM)
-//                                    .navigationBarBackButtonHidden()
-//                            } label: {
-//                                HStack {
-//                                    Text("Language")
-//                                        .font(.hauora(size: 16, weight: .medium))
-//                                    Spacer()
-//                                    Text(userVM.lang)
-//                                        .font(.hauora(size: 18, weight: .bold))
-//                                }
-//                            }
-//                            .listRowBackground(Color.bw20)
                             Button {
-//                                navigationManager.navigate(to: .languages)
+                                navigationManager.navigate(to: .personalDetails)
+                            } label: {
+                                HStack {
+                                    Image(.personalDetails)
+                                    Text("account-personal-details-label")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                            Button {
                                 navigationManager.navigate(to: .languages)
                             } label: {
                                 HStack {
-                                    Text("Language")
+                                    Image(systemName: "translate")
+                                    Text("account-language-label")
                                         .font(.hauora(size: 16, weight: .medium))
                                     Spacer()
                                     Text(userVM.lang)
                                         .font(.hauora(size: 18, weight: .bold))
                                     Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
                                 }
                             }
                             .listRowBackground(Color.bw20)
-                            
-//                            NavigationLink {
-//                                CountryScreen()
-//                                    .environment(userVM)
-//                                    .navigationBarBackButtonHidden()
-//                            } label: {
-//                                HStack {
-//                                    FlagView(countryCode: userVM.country)
-//                                        .scaledToFit()
-//                                        .frame(maxWidth: 24)
-//                                        .clipShape(RoundedRectangle(cornerRadius: 2 ))
-//                                    Text("Country")
-//                                        .font(.hauora(size: 16, weight: .medium))
-//                                    Spacer()
-//                                    Text(userVM.lang.uppercased())
-//                                        .font(.hauora(size: 18, weight: .bold))
-//                                }
-//                            }
                             Button {
                                 navigationManager.navigate(to: .countries)
                             } label: {
@@ -112,27 +92,61 @@ struct ProfileScreen: View {
                                         .scaledToFit()
                                         .frame(maxWidth: 24)
                                         .clipShape(RoundedRectangle(cornerRadius: 2 ))
-                                    Text("Country")
+                                    Text("account-country-label")
                                         .font(.hauora(size: 16, weight: .medium))
                                     Spacer()
                                     Text(userVM.lang.uppercased())
                                         .font(.hauora(size: 18, weight: .bold))
                                     Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
                                 }
                             }
                             .listRowBackground(Color.bw20)
                         } header: {
-                            Text("Account settings")
+                            Text("account-section-settings-label")
                                 .font(.hauora(size: 14, weight: .bold))
                                 .foregroundStyle(.white)
                         }
+                        Section {
+                            Button {
+                                navigationManager.navigate(to: .about)
+                            } label: {
+                                HStack {
+                                    Image(.info)
+                                    Text("account-about-label")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                            Button {
+                                navigationManager.navigate(to: .support)
+                            } label: {
+                                HStack {
+                                    Image(.support)
+                                    Text("account-support-label")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                        } header: {
+                            Text("account-section-info-label")
+                                .font(.hauora(size: 14, weight: .bold))
+                                .foregroundStyle(.white)
+                        }
+
                         
                     }
                     .foregroundStyle(.white)
                     .background(.clear)
                     .scrollContentBackground(.hidden)
                 }
-                Button("Logout") {
+                Button("signout-button-label") {
                     logout()
                 }
             }
@@ -151,9 +165,11 @@ struct ProfileScreen: View {
 }
 
 #Preview {
-    NavigationStack {
+    @Previewable @State var navManager = NavigationManager()
+    NavigationStack(path: $navManager.path) {
         ProfileScreen()
             .environment(AuthViewModel())
             .environment(UserViewModel(user: User.preview))
+            .environment(navManager)
     }
 }

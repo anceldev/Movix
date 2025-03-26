@@ -36,7 +36,7 @@ struct MediaScreen<Content:View, T:MediaItemProtocol>: View {
                     ScrollViewReader { proxy in
                         ScrollView(.vertical) {
                             VStack(spacing: 0) {
-//                                PosterView(
+//                                HeaderMediaView(
 //                                    posterPath: <#T##String?#>,
 //                                    duration: <#T##String#>,
 //                                    isAdult: <#T##Bool?#>,

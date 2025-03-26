@@ -22,7 +22,7 @@ struct SeasonScreen: View {
     var body: some View {
         VStack {
             ScrollView(.vertical) {
-                PosterView(
+                HeaderMediaView(
                     posterPath: posterPath,
                     duration: "\(episodes) Ep.",
                     releaseDate: seasonVM.season?.airDate?.releaseDate()
@@ -57,7 +57,10 @@ struct SeasonScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-                    BackButton(label: "Serie")
+//                    BackButton(label: "Serie")
+                    BackButton {
+                        Text("Serie")
+                    }
                 }
             }
         }
