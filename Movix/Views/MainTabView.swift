@@ -20,11 +20,11 @@ struct MainTabView: View {
     }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $navigationManager.activeTab) {
             HomeScreen()
                 .tag(MainTabOption.home)
                 .tabItem {
-                    Label("Home", systemImage: "house.fill")
+                    Label(NSLocalizedString("home-tab-label", comment: "Home") , systemImage: "house.fill")
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(.bw10, for: .tabBar)
@@ -32,7 +32,7 @@ struct MainTabView: View {
             SeriesScreen()
                 .tag(MainTabOption.series)
                 .tabItem {
-                    Label("Series", systemImage: selectedTab == .series ? "tv" : "tv.fill")
+                    Label(NSLocalizedString("series-tab-label", comment: "Series"), systemImage: selectedTab == .series ? "tv" : "tv.fill")
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(.bw10, for: .tabBar)
@@ -40,21 +40,21 @@ struct MainTabView: View {
             MoviesScreen()
                 .tag(MainTabOption.movies)
                 .tabItem {
-                    Label("Movies", systemImage: selectedTab == .movies ? "movieclapper.fill" : "movieclapper")
+                    Label(NSLocalizedString("movies-tab-label", comment: "Movies") , systemImage: selectedTab == .movies ? "movieclapper.fill" : "movieclapper")
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(.bw10, for: .tabBar)
             MyListsScreen()
                 .tag(MainTabOption.lists)
                 .tabItem {
-                    Label("My lists", systemImage: "heart.fill")
+                    Label(NSLocalizedString("lists-tab-label", comment: "Lists"), systemImage: "heart.fill")
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(.bw10, for: .tabBar)
             ProfileScreen()
                 .tag(MainTabOption.profile)
                 .tabItem {
-                    Label("Profile", systemImage: selectedTab == .profile ? "person" : "person.fill")
+                    Label(NSLocalizedString("account-tab-label", comment: "Account"), systemImage: selectedTab == .profile ? "person" : "person.fill")
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(.bw10, for: .tabBar)
@@ -68,7 +68,7 @@ struct MainTabView: View {
         .animation(.easeOut, value: selectedTab)
         .toolbar(.visible, for: .tabBar)
         .toolbarBackground(.bw10, for: .tabBar)
-        .onChange(of: selectedTab) { _, newValue in
+        .onChange(of: navigationManager.activeTab) { _, newValue in
             navigationManager.path = []
             navigationManager.switchTab(to: newValue)
         }

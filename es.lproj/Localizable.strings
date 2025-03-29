@@ -14,28 +14,34 @@
 "login-question" = "¿Todavía no tienes cuenta?";
 "login-question-link" = "Unete a";
 
-"search-field-placeholder" = "Buscar";
-
 "home-tab-label" = "Inicio";
 
 "series-tab-label" = "Series";
 
 "movies-tab-label" = "Películas";
+
 "movie-tabbar-rate-label" = "Valorar";
 "movie-tabbar-favorites-label" = "Favorito";
 "movie-tabbar-lists-label" = "Mis listas";
 "movie-tabbar-providers-label" = "Proveedores";
+
 "movie-tabs-general" = "General";
 "movie-tabs-details" = "Detalles";
 "movie-tabs-reviews" = "Reseñas";
+
 "movie-tabs-general-actors-title" = "Actores";
 "movie-tabs-general-rating-title" = "Valoración";
+"movie-tabs-general-rating-description" = "Añada una valoración con un toque";
 "movie-tabs-details-recommendations-title" = "Recomendaciones";
+"movie-list-controls-favorites" = "Favoritos";
+"movie-list-controls-rated" = "Valoradas";
+
+"all-tab-label" = "Todo";
+"series-tab-label" = "Series";
 
 "lists-tab-label" = "Mis listas";
 
 "account-tab-label" = "Cuenta";
-
 "account-section-settings-label" = "Ajustes de cuenta";
 "account-section-info-label" = "Más información";
 
@@ -53,6 +59,10 @@
 "account-about-label" = "Sobre";
 "account-support-label" = "Soporte";
 
+"lists-tab-label" = "Mis listas";
 
 "save-button-label" = "Guardar";
 "signout-button-label" = "Cerrar sesión";
+"view-more-button-label" = "Ver más";
+"view-all-button-label" = "Ver todo";
+"search-field-placeholder" = "Buscar...";

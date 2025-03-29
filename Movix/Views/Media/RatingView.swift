@@ -46,10 +46,10 @@ struct RatingView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Rating")
+            Text("movie-tabs-general-rating-title")
                 .font(.hauora(size: 22, weight: .medium))
             VStack(spacing: 12) {
-                Text("Rate the \(mediaType) with a touch")
+                Text("movie-tabs-general-rating-description")
                 VStack(spacing: 12) {
                     VStack {
                         HStack(spacing: 0) {

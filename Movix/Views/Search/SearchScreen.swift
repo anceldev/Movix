@@ -7,11 +7,22 @@
 
 import SwiftUI
 
-enum SearchTab: String, CaseIterable, Identifiable, Hashable {
+enum SearchTab: String, CaseIterable, Identifiable, Hashable, Localizable {
     case all
     case movies
     case tv
     var id: Self { self }
+    
+    var localizedTitle: String {
+        switch self {
+        case .all:
+            return NSLocalizedString("all-tab-label", comment: "All")
+        case .movies:
+            return NSLocalizedString("movie-tabs-label", comment: "Details")
+        case .tv:
+            return NSLocalizedString("series-tabs-label", comment: "Reviews")
+        }
+    }
 }
 //enum SearchFlow {
 //    case searching

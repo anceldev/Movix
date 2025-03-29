@@ -96,13 +96,6 @@ struct MediaScreen<Content:View, T:MediaItemProtocol>: View {
                                     }
                                 }
                                 .padding(.top, 26)
-//                                OverviewView(
-//                                    overview: media.overview
-//                                )
-
-//                                MovieTabsView()
-//                                    .environment(movieVM)
-//                                    .id("movieTabs")
                                 MovieTabsView {
                                     switch mediaType {
                                     case .movie:

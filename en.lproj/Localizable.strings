@@ -14,24 +14,30 @@
 "login-question" = "Don't have an account?";
 "login-question-link" = "Join";
 
-"search-field-placeholder" = "Search";
-
 "home-tab-label" = "Home";
 
 "series-tab-label" = "Series";
 
 "movies-tab-label" = "Movies";
+
 "movie-tabbar-rate-label" = "Rate";
 "movie-tabbar-favorites-label" = "Favourite";
 "movie-tabbar-lists-label" = "My Lists";
 "movie-tabbar-providers-label" = "Providers";
+
 "movie-tabs-general" = "General";
 "movie-tabs-details" = "Details";
 "movie-tabs-reviews" = "Reviews";
+
 "movie-tabs-general-actors-title" = "Actors";
 "movie-tabs-general-rating-title" = "Rating";
+"movie-tabs-general-rating-description" = "Rate it with a touch";
 "movie-tabs-details-recommendations-title" = "Recommendations";
+"movie-list-controls-favorites" = "Favorites";
+"movie-list-controls-rated" = "Rated";
 
+"all-tab-label" = "All";
+"series-tab-label" = "Series";
 
 "lists-tab-label" = "My Lists";
 
@@ -53,5 +59,10 @@
 "account-about-label" = "About";
 "account-support-label" = "Support";
 
+"lists-tab-label" = "My lists";
+
 "save-button-label" = "Save";
 "signout-button-label" = "Sign out";
+"view-more-button-label" = "View more";
+"view-all-button-label" = "View all";
+"search-field-placeholder" = "Search...";

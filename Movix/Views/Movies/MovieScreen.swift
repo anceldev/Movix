@@ -93,9 +93,7 @@ struct MovieScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-                    BackButton {
-                        Text("Movies")
-                    }
+                    BackButton(label: NSLocalizedString("movies-tab-label", comment: "Movies tab label"))
                 }
             }
         }
@@ -116,5 +114,6 @@ struct MovieScreen: View {
     NavigationStack {
         MovieScreen(movieId: 11235)
             .environment(UserViewModel(user: User.preview))
+            .environment(NavigationManager())
     }
 }

@@ -53,7 +53,6 @@ struct CountryScreen: View {
                     }
                     .scrollIndicators(.hidden)
                     Button {
-//                        updateCountry()
                         showConfirmation.toggle()
                     } label: {
                         Text("save-button-label")
@@ -79,9 +78,7 @@ struct CountryScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-                    BackButton {
-                        Text("Profile")
-                    }
+                    BackButton(label: NSLocalizedString("account-tab-label", comment: "Account tab label"))
                 }
             }
         }
@@ -93,7 +90,6 @@ struct CountryScreen: View {
     private func updateCountry() {
         guard let country = selectedCountry else { return }
         userVM.country = country
-//        dismiss()
         navigationManager.navigateBack()
     }
     private func loadCountries() {
@@ -109,7 +105,6 @@ struct CountryScreen: View {
                 .frame(maxWidth: 24)
                 .opacity(selectedCountry == country.iso31661 ? 1 : 0.4)
                 .clipShape(RoundedRectangle(cornerRadius: 2 ))
-//                .aspectRatio(contentMode: .fill)
             Text(country.nativeName)
                 .font(.hauora(size: 16))
                 .foregroundStyle(selectedCountry == country.iso31661 ? .white : .bw50)
@@ -131,4 +126,5 @@ struct CountryScreen: View {
 #Preview {
     CountryScreen()
         .environment(UserViewModel(user: User.preview))
+        .environment(NavigationManager())
 }

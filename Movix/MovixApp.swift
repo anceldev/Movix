@@ -17,6 +17,7 @@ struct MovixApp: App {
         WindowGroup {
             AuthenticatedScreen()
                 .colorScheme(.dark)
+                .statusBarHidden()
         }
     }
 }

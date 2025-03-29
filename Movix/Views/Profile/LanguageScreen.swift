@@ -74,10 +74,7 @@ struct LanguageScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-//                    BackButton(label: "account-tab-label")
-                    BackButton {
-                        Text("account-tab-label")
-                    }
+                    BackButton(label: NSLocalizedString("account-tab-label", comment: "Account tab label"))
                 }
             }
         }
@@ -122,4 +119,5 @@ struct LanguageScreen: View {
 #Preview {
     LanguageScreen()
         .environment(UserViewModel(user: User.preview))
+        .environment(NavigationManager())
 }

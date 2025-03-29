@@ -14,6 +14,7 @@ fileprivate struct PopViewHelper<ViewContent: View>: ViewModifier {
     @State private var presentFullScreenCover: Bool = false
     @State private var animateView: Bool = false
     
+    @MainActor
     var screenSize: CGSize {
         if let screenSize = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.screen.bounds.size {
             return screenSize

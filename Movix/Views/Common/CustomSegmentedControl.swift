@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct CustomSegmentedControl<T: Hashable & CaseIterable & Identifiable>: View {
+struct CustomSegmentedControl<T: Hashable & CaseIterable & Identifiable & Localizable>: View {
     @Binding var state: T
     @Namespace private var segmentedControl
     
@@ -24,7 +24,7 @@ struct CustomSegmentedControl<T: Hashable & CaseIterable & Identifiable>: View {
                                 self.state = state
                             }
                         } label: {
-                            Text("\(state)".capitalized)
+                            Text("\(state.localizedTitle)")
                                 .padding(8)
                                 .foregroundStyle(.white)
                         }

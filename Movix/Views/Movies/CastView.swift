@@ -16,24 +16,11 @@ struct CastView: View {
     @Environment(NavigationManager.self) var navigationManager
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Actors")
+            Text("movie-tabs-general-actors-title")
                 .font(.system(size: 22, weight: .medium))
             ScrollView(.horizontal) {
                 HStack(spacing: 12) {
                     ForEach(actors) { actor in
-//                        NavigationLink {
-//                            ActorScreen(id: actor.id)
-//                                .navigationBarBackButtonHidden()
-//                        } label: {
-//                            ActorLink(
-//                                imageUrl: actor.profilePath,
-//                                name: actor.originalName
-//                            )
-//                            .transition(
-//                                .asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity)
-//                            )
-//                            .id("actor_\(actor.id)")
-//                        }
                         Button {
                             navigationManager.navigate(to: .people(id: actor.id))
                         } label: {
@@ -52,7 +39,7 @@ struct CastView: View {
                             NavigationLink {
                                 ActorsList(showAllActorsButton: $showLoadAllButton)
                             } label: {
-                                Text("Show all")
+                                Text("view-all-button-label")
                                     .foregroundStyle(.white)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .font(.hauora(size: 12))
@@ -140,5 +127,5 @@ struct CastView: View {
 
 #Preview {
     CastView(cast: [])
-        .background(.red)
+        .environment(NavigationManager())
 }

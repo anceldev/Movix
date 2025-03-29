@@ -25,7 +25,7 @@ struct MoviesScreen: View {
             NavigationStack(path: $routerDestination.path) {
                 VStack(spacing: 16) {
                     VStack(spacing: 8) {
-                        Text("Movies")
+                        Text("movies-tab-label")
                             .font(.hauora(size: 22, weight: .semibold))
                             .foregroundStyle(.white)
                         HStack(spacing: 16) {

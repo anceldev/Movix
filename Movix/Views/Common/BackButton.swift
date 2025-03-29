@@ -7,29 +7,14 @@
 
 import SwiftUI
 
-struct BackButton<Content:View>: View {
+struct BackButton: View {
     
-//    let label: String?
-    let content: (() -> Content)?
-    
-//    init(label: String?, content: @escaping () -> Content) {
-//        self.label = label
-//        self.content = content
-//    }
-    
-    init(content: (() -> Content)? = nil) {
-        self.content = content
-    }
-    
-//    init(content: @escaping () -> Content = nil) {
-//        self.content = content
-//    }
+    let label: String?
     var body: some View {
         HStack {
             Image(systemName: "chevron.left")
-            if let content {
-//                Text(label)
-                content()
+            if let label {
+                Text(label)
             }
         }
         .foregroundStyle(.blue1)

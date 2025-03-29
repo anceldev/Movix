@@ -38,7 +38,7 @@ struct OverviewView: View {
                                     }
                                 }
                             }, label: {
-                                Text("View More ")
+                                Text("view-more-button-label")
                                     .foregroundStyle(.blue1)
                                     .font(.hauora(size: 12))
                                     .opacity(viewMore == nil ? 0 : 1)

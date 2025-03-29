@@ -57,10 +57,10 @@ struct SeasonScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-//                    BackButton(label: "Serie")
-                    BackButton {
-                        Text("Serie")
-                    }
+                    BackButton(label: "Serie")
+//                    BackButton {
+//                        Text("Serie")
+//                    }
                 }
             }
         }

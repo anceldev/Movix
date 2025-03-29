@@ -7,10 +7,21 @@
 
 import SwiftUI
 
-enum MovieTab: String, CaseIterable, Identifiable, Hashable {
+enum MovieTab: String, CaseIterable, Identifiable, Hashable, Localizable {
     case general, details, reviews
     
     var id: Self { self }
+    
+    var localizedTitle: String {
+        switch self {
+        case .general:
+            return NSLocalizedString("movie-tabs-general", comment: "General")
+        case .details:
+            return NSLocalizedString("movie-tabs-details", comment: "Details")
+        case .reviews:
+            return NSLocalizedString("movie-tabs-reviews", comment: "Reviews")
+        }
+    }
 }
 struct MovieTabsView<Content:View>: View {
     /// View Properties
@@ -34,12 +45,7 @@ struct MovieTabsView<Content:View>: View {
             CustomSegmentedControl(state: $selectedTab)
             switch selectedTab {
             case .general:
-//                GeneralTabMovieView(cast: movieVM.cast)
-//                GeneralTabMovieView(
-//                    id: movieVM.movie?.id ?? 0,
-//                    currentRate: userVM.getCurrentMovieRating(movieId: movieVM.movie?.id)
-//                )
-//                .environment(movieVM)
+
                 content
             case .details:
 //                DetailsTabView(movie: movieVM.movie!)

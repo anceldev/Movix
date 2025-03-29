@@ -76,6 +76,7 @@ enum MovieEndpoint {
     case credits(Int)
     case providers(Int)
     case reviews(Int)
+    case popular
     
     var url: URL {
         switch self {
@@ -91,6 +92,8 @@ enum MovieEndpoint {
             return URL(string: baseUrlPath + "movie/\(movieId)/watch/providers")!
         case .reviews(let movieId):
             return URL(string: baseUrlPath + "movie/\(movieId)/reviews")!
+        case .popular:
+            return URL(string: baseUrlPath + "movie/popular")!
         }
     }
 }

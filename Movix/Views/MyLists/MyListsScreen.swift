@@ -5,6 +5,7 @@
 //  Created by Ancel Dev account on 7/2/25.
 //
 
+import Foundation
 import SwiftUI
 
 
@@ -12,13 +13,34 @@ enum ListControlsMedia: String, CaseIterable, Identifiable, Hashable {
     case movies
     case series
     var id: Self { self }
+    var localizedTitle: String {
+        switch self {
+        case .movies:
+            return NSLocalizedString("movies-tab-label", comment: "Movies")
+        case .series:
+            return NSLocalizedString("series-tab-label", comment: "Series")
+        }
+    }
+}
+protocol Localizable {
+    var localizedTitle: String { get }
 }
 
 
-enum ListControls: String, CaseIterable, Identifiable, Hashable {
+enum ListControls: String, CaseIterable, Identifiable, Hashable, Localizable {
     case favorites
     case rates
     var id: Self { self }
+    
+    var localizedTitle: String {
+        switch self {
+        case .favorites:
+            return NSLocalizedString("movie-list-controls-favorites", comment: "Favorites")
+        case .rates:
+            return NSLocalizedString("movie-list-controls-rated", comment: "Rated")
+        }
+    }
+    
 }
 
 struct MyListsScreen: View {
@@ -33,14 +55,17 @@ struct MyListsScreen: View {
         NavigationStack(path: $navigationManager.path) {
             VStack(spacing: 0) {
                 HStack {
-                    Text("My \(selectedMedia.rawValue.capitalized)")
+                    HStack {
+                        Text("lists-tab-label")
+                        Text("- \(selectedMedia.localizedTitle)")
+                    }
                         .foregroundStyle(.white)
                         .font(.hauora(size: 20, weight: .semibold))
                     Spacer()
                     Button {
                         mediaPopover.toggle()
                     } label: {
-                        Text(selectedMedia.rawValue.capitalized)
+                        Text(selectedMedia.localizedTitle)
                             .font(.hauora(size: 14, weight: .semibold))
                             .foregroundStyle(.white)
                             .padding(.vertical, 4)
@@ -51,7 +76,7 @@ struct MyListsScreen: View {
                     .popover(isPresented: $mediaPopover) {
                         VStack(spacing: 12) {
                             ForEach(ListControlsMedia.allCases) { btn in
-                                Text(btn.rawValue.capitalized)
+                                Text(btn.localizedTitle)
                                     .opacity(selectedMedia == btn ? 1 : 0.6)
                                     .onTapGesture {
                                         withAnimation(.easeIn) {

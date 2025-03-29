@@ -26,7 +26,7 @@ struct SearchBar: View {
                         .padding(.leading, 12)
                         .padding(.trailing, 4)
                 }
-                TextField("Search...", text: $searchTerm, prompt: Text("Search...").foregroundStyle(.bw50))
+                TextField("Search...", text: $searchTerm, prompt: Text("search-field-placeholder").foregroundStyle(.bw50))
                     .tint(Color.bw90)
                     .submitLabel(.search)
                     .onSubmit {

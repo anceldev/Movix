@@ -55,7 +55,8 @@ final class MoviesViewModel {
         self.trendingMoviesPage += 1
         do {
             let resource = Resource(
-                url: Endpoints.trending(.movie, .week).url,
+//                url: Endpoints.trending(.movie, .week).url,
+                url: MovieEndpoint.popular.url,
                 method: .get([
                     URLQueryItem(name: "language", value: lang),
                     URLQueryItem(name: "page", value: "\(self.trendingMoviesPage)")

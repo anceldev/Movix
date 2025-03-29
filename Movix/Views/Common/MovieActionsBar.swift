@@ -7,35 +7,6 @@
 
 import SwiftUI
 
-struct ActionBarButtonLabel: View {
-    let label: String
-    let imageName: String
-    let isOn: Bool
-    
-    var image: Image {
-        if isOn {
-            return Image(imageName)
-        }
-        else {
-            return Image("\(imageName)-disabled")
-        }
-    }
-    var body: some View {
-        VStack(spacing: 8) {
-            VStack {
-                image
-                    .resizable()
-                    .frame(width: 24, height: 24)
-                    .tint(isOn ? .blue1 : .bw50)
-            }
-            .frame(width: 30, height: 30)
-            Text(label)
-                .font(.hauora(size: 12))
-                .foregroundStyle(isOn ? .blue1 : .bw50)
-        }
-        .frame(width: 60)
-    }
-}
 
 struct MovieActionsBar: View {
     let idMovie: Int
@@ -84,7 +55,7 @@ struct MovieActionsBar: View {
                             .font(.hauora(size: 12))
                             .foregroundStyle(.white)
                     }
-                    .frame(width: 60)
+                    .frame(width: 65)
                 }
             }
             .padding(.top, 26)

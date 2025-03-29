@@ -7,10 +7,21 @@
 
 import SwiftUI
 
-enum MediaTab: String, CaseIterable, Identifiable, Hashable {
+enum MediaTab: String, CaseIterable, Identifiable, Hashable, Localizable {
     case general, details, reviews
     
     var id: Self { self }
+    
+    var localizedTitle: String {
+        switch self {
+        case .general:
+            return NSLocalizedString("movie-tabs-general", comment: "General")
+        case .details:
+            return NSLocalizedString("movie-tabs-details", comment: "Details")
+        case .reviews:
+            return NSLocalizedString("movie-tabs-reviews", comment: "Reviews")
+        }
+    }
 }
 
 struct MediaTabsView<TabContent: View>: View {
