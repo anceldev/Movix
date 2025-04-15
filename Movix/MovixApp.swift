@@ -10,9 +10,6 @@ import SwiftUI
 
 @main
 struct MovixApp: App {
-//    init() {
-//        Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")!.load()
-//    }
     var body: some Scene {
         WindowGroup {
             AuthenticatedScreen()

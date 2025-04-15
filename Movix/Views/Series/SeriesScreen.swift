@@ -7,15 +7,51 @@
 
 import SwiftUI
 
+struct CustomSearchField: View {
+    @Binding var text: String
+    var onClear: () -> Void
+    var onTextChange: (String) -> Void
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            
+            TextField("Buscar películas", text: Binding(
+                get: { text },
+                set: { onTextChange($0) }
+            ))
+            
+            if !text.isEmpty {
+                Button(action: onClear) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+                .transition(.scale)
+                .animation(.default, value: text.isEmpty)
+            }
+        }
+        .padding(10)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
+}
+
 struct SeriesScreen: View {
     @State private var searchTerm = ""
     @State private var showFilterSheet = false
+    
     @State private var viewOption: ViewOption = .gridx3
     @Environment(SeriesViewModel.self) var seriesVM
     @Environment(NavigationManager.self) var navigationManager
+    
+    @State private var query = ""
+    @State private var debouncedQuery = ""
 
     var body: some View {
         @Bindable var routerDestination = navigationManager
+        @Bindable var seriesVM = seriesVM
         VStack {
             NavigationStack(path: $routerDestination.path) {
                 VStack(spacing: 16) {
@@ -24,33 +60,50 @@ struct SeriesScreen: View {
                             .font(.hauora(size: 22, weight: .semibold))
                             .foregroundStyle(.white)
                         HStack(spacing: 16) {
-                            SearchField(
-                                searchTerm: $searchTerm,
-                                loadAction: loadSeries) {
-                                    seriesVM.searchedSeries.removeAll()
-                                }
-                                .padding(.leading)
+//                            SearchField(
+//                                searchTerm: $searchTerm,
+//                                loadAction: loadSeries) {
+//                                    seriesVM.searchedSeries.removeAll()
+//                                }
+//                                .padding(.leading)
+                            
+                            TextField("text", text: $query)
+                                .debounced(text: $query, debouncedText: $debouncedQuery)
+                            
                             SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 44)
+                        .environment(seriesVM) //
                     }
                     Group {
                         switch viewOption {
                         case .gridx2:
+//                            GridItemsView<TvSerie>(
+//                                mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
+//                                searchTerm: .constant(""),
+//                                mediaType: .tv,
+//                                columns: [GridItem(.flexible()), GridItem(.flexible())]
+//                            )
                             GridItemsView<TvSerie>(
-                                mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
+                                mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
                                 searchTerm: .constant(""),
                                 mediaType: .tv,
                                 columns: [GridItem(.flexible()), GridItem(.flexible())]
                             )
                         case .gridx3:
-                             GridItemsView<TvSerie>(
-                                 mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
-                                 searchTerm: .constant(""),
-                                 mediaType: .tv,
-                                 columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-                             )
+//                             GridItemsView<TvSerie>(
+//                                 mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
+//                                 searchTerm: .constant(""),
+//                                 mediaType: .tv,
+//                                 columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+//                             )
+                            GridItemsView<TvSerie>(
+                                mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
+                                searchTerm: .constant(""),
+                                mediaType: .tv,
+                                columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                            )
                         }
                     }
                     .padding(.horizontal, 16)
@@ -77,7 +130,16 @@ struct SeriesScreen: View {
         .sheet(isPresented: $showFilterSheet) {
             Text("Filter screen")
         }
+        .onChange(of: debouncedQuery) { oldValue, newValue in
+            search(query: newValue)
+        }
     }
+    private func search(query: String) {
+        Task {
+            await seriesVM.getSearchedSeries(searchTerm: debouncedQuery)
+        }
+    }
+    
     private func loadSeries() {
         Task {
             if searchTerm.isEmpty {
@@ -93,5 +155,5 @@ struct SeriesScreen: View {
 #Preview {
     SeriesScreen()
         .environment(SeriesViewModel())
-        .environment(UserViewModel(user: User.preview))
+        .environment(NavigationManager())
 }

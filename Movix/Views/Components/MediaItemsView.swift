@@ -64,7 +64,7 @@ struct ContentView2: View {
             }
             .background(GeometryReader { proxy in
                 Color.clear
-                    .onChange(of: proxy.frame(in: .global).minY) { newValue in
+                    .onChange(of: proxy.frame(in: .global).minY) { _, newValue in
                         withAnimation {
                             if newValue < 0 {
                                 showIcon = true

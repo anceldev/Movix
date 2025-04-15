@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Supabase
 
 enum AuthState {
     case authenticated
@@ -24,10 +25,16 @@ enum RequestError: Error {
 
 @Observable
 final class AuthViewModel {
+    
+    typealias Client = SupClient
+    let supabase = Client.shared.supabase
+    
     var username: String = ""
     var password: String = ""
     
     var user: User?
+    var supabaseUser: Supabase.User?
+    
     var state: AuthState = .authenticating
     private var tmdbSession: String = ""
     private var httpClient = HTTPClient()
@@ -132,12 +139,6 @@ final class AuthViewModel {
     }
     
     private func getAccount() async throws -> User {
-//        let resource = Resource(
-//            url: Endpoints.getAccount("\(self.tmdbSession)").url,
-//            modelType: User.self
-//        )
-//        let user = try await httpClient.load(resource)
-//        return user
         let url = Endpoints.getAccount("\(self.tmdbSession)").url
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
@@ -179,5 +180,43 @@ final class AuthViewModel {
         self.username = ""
         self.password = ""
         UserDefaults.standard.removeObject(forKey: "session_id")
+    }
+    
+    
+    
+    func signUpSupabase(username: String, email: String, password: String, country: String = "US", language: String = "en") async -> Supabase.User? {
+        do {
+            let authSession = try await supabase.auth.signUp(
+                email: email,
+                password: password
+            )
+            print(authSession.user)
+            print(authSession.session ?? "NO-SESSION")
+            return authSession.user
+        } catch {
+            setError(error)
+            return nil
+        }
+    }
+    
+    func signInSupabase(email: String, password: String) async -> Supabase.User? {
+        do {
+            let authSession = try await supabase.auth.signIn(email: email, password: password)
+            
+            print(authSession.user)
+            
+            return authSession.user
+        } catch {
+            setError(error)
+            return nil
+        }
+    }
+    
+    func signOutSupabase() async {
+        do {
+            try await supabase.auth.signOut()
+        } catch {
+            setError(error)
+        }
     }
 }
