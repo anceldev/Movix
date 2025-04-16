@@ -9,29 +9,23 @@ import SwiftUI
 
 struct SearchField: View {
     @Binding var searchTerm: String
-    let loadAction: () async -> Void
-    let clearAction: () -> Void
+    @Binding var debounceQuery: String
+
     
     var body: some View {
-//        HStack(spacing: 16) {
             HStack {
-                Button {
-                    searchAction()
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.white)
-                        .padding(.leading, 12)
-                        .padding(.trailing, 4)
-                }
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.white)
+                    .padding(.leading, 12)
+                    .padding(.trailing, 4)
+                
                 TextField("Search...", text: $searchTerm, prompt: Text("search-field-placeholder").foregroundStyle(.bw50))
                     .tint(Color.bw90)
                     .submitLabel(.search)
-                    .onSubmit {
-                        searchAction()
-                    }
+                    .debounced(text: $searchTerm, debouncedText: $debounceQuery)
+                
                 Button(action: {
                     searchTerm = ""
-                    clearAction()
                 }, label: {
                     Label("Clear", systemImage: "xmark.circle.fill")
                         .labelStyle(.iconOnly)
@@ -43,15 +37,5 @@ struct SearchField: View {
             .frame(maxWidth: .infinity, maxHeight: 44)
             .background(.bw40)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-//            .padding(.leading, 16)
     }
-    private func searchAction() {
-        Task {
-            await loadAction()
-        }
-    }
-}
-
-#Preview {
-    SearchField(searchTerm: .constant(""), loadAction: {}, clearAction: {})
 }

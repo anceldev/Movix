@@ -53,7 +53,6 @@ struct ProfileScreen: View {
                         .foregroundStyle(.white)
                 }
                 VStack {
-                    
                     List {
                         Section {
                             Button {
@@ -69,6 +68,21 @@ struct ProfileScreen: View {
                                 }
                             }
                             .listRowBackground(Color.bw20)
+                            
+                            Button {
+                                navigationManager.navigate(to: .friends)
+                            } label: {
+                                HStack {
+                                    Image(.friends)
+                                    Text("account-friends-label")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                            
                             Button {
                                 navigationManager.navigate(to: .languages)
                             } label: {
@@ -77,25 +91,26 @@ struct ProfileScreen: View {
                                     Text("account-language-label")
                                         .font(.hauora(size: 16, weight: .medium))
                                     Spacer()
-                                    Text(userVM.lang)
+                                    Text(userVM.user.lang)
                                         .font(.hauora(size: 18, weight: .bold))
                                     Image(systemName: "chevron.right")
                                         .foregroundStyle(.bw50)
                                 }
                             }
                             .listRowBackground(Color.bw20)
+                            
                             Button {
                                 navigationManager.navigate(to: .countries)
                             } label: {
                                 HStack {
-                                    FlagView(countryCode: userVM.country)
+                                    FlagView(countryCode: userVM.user.country)
                                         .scaledToFit()
                                         .frame(maxWidth: 24)
                                         .clipShape(RoundedRectangle(cornerRadius: 2 ))
                                     Text("account-country-label")
                                         .font(.hauora(size: 16, weight: .medium))
                                     Spacer()
-                                    Text(userVM.lang.uppercased())
+                                    Text(userVM.user.country.uppercased())
                                         .font(.hauora(size: 18, weight: .bold))
                                     Image(systemName: "chevron.right")
                                         .foregroundStyle(.bw50)
@@ -107,6 +122,7 @@ struct ProfileScreen: View {
                                 .font(.hauora(size: 14, weight: .bold))
                                 .foregroundStyle(.white)
                         }
+                        
                         Section {
                             Button {
                                 navigationManager.navigate(to: .about)
@@ -121,6 +137,20 @@ struct ProfileScreen: View {
                                 }
                             }
                             .listRowBackground(Color.bw20)
+                            Button {
+                                navigationManager.navigate(to: .aboutTMDB)
+                            } label: {
+                                HStack {
+                                    Image(.info)
+                                    Text("account-about-tmdb-label")
+                                        .font(.hauora(size: 16, weight: .medium))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.bw50)
+                                }
+                            }
+                            .listRowBackground(Color.bw20)
+                            
                             Button {
                                 navigationManager.navigate(to: .support)
                             } label: {
@@ -139,8 +169,6 @@ struct ProfileScreen: View {
                                 .font(.hauora(size: 14, weight: .bold))
                                 .foregroundStyle(.white)
                         }
-
-                        
                     }
                     .foregroundStyle(.white)
                     .background(.clear)

@@ -23,200 +23,143 @@ enum RequestError: Error {
     case listError
 }
 
+enum AuthenticationError: Error {
+    case userNotInserted
+    case userNotFound
+}
+
+enum AuthFlow {
+    case signIn
+    case signUp
+}
+
 @Observable
 final class AuthViewModel {
     
     typealias Client = SupClient
     let supabase = Client.shared.supabase
     
-    var username: String = ""
-    var password: String = ""
+    var username = ""
+    var email = ""
+    var password = ""
+    var language = ""
+    var country = ""
     
     var user: User?
-    var supabaseUser: Supabase.User?
     
-    var state: AuthState = .authenticating
+    var state: AuthState = .unauthenticated
+    var flow: AuthFlow = .signIn
+    
     private var tmdbSession: String = ""
     private var httpClient = HTTPClient()
     
     var errorMessage: String? = nil
     
     init() {
-        guard let currentSessionId = UserDefaults.standard.string(forKey: "session_id") else {
-            self.state = .unauthenticated
-            return
-        }
         Task {
-            do {
-                self.tmdbSession = currentSessionId
-                self.user = try await getAccount()
-                self.state = .authenticated
-               
-            } catch {
-                setError(error)
-                self.state = .unauthenticated
+            await getCurrentSession()
+        }
+    }
+    
+    private func getCurrentSession() async {
+        state = .authenticating
+        do {
+            let session = try await supabase.auth.session
+            user = try await getUser(userId: session.user.id)
+            state = .authenticated
+        } catch {
+            print(error)
+            print(error.localizedDescription)
+            state = .unauthenticated
+        }
+    }
+    
+    func signUp() async {
+        defer { resetValues() }
+        state = .authenticating
+        do {
+            let authSession = try await supabase.auth.signUp(
+                email: email,
+                password: password
+            )
+            
+            let user = User(
+                id: authSession.user.id,
+                name: nil,
+                username: username,
+                email: email,
+                lang: language,
+                country: country,
+                avatarPath: nil
+            )
+            
+            let response = try await supabase
+                .from(SupabaseTables.users.rawValue)
+                .insert(user)
+                .execute()
+            
+            if response.status == 201 {
+                self.user = user
+                state = .authenticated
+                return
             }
+            throw AuthenticationError.userNotInserted
+        } catch {
+            setError(error)
+            state = .unauthenticated
         }
     }
     
     func signIn() async {
-        self.state = .authenticating
+        defer { resetValues() }
+        state = .authenticating
         do {
-            let token = try await createRequestToken()
-            try await validateTokenWithLogin(with: token)
-            let sessionId = try await createSession(token: token)
-            self.tmdbSession = sessionId
-            UserDefaults.standard.set(sessionId, forKey: "session_id")
-            let user = try await getAccount()
-            self.user = user
-            UserDefaults.standard.set(user.lang, forKey: "lang")
-            UserDefaults.standard.set(user.country, forKey: "country")
-            self.state = .authenticated
-            
+            let authSession = try await supabase.auth.signIn(email: email, password: password)
+            user = try await getUser(userId: authSession.user.id)
+            state = .authenticated
         } catch {
             setError(error)
-            self.state = .unauthenticated
+            state = .unauthenticated
         }
+    }
+    
+    private func getUser(userId: UUID) async throws -> User {
+        do {
+            let response = try await supabase
+                .from(SupabaseTables.users.rawValue)
+                .select("*")
+                .eq("id", value: userId)
+                .execute()
+            return try JSONDecoder().decode([User].self, from: response.data)[0]
+        } catch {
+            throw error
+        }
+    }
+    
+    func signOut() async {
+        defer { resetValues() }
+        state = .authenticating
+        do {
+            try await supabase.auth.signOut()
+            self.user = nil
+            state = .unauthenticated
+        } catch {
+            setError(error)
+        }
+    }
+    
+    private func resetValues() {
+        username = ""
+        email = ""
+        password = ""
+        language = "en"
+        country = "US"
+        errorMessage = nil
     }
     
     private func setError(_ error: Error) {
         print(error)
         print(error.localizedDescription)
         self.errorMessage = error.localizedDescription
-    }
-    
-    /// Requests a token for authentication
-    /// - Returns: token
-    private func createRequestToken() async throws -> String {
-        let resource = Resource(
-            url: Endpoints.requestToken.url,
-            modelType: Response.self
-        )
-        let response = try await httpClient.load(resource)
-        guard let succes = response.success, succes == true, let token = response.token else {
-            throw RequestError.tokenError
-        }
-        return token
-    }
-    private func validateTokenWithLogin(with token: String) async throws {
-        let parameters = [
-            "username": self.username,
-            "password": self.password,
-            "request_token": token,
-        ] as [String:Any]
-        let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-        let resourceValidation = Resource(
-            url: URL(string: Endpoints.validateTokenWithLogin.url.absoluteString)!,
-            method: .post(postData, []),
-            modelType: Response.self
-        )
-        let responseValidation = try await httpClient.load(resourceValidation)
-        guard let success = responseValidation.success,
-              success == true,
-              let _ = responseValidation.token else {
-            throw RequestError.tokenValidationError
-        }
-    }
-    
-    /// Creates a session with the requested and validated token
-    /// - Parameter token: validated token
-    /// - Returns: session token
-    private func createSession(token: String) async throws -> String{
-        let parameters = [ "request_token": token] as [String:Any?]
-        let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-        let resource = Resource(
-            url: Endpoints.createSession.url,
-            method: .post(postData, []),
-            modelType: Response.self
-        )
-        let session = try await httpClient.load(resource)
-        guard let succes = session.success,
-                succes == true,
-                let sessionId = session.sessionId else {
-            throw RequestError.sessionError
-        }
-        return sessionId
-    }
-    
-    private func getAccount() async throws -> User {
-        let url = Endpoints.getAccount("\(self.tmdbSession)").url
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let decoder = JSONDecoder()
-            print(String(decoding: data, as: UTF8.self))
-            let user = try decoder.decode(User.self, from: data)
-            return user
-        } catch {
-            print(error.localizedDescription)
-            throw error
-        }
-    }
-    
-    func signOut() async {
-        do {
-            let data = [ "session_id": self.tmdbSession ] as [String:Any]
-            let postData = try JSONSerialization.data(withJSONObject: data, options: [])
-            
-            let resource = Resource(
-                url: Endpoints.deleteSession.url,
-                method: .delete(postData),
-                modelType: Response.self
-            )
-            let response = try await httpClient.load(resource)
-            if let succes = response.success, succes == true {
-                resetValues()
-            }
-            else {
-                throw RequestError.logoutError
-            }
-        } catch {
-            setError(error)
-        }
-    }
-    private func resetValues() {
-        self.tmdbSession = ""
-        self.user = nil
-        self.state = .unauthenticated
-        self.username = ""
-        self.password = ""
-        UserDefaults.standard.removeObject(forKey: "session_id")
-    }
-    
-    
-    
-    func signUpSupabase(username: String, email: String, password: String, country: String = "US", language: String = "en") async -> Supabase.User? {
-        do {
-            let authSession = try await supabase.auth.signUp(
-                email: email,
-                password: password
-            )
-            print(authSession.user)
-            print(authSession.session ?? "NO-SESSION")
-            return authSession.user
-        } catch {
-            setError(error)
-            return nil
-        }
-    }
-    
-    func signInSupabase(email: String, password: String) async -> Supabase.User? {
-        do {
-            let authSession = try await supabase.auth.signIn(email: email, password: password)
-            
-            print(authSession.user)
-            
-            return authSession.user
-        } catch {
-            setError(error)
-            return nil
-        }
-    }
-    
-    func signOutSupabase() async {
-        do {
-            try await supabase.auth.signOut()
-        } catch {
-            setError(error)
-        }
     }
 }

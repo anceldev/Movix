@@ -8,22 +8,21 @@
 import SwiftUI
 
 struct AuthenticationScreen: View {
-//    @Environment(AuthViewModel.self) var authVM
+    @Environment(AuthViewModel.self) var authVM
     var body: some View {
         VStack {
-            Text("This is the authentication screen")
-//            switch authVM.flow {
-//            case .signIn:
-//                SignInScreen()
-//            case .signUp:
-//                SignUpScreen()
-//            }
+            switch authVM.flow {
+            case .signIn:
+                SignInScreen()
+            case .signUp:
+                SignUpScreen()
+            }
         }
-//        .environment(authVM)
+        .environment(authVM)
     }
 }
 
 #Preview {
     AuthenticationScreen()
-//        .environment(AuthViewModel())
+        .environment(AuthViewModel())
 }

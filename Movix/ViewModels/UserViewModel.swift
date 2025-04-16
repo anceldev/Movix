@@ -7,35 +7,31 @@
 
 import Foundation
 import SwiftUI
+import Supabase
+
 @Observable
 final class UserViewModel {
+    
+    typealias Client = SupClient
+    let supabase = Client.shared.supabase
+    
     var user: User
     var languages = [Language]()
     var countries = [Country]()
+    var friends = [User]()
+    
     var errorMessage: String?
     private var favoritesPage = 1
     private var ratedMoviesPage = 1
     private var favoriteSeriesPage = 1
     private var ratedSeriesPage = 1
-    
-    var lang: String {
-        didSet {
-            UserDefaults.standard.set(lang, forKey: "lang")
-        }
-    }
-    var country: String {
-        didSet {
-            UserDefaults.standard.set(country, forKey: "country")
-        }
-    }
+
     
     private var httpClient = HTTPClient()
     private var sessionId = UserDefaults.standard.string(forKey: "session_id") ?? ""
     
     init(user: User) {
         self.user = user
-        self.lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
-        self.country = UserDefaults.standard.string(forKey: "country") ?? "US"
         Task {
             await getFavoriteMovies()
             await getRatedMovies()
@@ -44,55 +40,51 @@ final class UserViewModel {
         }
     }
     
-    /// Add or removes a movie from favorites
-    /// - Parameter movie: movie to add or delete.
-    func toggleFavoriteMovie<T: MediaItemProtocol>(media: T, mediaType: MediaType) async {
+    func getFriends() async {
         do {
-            var isFavorite: Bool
-            if mediaType == .movie {
-                isFavorite = user.favoriteMovies.contains { $0.id == media.id }
-            }
-            else {
-                isFavorite = user.favoriteSeries.contains(where: { $0.id == media.id })
-            }
+            let response = try await supabase
+                .from(SupabaseTables.friends.rawValue)
+                .select("friend_id, status")
+                .eq("user_id", value: user.id)
+                .execute()
             
-            let parameters = [
-                "media_type": mediaType.rawValue,
-                "media_id": media.id,
-                "favorite": !isFavorite
-            ] as [String:Any?]
-            
-            let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            let resource = Resource(
-                url: Endpoints.addFavorite(user.id).url,
-                method: .post(postData, [
-                    URLQueryItem(name: "session_id", value: sessionId)
-                ]),
-                modelType: Response.self
-            )
-            let response = try await httpClient.load(resource)
-            guard let succes = response.success, succes == true else {
-                throw RequestError.failedRequest
-            }
-            if mediaType == .movie {
-                if isFavorite {
-                    user.favoriteMovies.removeAll { $0.id == media.id }
-                }
-                else {
-                    user.favoriteMovies.append(media as! Movie)
-                }
-            }
-            else {
-                if isFavorite {
-                    user.favoriteSeries.removeAll { $0.id == media.id }
-                }
-                else {
-                    user.favoriteSeries.append(media as! TvSerie)
-                }
-            }
+            let friendRequestDTO = try JSONDecoder().decode([FriendsRequestDTO].self, from: response.data)
         } catch {
             setError(error)
         }
+    }
+    
+    
+    func updateUserLanguage(lang: String?) async -> Void {
+        guard let lang, lang != user.lang else { return }
+        do {
+            let response = try await supabase
+                .from(SupabaseTables.users.rawValue)
+                .update(["lang": lang])
+                .eq("id", value: user.id)
+                .execute()
+            user.lang = lang
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func updateUserCountry(country: String?) async -> Void {
+        guard let country, country != user.country else { return }
+        do {
+            let response = try await supabase
+                .from(SupabaseTables.users.rawValue)
+                .update(["country": country])
+                .eq("id", value: user.id)
+                .execute()
+            user.country = country
+        } catch {
+            setError(error)
+        }
+    }
+
+    func toggleFavoriteMovie<T: MediaItemProtocol>(media: T, mediaType: MediaType) async {
+        print("Toggle favorite")
     }
     
     func isFavoriteMovie(id: Int) -> Bool {
@@ -126,77 +118,17 @@ final class UserViewModel {
 
     
     func getFavoriteMovies() async {
-        do {
-            let resource = Resource(
-                url: Endpoints.favorites(user.id).url,
-                method: .get([
-                    URLQueryItem(name: "language", value: user.lang),
-                    URLQueryItem(name: "page", value: "\(favoritesPage)"),
-                    URLQueryItem(name: "sort_by", value: "created_at.asc"),
-                    URLQueryItem(name: "session_id", value: sessionId),
-                ]),
-                modelType: PageCollection<Movie>.self
-            )
-            let favoriteMovies = try await httpClient.load(resource)
-            self.user.favoriteMovies = favoriteMovies.results
-        } catch {
-            setError(error)
-        }
+        print("Getting favorite movies")
     }
     func getRatedMovies() async {
-        do {
-            let resource = Resource(
-                url: Endpoints.ratedMedia(user.id, .movie).url,
-                method: .get([
-                    URLQueryItem(name: "language", value: user.lang),
-                    URLQueryItem(name: "page", value: "1"),
-                    URLQueryItem(name: "session_id", value: sessionId),
-                    URLQueryItem(name: "sort_by", value: "created_at.asc")
-                ]),
-                modelType: PageCollection<Movie>.self
-            )
-            let ratedCollection = try await httpClient.load(resource)
-            self.user.ratedMovies = ratedCollection.results
-        } catch {
-            setError(error)
-        }
+        print("Getting rated movies")
     }
     func getFavoriteSeries() async {
-        do {
-            let resource = Resource(
-                url: SerieEndpoint.favorites(user.id).url,
-                method: .get([
-                    URLQueryItem(name: "language", value: user.lang),
-                    URLQueryItem(name: "page", value: "\(self.favoriteSeriesPage)"),
-                    URLQueryItem(name: "session_id", value: sessionId),
-                    URLQueryItem(name: "sort_by", value: "created_at.asc")
-                ]),
-                modelType: PageCollection<TvSerie>.self
-            )
-            let response = try await httpClient.load(resource)
-            self.user.favoriteSeries = response.results
-        } catch {
-            setError(error)
-        }
+        print("Getting favorite series")
     }
     
     func getRatedSeries() async {
-        do {
-            let resource = Resource(
-                url: SerieEndpoint.rated(user.id).url,
-                method: .get([
-                    URLQueryItem(name: "language", value: lang),
-                    URLQueryItem(name: "page", value: "1"),
-                    URLQueryItem(name: "session_id", value: sessionId),
-                    URLQueryItem(name: "sort_by", value: "created_at.asc")
-                ]),
-                modelType: PageCollection<TvSerie>.self
-            )
-            let response = try await httpClient.load(resource)
-            self.user.ratedSeries = response.results
-        } catch {
-            setError(error)
-        }
+        print("Getting reated series")
     }
     func addMovieRating(movie: Movie, rating: Int) async {
         do {
@@ -290,37 +222,55 @@ final class UserViewModel {
         }
     }
     
+//    func getLanguages() async {
+//        do {
+//            let resource = Resource(
+//                url: ConfigEndpoints.languages.url,
+//                method: .get([
+//                    URLQueryItem(name: "language", value: user.lang),
+//                ]),
+//                modelType: [Language].self
+//            )
+//            let response = try await httpClient.load(resource)
+//            self.languages = response
+//        } catch {
+//            setError(error)
+//        }
+//    }
+    
     func getLanguages() async {
         do {
-            let resource = Resource(
-                url: ConfigEndpoints.languages.url,
-                method: .get([
-                    URLQueryItem(name: "language", value: user.lang),
-                ]),
-                modelType: [Language].self
-            )
-            let response = try await httpClient.load(resource)
-            self.languages = response
+            languages = try await TMDBService.shared.getLanguages(lang: user.lang)
+            languages.sort { $0.englishName < $1.englishName }
         } catch {
             setError(error)
         }
     }
     func getCountries() async {
         do {
-            let langCountries = "\(lang)-\(country)"
-            let resource = Resource(
-                url: ConfigEndpoints.countries.url,
-                method: .get([
-                    URLQueryItem(name: "language", value: langCountries)
-                ]),
-                modelType: [Country].self
-            )
-            let response = try await httpClient.load(resource)
-            self.countries = response
+            self.countries = try await TMDBService.shared.getCountries(lang: user.lang, country: user.country)
+            countries.sort { $0.nativeName < $1.nativeName }
         } catch {
             setError(error)
         }
     }
+    
+//    func getCountries() async {
+//        do {
+//            let langCountries = "\(user.lang)-\(user.country)"
+//            let resource = Resource(
+//                url: ConfigEndpoints.countries.url,
+//                method: .get([
+//                    URLQueryItem(name: "language", value: langCountries)
+//                ]),
+//                modelType: [Country].self
+//            )
+//            let response = try await httpClient.load(resource)
+//            self.countries = response
+//        } catch {
+//            setError(error)
+//        }
+//    }
 
     func loadPosterImage(imagePath: String?) async -> Image? {
         do {

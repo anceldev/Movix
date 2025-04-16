@@ -10,10 +10,16 @@ import SwiftUI
 // struct GridItemsView<T: MediaItemProtocol>: View {
 struct GridItemsView<T: MediaItemProtocol>: View {
     let mediaItems: [T]
-    @Binding var searchTerm: String
     var mediaType: MediaType
     let columns: [GridItem]
     @Environment(NavigationManager.self) var navigationManager
+    
+    init(mediaItems: [T], mediaType: MediaType, columns: Int) {
+        self.mediaItems = mediaItems
+        self.mediaType = mediaType
+//        self.columns = [GridItem(.flexible()) * columns]
+        self.columns = Array<GridItem>(repeating: .init(.flexible()), count: columns)
+    }
 
     var body: some View {
         VStack {
@@ -35,7 +41,7 @@ struct GridItemsView<T: MediaItemProtocol>: View {
 }
 
 #Preview {
-    GridItemsView(mediaItems: [Movie.preview], searchTerm: .constant(""), mediaType: .movie, columns: [GridItem(.flexible()), GridItem(.flexible())])
+    GridItemsView(mediaItems: [Movie.preview], mediaType: .movie, columns: 2)
         .environment(MoviesViewModel())
         .environment(NavigationManager())
 }

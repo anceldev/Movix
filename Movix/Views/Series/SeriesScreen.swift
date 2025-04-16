@@ -60,15 +60,8 @@ struct SeriesScreen: View {
                             .font(.hauora(size: 22, weight: .semibold))
                             .foregroundStyle(.white)
                         HStack(spacing: 16) {
-//                            SearchField(
-//                                searchTerm: $searchTerm,
-//                                loadAction: loadSeries) {
-//                                    seriesVM.searchedSeries.removeAll()
-//                                }
-//                                .padding(.leading)
-                            
-                            TextField("text", text: $query)
-                                .debounced(text: $query, debouncedText: $debouncedQuery)
+                            SearchField(searchTerm: $query, debounceQuery: $debouncedQuery)
+                                .padding(.leading)
                             
                             SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
                         }
@@ -76,35 +69,42 @@ struct SeriesScreen: View {
                         .frame(height: 44)
                         .environment(seriesVM) //
                     }
-                    Group {
-                        switch viewOption {
-                        case .gridx2:
+//                    Group {
+//                        switch viewOption {
+//                        case .gridx2:
+////                            GridItemsView<TvSerie>(
+////                                mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
+////                                searchTerm: .constant(""),
+////                                mediaType: .tv,
+////                                columns: [GridItem(.flexible()), GridItem(.flexible())]
+////                            )
 //                            GridItemsView<TvSerie>(
-//                                mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
+//                                mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
 //                                searchTerm: .constant(""),
 //                                mediaType: .tv,
 //                                columns: [GridItem(.flexible()), GridItem(.flexible())]
 //                            )
-                            GridItemsView<TvSerie>(
-                                mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
-                                searchTerm: .constant(""),
-                                mediaType: .tv,
-                                columns: [GridItem(.flexible()), GridItem(.flexible())]
-                            )
-                        case .gridx3:
-//                             GridItemsView<TvSerie>(
-//                                 mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
-//                                 searchTerm: .constant(""),
-//                                 mediaType: .tv,
-//                                 columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-//                             )
-                            GridItemsView<TvSerie>(
-                                mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
-                                searchTerm: .constant(""),
-                                mediaType: .tv,
-                                columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-                            )
-                        }
+//                        case .gridx3:
+////                             GridItemsView<TvSerie>(
+////                                 mediaItems: searchTerm.isEmpty ? seriesVM.trendingSeries : seriesVM.searchedSeries,
+////                                 searchTerm: .constant(""),
+////                                 mediaType: .tv,
+////                                 columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+////                             )
+//                            GridItemsView<TvSerie>(
+//                                mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
+//                                searchTerm: .constant(""),
+//                                mediaType: .tv,
+//                                columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+//                            )
+//                        }
+//                    }
+                    VStack {
+                        GridItemsView<TvSerie>(
+                            mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
+                            mediaType: .tv,
+                            columns: viewOption == .gridx2 ? 2 : 3
+                        )
                     }
                     .padding(.horizontal, 16)
                     
@@ -130,7 +130,7 @@ struct SeriesScreen: View {
         .sheet(isPresented: $showFilterSheet) {
             Text("Filter screen")
         }
-        .onChange(of: debouncedQuery) { oldValue, newValue in
+        .onChange(of: debouncedQuery) { _, newValue in
             search(query: newValue)
         }
     }

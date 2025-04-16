@@ -13,7 +13,9 @@ enum MediaNavigation: Equatable {
 }
 
 struct MoviesScreen: View {
-    @State private var searchTerm = ""
+    @State private var query = ""
+    @State private var debounceQuery = ""
+    
     @State private var showFilterSheet = false
     @State private var viewOption: ViewOption = .gridx3
     @Environment(MoviesViewModel.self) var moviesVM
@@ -29,45 +31,43 @@ struct MoviesScreen: View {
                             .font(.hauora(size: 22, weight: .semibold))
                             .foregroundStyle(.white)
                         HStack(spacing: 16) {
-                            SearchField(
-                                searchTerm: $searchTerm,
-                                loadAction: loadMovies){
-                                    moviesVM.searchedMovies.removeAll()
-                                }
-                                .padding(.leading)
+                            SearchField(searchTerm: $query, debounceQuery: $debounceQuery)
                             SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 44)
                     }
-                    Group {
-                        switch viewOption {
-//                        case .row:
-//                            MediaRowLayout<Movie>(
-//                                mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
-//                                mediaType: .movie
+//                    Group {
+//                        switch viewOption {
+//                        case .gridx2:
+//                            GridItemsView<Movie>(
+//                                mediaItems: debounceQuery.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+//                                searchTerm: .constant(""),
+//                                mediaType: .movie,
+//                                columns: [GridItem(.flexible()), GridItem(.flexible())]
 //                            )
-                        case .gridx2:
-                            GridItemsView<Movie>(
-                                mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
-                                searchTerm: .constant(""),
-                                mediaType: .movie,
-                                columns: [GridItem(.flexible()), GridItem(.flexible())]
-                            )
-                        case .gridx3:
-                            GridItemsView<Movie>(
-                                mediaItems: searchTerm.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
-                                searchTerm: .constant(""),
-                                mediaType: .movie,
-                                columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-                            )
-                        }
+//                        case .gridx3:
+//                            GridItemsView<Movie>(
+//                                mediaItems: debounceQuery.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+//                                searchTerm: .constant(""),
+//                                mediaType: .movie,
+//                                columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+//                            )
+//                        }
+//                    }
+//                    .padding(.horizontal)
+                    VStack {
+                        GridItemsView<Movie>(
+                            mediaItems: debounceQuery.isEmpty ? moviesVM.trendingMovies : moviesVM.searchedMovies,
+                            mediaType: .movie,
+                            columns: viewOption == .gridx2 ? 2 : 3
+                        )
                     }
                     .padding(.horizontal)
                     
                     VStack {
                         Button {
-                            loadMovies()
+                            search(query: debounceQuery)
                         } label: {
                             Image(systemName: "chevron.down")
                         }
@@ -79,23 +79,19 @@ struct MoviesScreen: View {
                 .background(.bw10)
                 .withAppRouter()
             }
-//            .environment(navigationManager)
-//            .toolbarBackground(.clear, for: .navigationBar)
         }
         .animation(.easeIn, value: viewOption)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .sheet(isPresented: $showFilterSheet) {
             Text("Filter screen")
         }
+        .onChange(of: debounceQuery) { _, newValue in
+            search(query: newValue)
+        }
     }
-    private func loadMovies() {
+    private func search(query: String) {
         Task {
-            if searchTerm.isEmpty {
-                await moviesVM.getTrendingMovies()
-            }
-            else {
-                await moviesVM.searchMovies(searchTerm: searchTerm)
-            }
+        
         }
     }
 }

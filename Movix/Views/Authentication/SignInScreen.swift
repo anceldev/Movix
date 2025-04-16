@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SignInScreen: View {
     private enum FocusedField {
-        case username, password
+        case email, password
     }
     
     @Environment(AuthViewModel.self) var authVM
@@ -23,13 +23,13 @@ struct SignInScreen: View {
                 Title()
                     .padding(.top, 44)
                 VStack(spacing: 16) {
-                    TextField("login-email-label", text: $authVM.username)
+                    TextField("login-email-label", text: $authVM.email)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
-                        .customCapsule(focusedField == .username || authVM.username != "" ? .white : .bw50, input: true)
+                        .customCapsule(focusedField == .email || authVM.email != "" ? .white : .bw50, input: true)
                         .foregroundStyle(authVM.username != "" ? .white : .bw50)
-                        .focused($focusedField, equals: .username).animation(.easeInOut, value: focusedField)
+                        .focused($focusedField, equals: .email).animation(.easeInOut, value: focusedField)
                         .tint(.white)
                         .submitLabel(.next)
                         .onSubmit {
@@ -41,9 +41,10 @@ struct SignInScreen: View {
                         .textInputAutocapitalization(.never)
                         .focused($focusedField, equals: .password).animation(.easeInOut, value: focusedField)
                         .tint(.white)
-                        .submitLabel(.done)
+                        .submitLabel(.go)
                         .onSubmit {
                             focusedField = nil
+                            login()
                         }
                     Button(action: {
                         login()
@@ -53,6 +54,28 @@ struct SignInScreen: View {
                     })
                     .buttonStyle(.capsuleButton(.orangeGradient))
                     .disabled(authVM.state == .authenticating)
+                    
+                    if let errorMessage = authVM.errorMessage {
+                        Text(errorMessage)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    }
+                    
+                    
+                    HStack(spacing: 4) {
+                        Text("login-question-signin")
+                            .foregroundStyle(.white)
+                        Button(action: {
+                            withAnimation(.easeIn) {
+                                authVM.flow = .signUp
+                            }
+                        }, label: {
+                            Text("login-question-link-signup")
+                                .foregroundStyle(.blue1)
+                        })
+                    }
+                    .font(.hauora(size: 14))
+
                     VStack {
                         Text("login-privacy-link-label")
                         Button {
@@ -63,25 +86,25 @@ struct SignInScreen: View {
                         }
                     }
                     .multilineTextAlignment(.center)
-                    .font(.hauora(size: 14))
+                    .font(.hauora(size: 12))
                     .foregroundStyle(.bw50)
                     .padding(.top, 2)
-                    Spacer()
-                    VStack {
-                        Text("login-question")
-                            .foregroundStyle(.bw50)
-                            .font(.hauora(size: 16))
-                        Link(destination: URL(string: "https://www.themoviedb.org/signup")!) {
-                            HStack(spacing: 8) {
-                                Text("login-question-link")
-                                    .foregroundStyle(.blue1)
-                                Image(.tmdbLogo)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxHeight: 14)
-                            }
-                        }
-                    }
+//                    Spacer()
+//                    VStack {
+//                        Text("login-question")
+//                            .foregroundStyle(.bw50)
+//                            .font(.hauora(size: 16))
+//                        Link(destination: URL(string: "https://www.themoviedb.org/signup")!) {
+//                            HStack(spacing: 8) {
+//                                Text("login-question-link")
+//                                    .foregroundStyle(.blue1)
+//                                Image(.tmdbLogo)
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
+//                                    .frame(maxHeight: 14)
+//                            }
+//                        }
+//                    }
                 }
                 Spacer()
             }
@@ -99,7 +122,7 @@ struct SignInScreen: View {
     private func Title() -> some View {
         VStack {
             VStack(spacing: 36) {
-                Text("Login")
+                Text("login-signin-title")
                     .font(.hauora(size: 34))
                 VStack(spacing: 12) {
                     Image("profileDefault")
@@ -115,6 +138,7 @@ struct SignInScreen: View {
     
     private func login() {
         Task {
+            authVM.errorMessage = nil
             await authVM.signIn()
         }
     }

@@ -19,14 +19,9 @@ struct AuthenticatedScreen: View {
                 ProgressView()
                     .tint(.marsB)
             case .unauthenticated:
-                SignInScreen()
+                AuthenticationScreen()
                     .environment(authVM)
             }
-        }
-    }
-    private func signOut() {
-        Task {
-            await authVM.signOut()
         }
     }
 }

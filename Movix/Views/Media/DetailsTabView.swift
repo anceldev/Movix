@@ -75,9 +75,8 @@ struct DetailsTabView<T: MediaItemProtocol>: View {
                     if !similarMedia.isEmpty {
                         GridItemsView(
                             mediaItems: similarMedia,
-                            searchTerm: .constant(""),
                             mediaType: type(of: T.self) == type(of: Movie.self) ? .movie : .tv,
-                            columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                            columns: 3
                         )
                     }
                 }

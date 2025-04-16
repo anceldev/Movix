@@ -8,6 +8,11 @@
 import Foundation
 import Supabase
 
+enum SupabaseTables: String {
+    case users
+    case friends
+}
+
 enum SupabaseConfig: String {
     case projectId
     case anonKey

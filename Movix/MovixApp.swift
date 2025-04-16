@@ -10,11 +10,13 @@ import SwiftUI
 
 @main
 struct MovixApp: App {
+    
     var body: some Scene {
         WindowGroup {
             AuthenticatedScreen()
-                .colorScheme(.dark)
+                .preferredColorScheme(.dark)
                 .statusBarHidden()
+                
         }
     }
 }

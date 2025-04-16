@@ -8,11 +8,16 @@
 
 "login-email-label" = "Correo";
 "login-password-label" = "Contraseña";
+"login-signin-title" = "Iniciar sesión";
+"login-signup-title" = "Registrarse";
 "login-submit-button-label" = "Iniciar sesión";
 "login-privacy-link-label" = "Dando al boton de iniciar sesión, aceptas nuetra ";
 "login-privacy-link" = "política de privacidad.";
-"login-question" = "¿Todavía no tienes cuenta?";
+"login-question-signin" = "¿Todavía no tienes cuenta?";
+"login-question-signup" = "¿Ya tienes cuenta?";
 "login-question-link" = "Unete a";
+"login-question-link-signin" = "Inicar sesión.";
+"login-question-link-signup" = "Registrarse.";
 
 "home-tab-label" = "Inicio";
 
@@ -48,6 +53,11 @@
 "account-personal-details-label" = "Información personal";
 "account-personal-details-text" = "Para cambiar tus datos personales necesitas acceder a tu cuenta en:";
 
+"account-friends-label" = "Amigos";
+"account-friends-friends-tab" = "Amigos";
+"account-friends-requests-tab" = "Solicitudes";
+"account-friends-search-tab" = "Buscar";
+
 "account-language-label" = "Idioma";
 "account-language-title" = "Idioma actual";
 "account-language-sub-title" = "Idiomas disponibles";
@@ -57,6 +67,7 @@
 "account-country-sub-title" = "Países disponibles";
 
 "account-about-label" = "Sobre";
+"account-about-tmdb-label" = "Sobre TMDB";
 "account-support-label" = "Soporte";
 
 "lists-tab-label" = "Mis listas";

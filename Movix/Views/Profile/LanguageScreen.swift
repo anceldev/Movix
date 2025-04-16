@@ -12,7 +12,9 @@ struct LanguageScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedLan: String?
     @State private var showConfirmation: Bool = false
+    
     @State private var searchTerm: String = ""
+    @State private var debounceQuery = ""
     
     @Environment(NavigationManager.self) var navigationManager
     
@@ -23,7 +25,7 @@ struct LanguageScreen: View {
                     Text("account-language-title")
                         .font(.hauora(size: 20, weight: .medium))
                     Spacer()
-                    Text(userVM.lang)
+                    Text(userVM.user.lang)
                         .font(.hauora(size: 20, weight: .black))
                 }
                 .foregroundStyle(.white)
@@ -32,7 +34,7 @@ struct LanguageScreen: View {
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                     HStack(spacing: 16) {
-                        SearchField(searchTerm: $searchTerm, loadAction: {}, clearAction: {})
+                        SearchField(searchTerm: $searchTerm, debounceQuery: $debounceQuery)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
@@ -49,6 +51,7 @@ struct LanguageScreen: View {
                     }
                     .scrollIndicators(.hidden)
                     Button {
+                        
                         showConfirmation.toggle()
                     } label: {
                         Text("save-button-label")
@@ -79,22 +82,18 @@ struct LanguageScreen: View {
             }
         }
         .onAppear {
-            loadLanguages()
-            selectedLan = userVM.lang
+            Task {
+                await userVM.getLanguages()
+            }
         }
     }
     private func updateLanguage() {
-        guard let lang = selectedLan else { return }
-        userVM.lang = lang
-        print(userVM.lang)
-        navigationManager.navigateBack()
-    }
-    private func loadLanguages() {
         Task {
-            await userVM.getLanguages()
-            userVM.languages.sort { $0.englishName < $1.englishName }
+            await userVM.updateUserLanguage(lang: selectedLan)
+            navigationManager.navigateBack()
         }
     }
+
     @ViewBuilder
     func LanguageRow(_ lang: Language) -> some View {
         HStack(alignment: .center, spacing: 8) {

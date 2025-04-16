@@ -20,8 +20,10 @@ enum RouterDestination: Hashable {
     case countries
     case people(id: Int)
     case about
+    case aboutTMDB
     case support
     case personalDetails
+    case friends
 }
 
 
@@ -82,6 +84,10 @@ final class NavigationManager: Observable {
              case .personalDetails:
                  PersonalDetailsScreen()
                      .navigationBarBackButtonHidden()
+             case .friends:
+                 FriendsScreen()
+             case .aboutTMDB:
+                 AboutTMDB()
              }
          }
      }

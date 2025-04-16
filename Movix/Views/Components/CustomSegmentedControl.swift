@@ -9,8 +9,15 @@ import SwiftUI
 
 
 struct CustomSegmentedControl<T: Hashable & CaseIterable & Identifiable & Localizable>: View {
+
     @Binding var state: T
+    let horizontalPadding: CGFloat
     @Namespace private var segmentedControl
+    
+    init(state: Binding<T>, horizontalPadding: CGFloat = 36) {
+        self._state = state
+        self.horizontalPadding = horizontalPadding
+    }
     
     var body: some View {
         HStack(spacing: 24) {
@@ -40,7 +47,7 @@ struct CustomSegmentedControl<T: Hashable & CaseIterable & Identifiable & Locali
             .frame(height: 40)
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 36)
+        .padding(.horizontal, horizontalPadding)
         .background(
             Rectangle()
                 .fill(.blue1)

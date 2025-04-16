@@ -8,11 +8,16 @@
 
 "login-email-label" = "Email";
 "login-password-label" = "Password";
+"login-signin-title" = "Sign in";
+"login-signup-title" = "Sign up";
 "login-submit-button-label" = "Sign In";
 "login-privacy-link-label" = "By clicking the login button, you accept";
 "login-privacy-link" = "privacy policy rules.";
-"login-question" = "Don't have an account?";
+"login-question-signin" = "Don't have an account?";
+"login-question-signup" = "Already have an account?";
 "login-question-link" = "Join";
+"login-question-link-signin" = "Sign in.";
+"login-question-link-signup" = "Sign up.";
 
 "home-tab-label" = "Home";
 
@@ -48,6 +53,11 @@
 "account-personal-details-label" = "Personal details";
 "account-personal-details-text" = "You can update your personal details on:";
 
+"account-friends-label" = "Friends";
+"account-friends-friends-tab" = "Friends";
+"account-friends-requests-tab" = "Requests";
+"account-friends-search-tab" = "Search";
+
 "account-language-label" = "Language";
 "account-language-title" = "Current language";
 "account-language-sub-title" = "Available languages";
@@ -57,6 +67,7 @@
 "account-country-sub-title" = "Available countries";
 
 "account-about-label" = "About";
+"account-about-tmdb-label" = "About TMDB";
 "account-support-label" = "Support";
 
 "lists-tab-label" = "My lists";
@@ -66,3 +77,4 @@
 "view-more-button-label" = "View more";
 "view-all-button-label" = "View all";
 "search-field-placeholder" = "Search...";
+

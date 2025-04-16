@@ -53,7 +53,8 @@ enum DialogType {
 struct CustomDialog: View {
     @Binding var show: Bool
     let dialogType: DialogType
-    var onAccept: () -> Void
+//    var onAccept: () -> Void
+    var onAccept: () async -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var errorMessage = false
     
@@ -100,7 +101,10 @@ struct CustomDialog: View {
             
             HStack(spacing: 10) {
                 Button {
-                    onAccept()
+                    Task {
+                        await onAccept()
+                    }
+//                    onAccept()
                     dismiss()
                 } label: {
                     Text("Accept")

@@ -26,7 +26,6 @@ protocol Localizable {
     var localizedTitle: String { get }
 }
 
-
 enum ListControls: String, CaseIterable, Identifiable, Hashable, Localizable {
     case favorites
     case rates
@@ -98,24 +97,14 @@ struct MyListsScreen: View {
                             case .favorites:
                                 GridItemsView<Movie>(
                                     mediaItems: userVM.user.favoriteMovies,
-                                    searchTerm: .constant(""),
                                     mediaType: .movie,
-                                    columns: [
-                                        GridItem(.flexible()),
-                                        GridItem(.flexible()),
-                                        GridItem(.flexible())
-                                    ]
+                                    columns: 3
                                 )
                             case .rates:
                                 GridItemsView<Movie>(
                                     mediaItems: userVM.user.ratedMovies,
-                                    searchTerm: .constant(""),
                                     mediaType: .movie,
-                                    columns: [
-                                        GridItem(.flexible()),
-                                        GridItem(.flexible()),
-                                        GridItem(.flexible())
-                                    ]
+                                    columns: 3
                                 )
                             }
                         }
@@ -127,16 +116,14 @@ struct MyListsScreen: View {
                             case .favorites:
                                 GridItemsView<TvSerie>(
                                     mediaItems: userVM.user.favoriteSeries,
-                                    searchTerm: .constant(""),
                                     mediaType: .tv,
-                                    columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                                    columns: 3
                                 )
                             case .rates:
                                 GridItemsView<TvSerie>(
                                     mediaItems: userVM.user.ratedSeries,
-                                    searchTerm: .constant(""),
                                     mediaType: .tv,
-                                    columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+                                    columns: 3
                                 )
                             }
                         }
