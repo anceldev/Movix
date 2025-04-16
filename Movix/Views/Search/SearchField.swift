@@ -10,7 +10,6 @@ import SwiftUI
 struct SearchField: View {
     @Binding var searchTerm: String
     @Binding var debounceQuery: String
-
     
     var body: some View {
             HStack {

@@ -11,15 +11,16 @@ struct PersonalDetailsScreen: View {
     @Environment(NavigationManager.self) var navigationManager
     var body: some View {
         VStack(alignment: .center) {
-            Text("account-personal-details-text")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
-            Link(destination: URL(string:"https://www.themoviedb.org")!) {
-                Image(.tmdbLogo)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 180)
-            }
+            
+//            Text("account-personal-details-text")
+//                .multilineTextAlignment(.center)
+//                .foregroundStyle(.white)
+//            Link(destination: URL(string:"https://www.themoviedb.org")!) {
+//                Image(.tmdbLogo)
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(maxWidth: 180)
+//            }
                 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -25,7 +25,6 @@ final class UserViewModel {
     private var ratedMoviesPage = 1
     private var favoriteSeriesPage = 1
     private var ratedSeriesPage = 1
-
     
     private var httpClient = HTTPClient()
     private var sessionId = UserDefaults.standard.string(forKey: "session_id") ?? ""
