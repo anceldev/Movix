@@ -95,7 +95,6 @@ final class MovieViewModel {
                     URLQueryItem(name: "page", value: "1")
                 ]),
                 modelType: PageCollection<Review>.self
-//                modelType: ReviewCollection.self
             )
             let reviews = try await httpClient.load(resource)
             self.reviews = reviews.results
@@ -104,88 +103,6 @@ final class MovieViewModel {
             print(error)
             print(error.localizedDescription)
             self.errorMessage = error.localizedDescription
-        }
-    }
-    func getBackdropImage(backdropPath: String?) async -> Image? {
-        guard let posterPath = backdropPath else {
-            return nil
-        }
-        do {
-//            if let cachedImage = try await ImageCacheManager.shared.getImage(forKey: posterPath) {
-//                return Image(uiImage: cachedImage)
-//            }
-            
-            var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
-            let (dataW780, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW780) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/w1280\(posterPath)")!
-            let (dataW1280, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW1280) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
-            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataOriginal) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
-                return Image(uiImage: uiImage)
-            }
-            return nil
-        } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
-            return nil
-        }
-    }
-    func getPosterImage(posterPath: String?) async -> Image? {
-        guard let posterPath = posterPath else {
-            return nil
-        }
-        do {
-//            if let cachedImage = try await ImageCacheManager.shared.getImage(forKey: posterPath) {
-//                return Image(uiImage: cachedImage)
-//            }
-            
-            var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
-            let (dataW780, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW780) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
-            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataOriginal) {
-//                try await ImageCacheManager.shared.saveImage(uiImage, forKey: posterPath)
-                return Image(uiImage: uiImage)
-            }
-            return nil
-        } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
-            return nil
-        }
-    }
-    func loadPosterImage(imagePath: String?) async -> Image? {
-        do {
-            guard let imagePath else { return nil }
-            if let uiImage = try await ImageCacheManager.shared.getImage(forKey: imagePath) {
-                return Image(uiImage: uiImage)
-            }
-            if let posteUiImage = await HTTPClient.getPosterUIImage(posterPath: imagePath) {
-                try await ImageCacheManager.shared.saveImage(posteUiImage, forKey: imagePath)
-                return Image(uiImage: posteUiImage)
-            }
-            return nil
-        } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
-            return nil
         }
     }
 }

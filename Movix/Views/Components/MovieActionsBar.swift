@@ -69,6 +69,6 @@ struct MovieActionsBar: View {
     MovieActionsBar(idMovie: 533535, showRateSlider: .constant(true))
         .background(.bw20)
         .environment(MovieViewModel())
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
 }
 

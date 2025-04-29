@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
-
+import Supabase
 
 @main
 struct MovixApp: App {
+    
+    let storageClient: SupabaseStorageClient = .development
     
     var body: some Scene {
         WindowGroup {
             AuthenticatedScreen()
                 .preferredColorScheme(.dark)
                 .statusBarHidden()
-                
         }
+        .environment(\.storageClient, storageClient)
     }
 }

@@ -11,7 +11,15 @@ struct MediaGridItem: View {
 
     let posterPath: String?
     let voteAverage: Double?
+    let userRating: Int?
     @State private var poster: Image? = nil
+    
+    init(posterPath: String? = nil, voteAverage: Double? = nil, poster: Image? = nil, userRating: Int? = nil) {
+        self.posterPath = posterPath
+        self.voteAverage = voteAverage
+        self.poster = poster
+        self.userRating = userRating
+    }
     
     var body: some View {
         ZStack {
@@ -30,18 +38,10 @@ struct MediaGridItem: View {
             }
             .frame(maxWidth: .infinity)
 
-            if let formattedRate = NumberFormatter.popularity.string(from: NSNumber(value: voteAverage ?? 0.0)) {
-                VStack(alignment: .leading) {
-                    ZStack(alignment: .center){
-                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, bottomTrailing: 10))
-                            .fill(.black.opacity(0.8))
-                        Text(formattedRate)
-                            .foregroundStyle(.blue1)
-                            .font(.hauora(size: 12))
-                    }
-                    .frame(width: 30, height: 20)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            if let voteAverage, let formattedRate = NumberFormatter.popularity.string(from: NSNumber(value: voteAverage)) {
+                UnevenRating(rate: formattedRate)
+            } else if let userRating {
+                UnevenRating(rate: "\(userRating)")
             }
         }
         .background(.clear)
@@ -57,5 +57,5 @@ struct MediaGridItem: View {
 }
 
 #Preview {
-    MediaGridItem(posterPath: Movie.preview.posterPath, voteAverage: 8.7)
+    MediaGridItem(posterPath: PreviewData.movie.posterPath, voteAverage: 8.7)
 }

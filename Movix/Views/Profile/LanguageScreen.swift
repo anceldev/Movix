@@ -18,6 +18,10 @@ struct LanguageScreen: View {
     
     @Environment(NavigationManager.self) var navigationManager
     
+    var languages: [Language] {
+        Array(Set(searchTerm.isEmpty ? userVM.languages : userVM.languages.filter({ $0.englishName.contains(searchTerm) })).sorted(by: { $0.englishName < $1.englishName }))
+    }
+    
     var body: some View {
         VStack {
             VStack(spacing: 16) {
@@ -34,12 +38,12 @@ struct LanguageScreen: View {
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                     HStack(spacing: 16) {
-                        SearchField(searchTerm: $searchTerm, debounceQuery: $debounceQuery)
+                        SearchField(query: $searchTerm, debounceQuery: $debounceQuery)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
                     ScrollView(.vertical) {
-                        ForEach(searchTerm.isEmpty ? userVM.languages : userVM.languages.filter({ $0.englishName.contains(searchTerm) }), id: \.iso6391) { lang in
+                        ForEach(languages, id: \.iso6391) { lang in
                             LanguageRow(lang)
                                 .onTapGesture {
                                     withAnimation(.easeIn) {
@@ -117,6 +121,6 @@ struct LanguageScreen: View {
 
 #Preview {
     LanguageScreen()
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
         .environment(NavigationManager())
 }

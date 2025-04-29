@@ -33,7 +33,7 @@ struct GeneralTabMovieView: View {
     private func rateMovie() {
         Task {
             guard let movie = movieVM.movie else { return }
-            await userVM.addMovieRating(movie: movie, rating: Int(currentRate))
+            await userVM.rateMovie(movie: movie, rating: Int(currentRate))
         }
     }
 }

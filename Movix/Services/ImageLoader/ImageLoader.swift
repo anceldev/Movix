@@ -13,13 +13,14 @@ final class ImageLoader {
     
     static var shared = ImageLoader()
     
+    private init(){}
+    
     func loadImage(for path: String?, size: ImageSize) async -> Image? {
         do {
             guard let path else { throw ImageLoaderError.wrongPath }
             if let cacheUiImage = try await ImageCacheManager.shared.getImage(forKey: path) {
                 return Image(uiImage: cacheUiImage)
             }
-            
             var uiImage: UIImage?
             switch size {
             case .backdrop:
@@ -27,7 +28,6 @@ final class ImageLoader {
             case .poster:
                 uiImage = try await getPosterUIImage(for: path)
             }
-            
             try await ImageCacheManager.shared.saveImage(uiImage!, forKey: path)
             return Image(uiImage: uiImage!)
         } catch {
@@ -93,7 +93,6 @@ final class ImageLoader {
             if let uiImage = UIImage(data: dataOriginal) {
                 return uiImage
             }
-
             url = URL(string: "https://image.tmdb.org/t/p/w780\(path)")!
             let (dataW780, _) = try await URLSession.shared.data(from: url)
             if let uiImage = UIImage(data: dataW780) {

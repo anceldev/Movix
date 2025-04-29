@@ -9,6 +9,11 @@ import Foundation
 import SwiftUI
 import Supabase
 
+enum UserViewModelError: Error {
+    case avatarUploadError
+    case avatarCompressionError
+}
+
 @Observable
 final class UserViewModel {
     
@@ -28,36 +33,172 @@ final class UserViewModel {
     
     private var httpClient = HTTPClient()
     private var sessionId = UserDefaults.standard.string(forKey: "session_id") ?? ""
+
+    private let fileManager = FileManager.default
+    private var avatarFileURL: URL? {
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+        guard let _ = user.avatarPath else { return nil }
+        return documentsDirectory.appendingPathComponent("\(user.id.uuidString).jpg")
+    }
     
     init(user: User) {
         self.user = user
         Task {
-            await getFavoriteMovies()
-            await getRatedMovies()
-            await getRatedSeries()
-            await getFavoriteSeries()
+            await getAvatar()
+            await getUserSeries()
+            await getUserMovies()
         }
     }
     
-    func getFriends() async {
+    private func getUserSeries() async {
         do {
-            let response = try await supabase
-                .from(SupabaseTables.friends.rawValue)
-                .select("friend_id, status")
+            let series: [TestUserSerie] = try await supabase
+                .from("user_series")
+                .select("""
+                id,
+                user_id,
+                series(*),
+                is_favorite,
+                rating
+                """)
                 .eq("user_id", value: user.id)
                 .execute()
-            
-            let friendRequestDTO = try JSONDecoder().decode([FriendsRequestDTO].self, from: response.data)
+                .value
+            user.series = series
+        } catch {
+            setError(error)
+        }
+    }
+    private func getUserMovies() async {
+        do {
+            let movies: [TestUserMovie] = try await supabase
+                .from("user_movies")
+                .select("""
+                id,
+                user_id,
+                movies(*),
+                is_favorite,
+                rating
+                """)
+                .eq("user_id", value: user.id)
+                .execute()
+                .value
+            user.movies = movies
         } catch {
             setError(error)
         }
     }
     
+    func getFriends() async {
+        do {
+//            let response: [FriendsRequestDTO] = try await supabase
+//                .from("friendship")
+//                .select()
+//                .eq("user_id", value: user.id)
+//                .execute()
+//                .value
+//            
+//            print(response)
+            let response = try await supabase
+                .from("friendship")
+                .select("""
+                    id,
+                    user_1(id, username, avatar_path),
+                    user_2(id, username, avatar_path)
+                    status
+                    """)
+                .or("user_1.eq.\(user.id),user_2.eq.\(user.id)")
+                .execute()
+            print(String(decoding: response.data, as: UTF8.self))
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func getAvatar() async {
+        guard let path = user.avatarPath else { return }
+        do {
+            if let avatarData = loadAvatarFromDisk() {
+                user.avatarData = avatarData
+                return
+            }
+            let avatarData = try await supabase.storage
+                .from("avatars")
+                .download(path: path)
+            user.avatarData = avatarData
+            saveAvatarToDisk(avatarData)
+        } catch {
+            setError(error)
+        }
+    }
+    func updateAvatar(uiImage: UIImage?) async {
+        guard let uiImage else { return }
+        do {
+            let path = try await uploadAvatar(uiImage: uiImage)
+            let _ = try await supabase
+                .from(SupabaseTables.users.rawValue)
+                .update(["avatar_path": path])
+                .eq("id", value: user.id)
+                .execute()
+            user.avatarPath = path
+        } catch {
+            setError(error)
+        }
+    }
+    func uploadAvatar(uiImage: UIImage) async throws -> String {
+        do {
+            guard let resizedImage = uiImage.resizeTo(to: 150),
+                  let imageData = resizedImage.jpegData(compressionQuality: 0.8)
+            else { throw UserViewModelError.avatarCompressionError }
+            let response = try await supabase.storage
+                .from("avatars")
+                .update(
+                    "avatars/\(user.id.uuidString)",
+                    data: imageData,
+                    options: FileOptions(
+                        cacheControl: "3600",
+                        contentType: "image/jpeg",
+                        upsert: false
+                    )
+                )
+            saveAvatarToDisk(imageData)
+            return response.path
+        } catch {
+            print(error.localizedDescription)
+            throw error
+        }
+    }
+    private func loadAvatarFromDisk() -> Data? {
+        guard let fileURL = avatarFileURL else { return nil }
+        do {
+            let data = try Data(contentsOf: fileURL)
+            return data
+        } catch {
+            setError(error)
+            return nil
+        }
+    }
+    private func saveAvatarToDisk(_ data: Data) {
+        guard let fileURL = avatarFileURL else { return }
+        do {
+            try data.write(to: fileURL)
+        } catch {
+            setError(error)
+        }
+    }
+    private func clearStoreAvatar() {
+        guard let fileURL = avatarFileURL else { return }
+        do {
+            try fileManager.removeItem(at: fileURL)
+        } catch {
+            setError(error)
+        }
+    }
     
     func updateUserLanguage(lang: String?) async -> Void {
         guard let lang, lang != user.lang else { return }
         do {
-            let response = try await supabase
+            let _ = try await supabase
                 .from(SupabaseTables.users.rawValue)
                 .update(["lang": lang])
                 .eq("id", value: user.id)
@@ -67,11 +208,10 @@ final class UserViewModel {
             setError(error)
         }
     }
-    
     func updateUserCountry(country: String?) async -> Void {
         guard let country, country != user.country else { return }
         do {
-            let response = try await supabase
+            let _ = try await supabase
                 .from(SupabaseTables.users.rawValue)
                 .update(["country": country])
                 .eq("id", value: user.id)
@@ -81,161 +221,332 @@ final class UserViewModel {
             setError(error)
         }
     }
+    
+    func toggleFavoriteMovie(movie: Movie) async {
+        do {
+            let existingFavorite = user.movies.first(where: { $0.media.id == movie.id })
+            if existingFavorite != nil {
+                let updatedMovie: TestUserMovie = try await supabase
+                    .from("user_movies")
+                    .update(["is_favorite": !existingFavorite!.isFavorite])
+                    .eq("id", value: existingFavorite!.id)
+                    .select("""
+                        id,
+                        user_id,
+                        movies(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
 
-    func toggleFavoriteMovie<T: MediaItemProtocol>(media: T, mediaType: MediaType) async {
-        print("Toggle favorite")
-    }
-    
-    func isFavoriteMovie(id: Int) -> Bool {
-        let favorite = user.favoriteMovies.first { $0.id == id }
-        if favorite != nil {
-            return true
+                print(updatedMovie)
+                user.movies.removeAll { $0.id == updatedMovie.id }
+                if updatedMovie.isFavorite {
+                    user.movies.append(updatedMovie)
+                }
+            } else {
+                let existingMovie: SupabaseMedia = try await supabase
+                    .from("movies" )
+                    .select()
+                    .eq("id", value: movie.id)
+                    .single()
+                    .execute()
+                    .value
+                
+                let newUserMovie = UserMovieRsponseDTO(userId: user.id, movieId: movie.id, isFavorite: true)
+                let addedMovie: TestUserMovie = try await supabase
+                    .from("user_movies")
+                    .insert(newUserMovie)
+                    .select("""
+                        id,
+                        user_id,
+                        movies(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
+                
+                user.movies.append(addedMovie)
+            }
+        } catch let error as PostgrestError {
+            if error.code == "PGRST116" {
+                do {
+                    try await addMovie(serieId: movie.id, posterPath: movie.posterPath)
+                    let newMovie: UserMovieRsponseDTO = .init(userId: user.id, movieId: movie.id, isFavorite: true)
+                    
+                    let response: TestUserMovie = try await supabase
+                        .from("user_movies")
+                        .insert(newMovie)
+                        .select("""
+                            id,
+                            user_id,
+                            movies(*),
+                            is_favorite,
+                            rating
+                            """)
+                        .single()
+                        .execute()
+                        .value
+                    user.movies.append(response)
+                } catch {
+                    setError(error)
+                }
+            }
+        } catch {
+            setError(error)
         }
-        return false
     }
-    func isFavoriteSerie(id: Int) -> Bool {
-        let favorite = user.favoriteSeries.first { $0.id == id }
-        if favorite != nil {
-            return true
+    func toggleFavoriteSerie(serie: TvSerie) async {
+        do {
+            let existingFavorite = user.series.first(where: { $0.media.id == serie.id })
+            if existingFavorite != nil {
+                let updatedSerie: TestUserSerie = try await supabase
+                    .from("user_series")
+                    .update(["is_favorite": !existingFavorite!.isFavorite])
+                    .eq("id", value: existingFavorite!.id)
+                    .select("""
+                        id,
+                        user_id,
+                        series(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
+
+                print(updatedSerie)
+                user.series.removeAll { $0.id == updatedSerie.id }
+                if updatedSerie.isFavorite {
+                    user.series.append(updatedSerie)
+                }
+            } else {
+                let existingSerie: SupabaseMedia = try await supabase
+                    .from( "series" )
+                    .select()
+                    .eq("id", value: serie.id)
+                    .single()
+                    .execute()
+                    .value
+                
+                let newUserSerie = UserSerieResponseDTO(userId: user.id, serieId: serie.id, isFavorite: true)
+                let addedSerie: TestUserSerie = try await supabase
+                    .from("user_series")
+                    .insert(newUserSerie)
+                    .select("""
+                        id,
+                        user_id,
+                        series(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
+                
+                user.series.append(addedSerie)
+            }
+        } catch let error as PostgrestError {
+            if error.code == "PGRST116" {
+                do {
+                    try await addSerie(serieId: serie.id, posterPath: serie.posterPath)
+                    let newSerie: UserSerieResponseDTO = .init(userId: user.id, serieId: serie.id, isFavorite: true)
+                    
+                    let response: TestUserSerie = try await supabase
+                        .from("user_series")
+                        .insert(newSerie)
+                        .select("""
+                            id,
+                            user_id,
+                            series(*),
+                            is_favorite,
+                            rating
+                            """)
+                        .single()
+                        .execute()
+                        .value
+                    user.series.append(response)
+                } catch {
+                    setError(error)
+                }
+            }
+        } catch {
+            setError(error)
         }
-        return false
-    }
-    func isRatedMovie(id: Int) -> Bool {
-        let rated = user.ratedMovies.first { $0.id == id }
-        if rated != nil {
-            return true
-        }
-        return false
-    }
-    func isRatedSerie(id: Int) -> Bool {
-        let ratedSeries = user.ratedSeries.first { $0.id == id }
-        if ratedSeries != nil {
-            return true
-        }
-        return false
     }
 
-    
-    func getFavoriteMovies() async {
-        print("Getting favorite movies")
-    }
-    func getRatedMovies() async {
-        print("Getting rated movies")
-    }
-    func getFavoriteSeries() async {
-        print("Getting favorite series")
-    }
-    
-    func getRatedSeries() async {
-        print("Getting reated series")
-    }
-    func addMovieRating(movie: Movie, rating: Int) async {
+    private func addSerie(serieId: Int, posterPath: String?) async throws {
         do {
-            let parameters = [
-                "value": "\(rating)",
-            ] as [String:Any?]
-            let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            let resource = Resource(
-                url: MovieEndpoint.addRating(movie.id).url,
-                method: .post(
-                    postData,
-                    [URLQueryItem(name: "session_id", value: sessionId)]
-                ),
-                modelType: Response.self
-            )
-            
-            let rateResource = try await httpClient.load(resource)
-            if let statusCode = rateResource.statusCode, statusCode == 1 {
-                var ratedMovie = movie
-                ratedMovie.rating = rating
-                user.ratedMovies.append(ratedMovie)
+            let _ = try await supabase
+                .from("series")
+                .insert(["id": "\(serieId)", "poster_path": posterPath])
+                .execute()
+        } catch {
+            throw error
+        }
+    }
+    private func addMovie(serieId: Int, posterPath: String?) async throws {
+        do {
+            let _ = try await supabase
+                .from("movies")
+                .insert(["id": "\(serieId)", "poster_path": posterPath])
+                .execute()
+        } catch {
+            throw error
+        }
+    }
+    
+    func rateSerie(serie: TvSerie, rating: Int) async {
+        do {
+            let existingUserSerie = user.series.first { $0.media.id == serie.id }
+            if let existingUserSerie {
+                let updatedSerie: TestUserSerie = try await updateRating(rowId: existingUserSerie.id!, rating: rating, table: "series")
+                user.series.removeAll { $0.id == updatedSerie.id }
+                user.series.append(updatedSerie)
+            } else {
+                let _: SupabaseMedia = try await supabase
+                    .from("series")
+                    .select()
+                    .eq("id", value: serie.id)
+                    .single()
+                    .execute()
+                    .value
+                
+                let newRatedSerie = UserSerieResponseDTO(userId: user.id, serieId: serie.id, rating: rating)
+                let addedSerie: TestUserSerie = try await supabase
+                    .from("user_series")
+                    .insert(newRatedSerie)
+                    .select("""
+                        id,
+                        user_id,
+                        series(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
+                
+                user.series.append(addedSerie)
+            }
+        } catch let error as PostgrestError {
+            if error.code == "PGRST116" {
+                do {
+                    try await addMovie(serieId: serie.id, posterPath: serie.posterPath)
+                    let newRatedMovie: UserSerieResponseDTO = .init(userId: user.id, serieId: serie.id, rating: rating)
+                    let addedSerie: TestUserSerie = try await supabase
+                        .from("user_series")
+                        .insert(newRatedMovie)
+                        .select("""
+                            id,
+                            user_id,
+                            series(*),
+                            is_favorite,
+                            rating
+                            """)
+                        .single()
+                        .execute()
+                        .value
+                    user.series.append(addedSerie)
+                } catch {
+                    setError(error)
+                }
             }
         } catch {
             setError(error)
         }
     }
-    func addSerieRating(serie: TvSerie, rating: Int) async {
+    func rateMovie(movie: Movie, rating: Int) async {
         do {
-            let parameters = [
-                "value": "\(rating)",
-            ] as [String:Any?]
-            let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            let resource = Resource(
-                url: SerieEndpoint.addRating(serie.id).url,
-                method: .post(
-                    postData,
-                    [URLQueryItem(name: "session_id", value: sessionId)]
-                ),
-                modelType: Response.self
-            )
-            
-            let rateResource = try await httpClient.load(resource)
-            if let statusCode = rateResource.statusCode, statusCode == 1 {
-                var ratedSerie = serie
-                ratedSerie.rating = rating
-                user.ratedSeries.append(ratedSerie)
+            let existingUserMovie = user.movies.first { $0.media.id == movie.id }
+            if let existingUserMovie {
+                let updatedMovie: TestUserMovie = try await updateRating(rowId: existingUserMovie.id!, rating: rating, table: "movies")
+                user.movies.removeAll { $0.id == updatedMovie.id }
+                user.movies.append(updatedMovie)
+            } else {
+                let _: SupabaseMedia = try await supabase
+                    .from("movies")
+                    .select()
+                    .eq("id", value: movie.id)
+                    .single()
+                    .execute()
+                    .value
+                
+                let newRatedMovie = UserMovieRsponseDTO(userId: user.id, movieId: movie.id, rating: rating)
+                let addedMovie: TestUserMovie = try await supabase
+                    .from("user_movies")
+                    .insert(newRatedMovie)
+                    .select("""
+                        id,
+                        user_id,
+                        movies(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
+                
+                user.movies.append(addedMovie)
+            }
+        } catch let error as PostgrestError {
+            if error.code == "PGRST116" {
+                do {
+                    try await addMovie(serieId: movie.id, posterPath: movie.posterPath)
+                    let newRatedMovie: UserMovieRsponseDTO = .init(userId: user.id, movieId: movie.id, rating: rating)
+                    let addedMovie: TestUserMovie = try await supabase
+                        .from("user_movies")
+                        .insert(newRatedMovie)
+                        .select("""
+                            id,
+                            user_id,
+                            movies(*),
+                            is_favorite,
+                            rating
+                            """)
+                        .single()
+                        .execute()
+                        .value
+                    user.movies.append(addedMovie)
+                } catch {
+                    setError(error)
+                }
             }
         } catch {
             setError(error)
         }
     }
-    
-    func getCurrentMovieRating(movieId: Int?) -> Int? {
-        guard let movieId else { return nil }
-        guard let movie = user.ratedMovies.first(where: { $0.id == movieId }),
-              let ratingValue = movie.rating else { return nil }
-        return ratingValue
+    func getMovieRating(movieId: Int) -> Int? {
+        return user.movies.first { $0.media.id == movieId }?.rating
     }
-    func getCurrentSerieRating(serieId: Int?) -> Int? {
-        guard let serieId else { return nil }
-        guard let serie = user.ratedSeries.first(where: { $0.id == serieId }),
-              let ratingValue = serie.rating else { return nil }
-        return ratingValue
+    func getSerieRating(serieId: Int) -> Int? {
+        return user.series.first { $0.media.id == serieId }?.rating
     }
-    
-    func createList(name: String, description: String, language: String) async {
+    private func updateRating<T:UserItemCollectionMediaProtocol>(rowId: Int, rating: Int, table: String) async throws -> T {
         do {
-            let parameters = [
-                "name": name,
-                "description": description,
-                "language": language
-            ] as [String:Any?]
-            
-            let postData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            
-            let resource = Resource(
-                url: MovieEndpoint.createList.url,
-                method: .post(postData, []),
-                modelType: Response.self
-            )
-            let response = try await httpClient.load(resource)
-            guard let succes = response.success,
-                  succes == true else {
-                throw RequestError.listError
-            }
-            let listId = response.listId
-            print(listId ?? 0)
-            
+            let updatedMedia: T = try await supabase
+                .from("user_\(table)")
+                .update(["rating": "\(rating)"])
+                .eq("id", value: rowId)
+                .select("""
+                    id,
+                    user_id,
+                    \(table)(*),
+                    is_favorite,
+                    rating
+                    """)
+                .single()
+                .execute()
+                .value
+            return updatedMedia
         } catch {
-            setError(error)
+            throw error
         }
     }
-    
-//    func getLanguages() async {
-//        do {
-//            let resource = Resource(
-//                url: ConfigEndpoints.languages.url,
-//                method: .get([
-//                    URLQueryItem(name: "language", value: user.lang),
-//                ]),
-//                modelType: [Language].self
-//            )
-//            let response = try await httpClient.load(resource)
-//            self.languages = response
-//        } catch {
-//            setError(error)
-//        }
-//    }
     
     func getLanguages() async {
         do {
@@ -251,40 +562,6 @@ final class UserViewModel {
             countries.sort { $0.nativeName < $1.nativeName }
         } catch {
             setError(error)
-        }
-    }
-    
-//    func getCountries() async {
-//        do {
-//            let langCountries = "\(user.lang)-\(user.country)"
-//            let resource = Resource(
-//                url: ConfigEndpoints.countries.url,
-//                method: .get([
-//                    URLQueryItem(name: "language", value: langCountries)
-//                ]),
-//                modelType: [Country].self
-//            )
-//            let response = try await httpClient.load(resource)
-//            self.countries = response
-//        } catch {
-//            setError(error)
-//        }
-//    }
-
-    func loadPosterImage(imagePath: String?) async -> Image? {
-        do {
-            guard let imagePath else { return nil }
-            if let uiImage = try await ImageCacheManager.shared.getImage(forKey: imagePath) {
-                return Image(uiImage: uiImage)
-            }
-            if let posteUiImage = await HTTPClient.getPosterUIImage(posterPath: imagePath) {
-                try await ImageCacheManager.shared.saveImage(posteUiImage, forKey: imagePath)
-                return Image(uiImage: posteUiImage)
-            }
-            return nil
-        } catch {
-            setError(error)
-            return nil
         }
     }
     func getMediaCountries(_ codes: [String]) -> String {

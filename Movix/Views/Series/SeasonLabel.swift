@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct SeasonLabel: View {
     let season: TvSeason
     @State private var posterImage: Image?
@@ -21,8 +20,6 @@ struct SeasonLabel: View {
                 }
                 else {
                     TimeoutProgressView()
-                    // ProgressView()
-                    //     .tint(.marsA)
                 }
             }
             .aspectRatio(2/3, contentMode: .fit)
@@ -31,7 +28,8 @@ struct SeasonLabel: View {
         }
         .task {
             if self.posterImage == nil {
-                self.posterImage = await serieVM.loadPosterImage(imagePath: season.posterPath)
+//                self.posterImage = await serieVM.loadPosterImage(imagePath: season.posterPath)
+                self.posterImage = await ImageLoader.shared.loadImage(for: season.posterPath, size: .poster)
             }
         }
     }

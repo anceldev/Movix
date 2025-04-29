@@ -29,7 +29,7 @@ struct TimeoutProgressView: View {
             }
         }
         .task {
-            try? await Task.sleep(for: .seconds(7))
+            try? await Task.sleep(for: .seconds(5))
             withAnimation(.easeIn) {
                 showProgress = false
             }

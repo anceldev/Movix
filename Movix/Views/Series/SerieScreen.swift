@@ -18,6 +18,11 @@ struct SerieScreen: View {
     @State private var serieVM = SerieViewModel()
     @State private var selectedTab: MediaTab = .general
     
+    var isFavorite: Bool {
+        let media = userVM.user.series.first { $0.media.id == serieId }
+        guard let media else { return false }
+        return media.isFavorite
+    }
     
     init(serieId: Int) {
         self.serieId = serieId
@@ -29,14 +34,6 @@ struct SerieScreen: View {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical) {
                         LazyVStack(spacing: 0) {
-//                            HeaderMediaView(
-//                                backdropPath: serie.backdropPath,
-//                                posterPath: serie.posterPath,
-//                                duration: "\(serie.numberOfSeasons ?? 0) Se.",
-//                                isAdult: serie.isAdult,
-//                                releaseDate: serie.releaseDate?.releaseDate(),
-//                                genres: serie.genres
-//                            )
                             HeaderMediaView(
                                 posterPath: serie.posterPath,
                                 duration: "\(serie.numberOfSeasons ?? 0) Se.",
@@ -47,6 +44,7 @@ struct SerieScreen: View {
                             MediaActionsBar(
                                 mediaId: serieId,
                                 mediaType: .tv,
+                                isFavorite: isFavorite,
                                 rateAction: {
                                     selectedTab = .general
                                     proxy.scrollTo( "mediaTabs")
@@ -57,7 +55,7 @@ struct SerieScreen: View {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {
                                 case .general:
-                                    GeneralTabSerieView(currentRate: userVM.getCurrentSerieRating(serieId: serie.id))
+                                    GeneralTabSerieView(currentRate: userVM.getSerieRating(serieId: serieId))
                                 case .details:
                                     DetailsTabView<TvSerie>(media: serieVM.serie!, similarAction: getSimilarSeries)
                                 case .reviews:
@@ -101,7 +99,8 @@ struct SerieScreen: View {
     }
     private func toggleFavoriteSerie() async {
         if let serie = serieVM.serie {
-            await userVM.toggleFavoriteMovie(media: serie, mediaType: .tv)
+//            await userVM.toggleFavoriteMovie(media: serie, mediaType: .tv)
+            await userVM.toggleFavoriteSerie(serie: serie)
         }
     }
 }
@@ -109,7 +108,7 @@ struct SerieScreen: View {
 #Preview {
     NavigationStack {
         SerieScreen(serieId: 52)
-            .environment(UserViewModel(user: User.preview))
+            .environment(UserViewModel(user: PreviewData.user))
             .environment(NavigationManager())
     }
 }

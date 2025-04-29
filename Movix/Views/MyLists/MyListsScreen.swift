@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 enum ListControlsMedia: String, CaseIterable, Identifiable, Hashable {
     case movies
     case series
@@ -39,7 +38,6 @@ enum ListControls: String, CaseIterable, Identifiable, Hashable, Localizable {
             return NSLocalizedString("movie-list-controls-rated", comment: "Rated")
         }
     }
-    
 }
 
 struct MyListsScreen: View {
@@ -50,16 +48,17 @@ struct MyListsScreen: View {
     
     @Environment(NavigationManager.self) var navigationManager
     var body: some View {
-        @Bindable var navigationManager = navigationManager
-        NavigationStack(path: $navigationManager.path) {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
+            Text("lists-tab-label")
+                .font(.hauora(size: 22, weight: .semibold))
+                .foregroundStyle(.white)
+            VStack(spacing: 8) {
                 HStack {
-                    HStack {
-                        Text("lists-tab-label")
-                        Text("- \(selectedMedia.localizedTitle)")
-                    }
-                        .foregroundStyle(.white)
-                        .font(.hauora(size: 20, weight: .semibold))
+//                    HStack {
+//                        Text("\(selectedMedia.localizedTitle)")
+//                    }
+//                    .foregroundStyle(.white)
+//                    .font(.hauora(size: 20, weight: .semibold))
                     Spacer()
                     Button {
                         mediaPopover.toggle()
@@ -89,57 +88,59 @@ struct MyListsScreen: View {
                         .presentationCompactAdaptation(.popover)
                     }
                 }
-                Group {
-                    if selectedMedia == .movies {
-                        VStack {
-                            CustomSegmentedControl(state: $selectedList)
-                            switch selectedList {
-                            case .favorites:
-                                GridItemsView<Movie>(
-                                    mediaItems: userVM.user.favoriteMovies,
-                                    mediaType: .movie,
-                                    columns: 3
-                                )
-                            case .rates:
-                                GridItemsView<Movie>(
-                                    mediaItems: userVM.user.ratedMovies,
-                                    mediaType: .movie,
-                                    columns: 3
-                                )
-                            }
-                        }
-                    }
-                    else {
-                        VStack {
-                            CustomSegmentedControl(state: $selectedList)
-                            switch selectedList {
-                            case .favorites:
-                                GridItemsView<TvSerie>(
-                                    mediaItems: userVM.user.favoriteSeries,
-                                    mediaType: .tv,
-                                    columns: 3
-                                )
-                            case .rates:
-                                GridItemsView<TvSerie>(
-                                    mediaItems: userVM.user.ratedSeries,
-                                    mediaType: .tv,
-                                    columns: 3
-                                )
-                            }
+            }
+            Group {
+                if selectedMedia == .movies {
+                    VStack {
+                        CustomSegmentedControl(state: $selectedList)
+                        switch selectedList {
+                        case .favorites:
+                            GridItemsView3<TestUserMovie>(
+                                mediaItems: userVM.user.movies.filter({ $0.isFavorite }),
+                                mediaType: .movie,
+                                columns: 3
+                            )
+                        case .rates:
+                            GridItemsView3<TestUserMovie>(
+                                mediaItems: userVM.user.movies.filter({ $0.rating != nil }),
+                                mediaType: .movie,
+                                columns: 3
+                            )
                         }
                     }
                 }
-                Spacer()
+                else {
+                    VStack {
+                        CustomSegmentedControl(state: $selectedList)
+                        switch selectedList {
+                        case .favorites:
+                            GridItemsView3<TestUserSerie>(
+                                mediaItems: userVM.user.series.filter({ $0.isFavorite }),
+                                mediaType: .tv,
+                                columns: 3
+                            )
+                        case .rates:
+                            GridItemsView3<TestUserSerie>(
+                                mediaItems: userVM.user.series.filter({ $0.rating != nil }),
+                                mediaType: .tv,
+                                columns: 3
+                            )
+                        }
+                    }
+                }
             }
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.bw10)
-            .withAppRouter()
+            Spacer()
         }
+        .padding([.horizontal, .bottom])
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.bw10)
+        .withAppRouter()
+        .environment(userVM)
     }
 }
 
 #Preview {
     MyListsScreen()
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
+        .environment(NavigationManager())
 }

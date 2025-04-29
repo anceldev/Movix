@@ -57,6 +57,6 @@ struct ReviewView: View {
 }
 
 #Preview {
-    ReviewView(review: Review.preview)
+    ReviewView(review: PreviewData.review)
         .background(.bw10)
 }

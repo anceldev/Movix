@@ -34,6 +34,7 @@ final class ProvidersViewModel {
                 modelType: Providers.self
             )
             let response = try await httpClient.load(resource)
+            print(response.buyProviders)
             self.providers.buyProviders = response.buyProviders
             self.providers.rentProviders = response.rentProviders
             self.providers.streamProviders = response.streamProviders

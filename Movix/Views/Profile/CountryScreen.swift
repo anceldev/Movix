@@ -40,7 +40,7 @@ struct CountryScreen: View {
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                     HStack(spacing: 16) {
-                        SearchField(searchTerm: $query, debounceQuery: $debounceQuery)
+                        SearchField(query: $query, debounceQuery: $debounceQuery)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
@@ -102,6 +102,6 @@ struct CountryScreen: View {
 
 #Preview {
     CountryScreen()
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
         .environment(NavigationManager())
 }

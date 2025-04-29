@@ -12,11 +12,6 @@ import PhotosUI
 // MARK: View Extensions
 extension View{
     @ViewBuilder
-//    func cropImagePicker(options: [Crop],show: Binding<Bool>,croppedImage: Binding<UIImage?>) -> some View {
-//        CustomImagePicker(options: options, show: show, croppedImage: croppedImage) {
-//            self
-//        }
-//    }
     func cropImagePicker(show: Binding<Bool>,croppedImage: Binding<UIImage?>) -> some View {
         CustomImagePicker(show: show, croppedImage: croppedImage) {
             self
@@ -54,34 +49,40 @@ fileprivate struct CustomImagePicker<Content: View>: View {
     @State private var selectedCropType: Crop = .square
     @State private var showCropView: Bool = false
     
-    var body: some View {
-        content
-            .photosPicker(isPresented: $show, selection: $photosItem)
-            .onChange(of: photosItem) { _, newValue in
-                /// - Extracting UIImage From Photos Item
-                if let newValue{
-                    Task{
-                        if let imageData = try? await newValue.loadTransferable(type: Data.self),let image = UIImage(data: imageData){
-                            /// - UI Must be updated on Main Thread
-                            await MainActor.run(body: {
-                                selectedImage = image
-                                showCropView.toggle()
-                            })
-                        }
-                    }
-                }
-            }
-            .fullScreenCover(isPresented: $showCropView) {
-                /// When Exited Clearing the old Selected Image
-                selectedImage = nil
-            } content: {
-                CropView(crop: selectedCropType, image: selectedImage) { croppedImage, status in
-                    if let croppedImage{
-                        self.croppedImage = croppedImage
-                    }
-                }
-            }
-    }
+     var body: some View {
+         content
+             .photosPicker(isPresented: $show, selection: $photosItem)
+             .onChange(of: photosItem) { _, newValue in
+                 /// - Extracting UIImage From Photos Item
+                 if let newValue{
+                     Task{
+                         if let imageData = try? await newValue.loadTransferable(type: Data.self),let image = UIImage(data: imageData){
+                             /// - UI Must be updated on Main Thread
+                             await MainActor.run(body: {
+                                 selectedImage = image
+                                 showCropView.toggle()
+                             })
+                         }
+                     }
+                 }
+             }
+             .fullScreenCover(isPresented: $showCropView) {
+                 /// When Exited Clearing the old Selected Image
+                 selectedImage = nil
+             } content: {
+                 if selectedImage == nil {
+                     Text("No image founded")
+                 }
+                 CropView(crop: selectedCropType, image: selectedImage) { croppedImage, status in
+                     if let croppedImage{
+                         self.croppedImage = croppedImage
+                     }
+                 }
+             }
+             .onChange(of: selectedImage) { oldValue, newValue in
+                 print("Updating selected image")
+             }
+     }
 }
 
 struct CropView: View{
@@ -130,7 +131,6 @@ struct CropView: View{
                                 .foregroundStyle(.blue1)
                         }
                     }
-                    
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {
                             dismiss()
@@ -143,7 +143,6 @@ struct CropView: View{
                 }
         }
     }
-    
     /// - Image View
     @ViewBuilder
     func ImageView(_ hideGrids: Bool = false) -> some View {
@@ -269,7 +268,6 @@ struct CropView: View{
     }
 }
 
-
-#Preview {
-    CropView(crop: .square, image: UIImage(named: "headerPreview")) { _, _ in }
-}
+//#Preview {
+//    CropView(crop: .square, image: UIImage(named: "headerPreview")) { _, _ in }
+//}

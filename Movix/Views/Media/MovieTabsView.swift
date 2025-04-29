@@ -48,9 +48,6 @@ struct MovieTabsView<Content:View>: View {
 
                 content
             case .details:
-//                DetailsTabView(movie: movieVM.movie!)
-//                Text("Details tab View")
-//                DetailsTabView<Movie>(media: movieVM.movie!)
                 Text("Details tab view")
             case .reviews:
                 Text("Reviews tab View")

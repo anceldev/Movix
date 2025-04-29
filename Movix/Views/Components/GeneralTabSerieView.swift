@@ -35,7 +35,8 @@ struct GeneralTabSerieView: View {
     private func rateSerie() {
         Task {
             guard let serie = serieVM.serie else { return }
-            await userVM.addSerieRating(serie: serie, rating: Int(currentRate))
+//            await userVM.addSerieRating(serie: serie, rating: Int(currentRate))
+            await userVM.rateSerie(serie: serie, rating: Int(currentRate))
         }
     }
 }
@@ -43,5 +44,5 @@ struct GeneralTabSerieView: View {
 #Preview {
     GeneralTabSerieView()
         .environment(SerieViewModel())
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
 }

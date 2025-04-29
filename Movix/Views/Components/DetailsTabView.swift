@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetailsTabView<T: MediaItemProtocol>: View {
+struct DetailsTabView<T: MediaTMDBProtocol>: View {
     let media: T
     let similarAction: () async -> [T]
     @State private var similarMedia: [T] = []
@@ -106,8 +106,8 @@ struct DetailsTabView<T: MediaItemProtocol>: View {
 
 #Preview {
     NavigationStack {
-        DetailsTabView<Movie>(media: Movie.preview, similarAction: {  return []})
-            .environment(UserViewModel(user: User.preview))
+        DetailsTabView<Movie>(media: PreviewData.movie, similarAction: {  return []})
+            .environment(UserViewModel(user: PreviewData.user))
             .padding(24)
     }
 }

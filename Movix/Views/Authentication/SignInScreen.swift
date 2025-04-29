@@ -35,6 +35,7 @@ struct SignInScreen: View {
                         .onSubmit {
                             focusedField = .password
                         }
+                    
                     SecureField("login-password-label", text: $authVM.password)
                         .customCapsule(focusedField == .password || authVM.password != "" ? .white : .bw50, input: true)
                         .autocorrectionDisabled()
@@ -89,22 +90,6 @@ struct SignInScreen: View {
                     .font(.hauora(size: 12))
                     .foregroundStyle(.bw50)
                     .padding(.top, 2)
-//                    Spacer()
-//                    VStack {
-//                        Text("login-question")
-//                            .foregroundStyle(.bw50)
-//                            .font(.hauora(size: 16))
-//                        Link(destination: URL(string: "https://www.themoviedb.org/signup")!) {
-//                            HStack(spacing: 8) {
-//                                Text("login-question-link")
-//                                    .foregroundStyle(.blue1)
-//                                Image(.tmdbLogo)
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-//                                    .frame(maxHeight: 14)
-//                            }
-//                        }
-//                    }
                 }
                 Spacer()
             }

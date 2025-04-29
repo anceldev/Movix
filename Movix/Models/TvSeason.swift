@@ -66,20 +66,3 @@ struct TvSeason: Codable, Identifiable {
         self.episodes = episodes
     }
 }
-
-extension TvSeason {
-    static let preview = TvSeason(
-            id: 94,
-            airDate: "1998-08-23",
-            name: "Season 1",
-            overview: "",
-            posterPath: "/d3jLBFnqub6rYXifgus5fkNt2H6.jpg",
-            seasonNumer: 1,
-            voteAverage: 7.5,
-            episodeCount: 25,
-            episodes: [
-                TvEpisode.pilotPreview,
-                TvEpisode.regularPreview
-            ]
-        )
-}

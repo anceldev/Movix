@@ -10,18 +10,20 @@ import SwiftUI
 
 @Observable
 final class MoviesViewModel {
-    var trendingMovies = [Movie]()
-    var searchedMovies = [Movie]()
-    var similarMovies = [Movie]()
+    var movies = [Movie]()
+    var trending = [Movie]()
+    var similar = [Movie]()
+    
     var tvGenre = [Genre]()
     
     var movieCredits: MovieCredits?
     
     var errorMessage: String?
+    var isLoading = false
     
-    private var trendingMoviesPage: Int = 0
-    private var searchedMoviesPage: Int = 0
-    private var favoriteMoviesPage: Int = 0
+    private var trendingPage: Int = 0
+    private var searchPage: Int = 0
+    private var currentQuery = ""
     
     private var lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
     
@@ -30,7 +32,7 @@ final class MoviesViewModel {
     init() {
         Task {
             self.tvGenre = await getGenres(lang: lang, mediaType: .tv)
-            await getTrendingMovies()
+            await loadTrending()
         }
     }
     
@@ -51,31 +53,35 @@ final class MoviesViewModel {
         }
     }
     
-    func getTrendingMovies() async {
-        self.trendingMoviesPage += 1
+    func loadTrending() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        self.trendingPage += 1
         do {
             let resource = Resource(
-//                url: Endpoints.trending(.movie, .week).url,
                 url: MovieEndpoint.popular.url,
                 method: .get([
                     URLQueryItem(name: "language", value: lang),
-                    URLQueryItem(name: "page", value: "\(self.trendingMoviesPage)")
+                    URLQueryItem(name: "page", value: "\(self.trendingPage)")
                 ]),
-//                modelType: PageCollection<ShortMovie>.self
                 modelType: PageCollection<Movie>.self
             )
             let trendingMovies = try await httpClient.load(resource)
-            self.trendingMovies += trendingMovies.results
+            self.trending += trendingMovies.results
         } catch {
             setError(error)
         }
     }
     func searchMovies(searchTerm: String) async {
-        if self.searchedMovies.isEmpty {
-            self.searchedMoviesPage = 1
-        }
-        else {
-            self.searchedMoviesPage += 1
+        isLoading = true
+        defer { isLoading = false }
+        if currentQuery == searchTerm {
+            searchPage += 1
+        } else {
+            currentQuery = searchTerm
+            searchPage = 1
+            self.movies = []
         }
         do {
             let resource = Resource(
@@ -83,68 +89,18 @@ final class MoviesViewModel {
                 method: .get([
                     URLQueryItem(name: "query", value: searchTerm),
                     URLQueryItem(name: "language", value: lang),
-                    URLQueryItem(name: "page", value: "\(self.searchedMoviesPage)")
+                    URLQueryItem(name: "page", value: "\(self.searchPage)")
                 ]),
-//                modelType: PageCollection<ShortMovie>.self
                 modelType: PageCollection<Movie>.self
             )
-            print("Searching on page: \(self.searchedMoviesPage)")
-            let searchedMovies = try await httpClient.load(resource)
-            self.searchedMovies += searchedMovies.results
+            let response = try await httpClient.load(resource)
+            self.movies += response.results
         } catch {
             setError(error)
         }
     }
     
-    func getBackdropImage(backdropPath: String?) async -> Image? {
-        guard let posterPath = backdropPath else {
-            return nil
-        }
-        do {
-            var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
-            let (dataW780, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW780) {
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/w1280\(posterPath)")!
-            let (dataW1280, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW1280) {
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
-            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataOriginal) {
-                return Image(uiImage: uiImage)
-            }
-            return nil
-        } catch {
-            setError(error)
-            return nil
-        }
-    }
-    func getPosterImage(posterPath: String?) async -> Image? {
-        guard let posterPath = posterPath else {
-            return nil
-        }
-        do {
-            var url = URL(string: "https://image.tmdb.org/t/p/w780\(posterPath)")!
-            let (dataW780, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW780) {
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")!
-            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataOriginal) {
-                return Image(uiImage: uiImage)
-            }
-            return nil
-        } catch {
-            setError(error)
-            return nil
-        }
-    }
-    
-    func getSimilarMovies(movieId: Int) async -> [Movie] {
+    func getRecommendedMovies(movieId: Int) async -> [Movie] {
         do {
             let resource = Resource(
                 url: MovieEndpoint.recommended(movieId).url,
@@ -155,12 +111,10 @@ final class MoviesViewModel {
                 modelType: PageCollection<Movie>.self
             )
             let similarMovies = try await httpClient.load(resource)
-            self.similarMovies = similarMovies.results
-            return self.similarMovies
+            self.similar = similarMovies.results
+            return self.similar
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
             return []
         }
     }

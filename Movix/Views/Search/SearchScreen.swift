@@ -93,7 +93,7 @@ struct SearchScreen: View {
     }
     private func searchMovies() {
         Task {
-            await moviesVM.getTrendingMovies()
+            await moviesVM.loadTrending()
         }
     }
 }
@@ -102,5 +102,5 @@ struct SearchScreen: View {
     SearchScreen()
         .environment(MoviesViewModel())
         .environment(SeriesViewModel())
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
 }

@@ -49,8 +49,7 @@ final class AuthViewModel {
     
     var state: AuthState = .unauthenticated
     var flow: AuthFlow = .signIn
-    
-    private var tmdbSession: String = ""
+
     private var httpClient = HTTPClient()
     
     var errorMessage: String? = nil
@@ -66,6 +65,8 @@ final class AuthViewModel {
         do {
             let session = try await supabase.auth.session
             user = try await getUser(userId: session.user.id)
+            UserDefaults.standard.set(user?.country, forKey: "country")
+            UserDefaults.standard.set(user?.lang, forKey: "lang")
             state = .authenticated
         } catch {
             print(error)
@@ -100,6 +101,8 @@ final class AuthViewModel {
             
             if response.status == 201 {
                 self.user = user
+                UserDefaults.standard.set(user.country, forKey: "country")
+                UserDefaults.standard.set(user.lang, forKey: "lang")
                 state = .authenticated
                 return
             }
@@ -116,6 +119,8 @@ final class AuthViewModel {
         do {
             let authSession = try await supabase.auth.signIn(email: email, password: password)
             user = try await getUser(userId: authSession.user.id)
+            UserDefaults.standard.set(user?.country, forKey: "country")
+            UserDefaults.standard.set(user?.lang, forKey: "lang")
             state = .authenticated
         } catch {
             setError(error)

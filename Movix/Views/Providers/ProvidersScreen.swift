@@ -49,9 +49,6 @@ struct ProvidersScreen: View {
                 Button {
                     routerDestination.navigateBack()
                 } label: {
-//                    BackButton {
-//                        Text(mediaType == .movie ? "Movie" : "Serie")
-//                    }
                     BackButton(label: mediaType == .movie ? "Movie" : "Serie")
                 }
             }

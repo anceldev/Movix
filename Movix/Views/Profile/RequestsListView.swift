@@ -38,5 +38,5 @@ struct RequestsListView: View {
 
 #Preview {
     RequestsListView()
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
 }

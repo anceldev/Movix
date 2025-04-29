@@ -76,13 +76,3 @@ extension Review {
         }
     }
 }
-
-extension Review {
-    static let preview = Review(
-        id: "1",
-        author: "whatever",
-        authorDetails: .init(name: "whatever", username: "what_ever", avatarPath: "/zDsL1byzwuiJvjhqW2hT6yw5OxU.jpg"),
-        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, voluptatem! Quasi, voluptates! Quo, voluptatem! Quo, voluptatem!",
-        createdAt: .now
-    )
-}

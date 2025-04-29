@@ -13,8 +13,9 @@ struct AuthenticatedScreen: View {
         VStack {
             switch authVM.state {
             case .authenticated:
-                MainTabView(user: authVM.user!)
+                MainTabView()
                     .environment(authVM)
+                    .environment(UserViewModel(user: authVM.user!))
             case .authenticating:
                 ProgressView()
                     .tint(.marsB)

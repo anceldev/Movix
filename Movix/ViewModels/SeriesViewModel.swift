@@ -24,16 +24,19 @@ final class SeriesViewModel {
     var errorMessage: String?
     var loadFlow: LoadFlow = .loaded
     var isLoading = false
+    
     private var trendingSeriesPage: Int = 0
-    private var searchedSeriesPage: Int = 0
+    private var searchPage: Int = 0
     
     private var httpClient = HTTPClient()
     private var lang = UserDefaults.standard.string(forKey: "lang") ?? "en"
     
+    private var currentQuery = ""
+    
     
     init() {
         Task {
-            await getTrendingSeries()
+            await loadTrending()
         }
     }
     
@@ -42,7 +45,7 @@ final class SeriesViewModel {
         isLoading = false
     }
         
-    func getTrendingSeries() async {
+    func loadTrending() async {
         isLoading = true
         defer { isLoading = false }
         
@@ -65,12 +68,15 @@ final class SeriesViewModel {
             self.loadFlow = .error
         }
     }
-    func getSearchedSeries(searchTerm: String) async {
-        if self.searchedSeries.isEmpty {
-            self.searchedSeriesPage = 1
-        }
-        else {
-            self.searchedSeriesPage += 1
+    func searchSeries(searchTerm: String) async {
+        isLoading = true
+        defer { isLoading = false }
+        if currentQuery == searchTerm {
+            searchPage += 1
+        } else {
+            currentQuery = searchTerm
+            searchPage = 1
+            self.series = []
         }
         do {
             let resource = Resource(
@@ -78,13 +84,12 @@ final class SeriesViewModel {
                 method: .get([
                     URLQueryItem(name: "query", value: searchTerm),
                     URLQueryItem(name: "language", value: lang),
-                    URLQueryItem(name: "page", value: "\(self.searchedSeriesPage)")
+                    URLQueryItem(name: "page", value: "\(self.searchPage)")
                 ]),
                 modelType: PageCollection<TvSerie>.self
             )
             let response = try await httpClient.load(resource)
-//            self.searchedSeries += response.results
-            self.series = response.results
+            self.series += response.results
 
         } catch {
             setError(error)

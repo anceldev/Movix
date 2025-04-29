@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListItemsView<T: MediaItemProtocol>: View {
+struct ListItemsView<T: MediaTMDBProtocol>: View {
     
     let mediaItems: [T]
     @Binding var searchTerm: String

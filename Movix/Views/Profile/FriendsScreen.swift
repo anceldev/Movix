@@ -65,5 +65,5 @@ struct FriendsScreen: View {
 
 #Preview {
     FriendsScreen()
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Movie: Codable, Identifiable, Hashable, MediaItemProtocol {
+struct Movie: Codable, Identifiable, Hashable, MediaTMDBProtocol {
     var id: Int
     var title: String
     var originalTitle: String?
@@ -155,24 +155,4 @@ extension Movie {
         self.originCountry = originCountry
         self.status = status
     }
-    
-    static var preview: Movie = .init(
-        id: 533535,
-        title: "Deadpool & Wolverine",
-        originalTitle: "Deadpool & Wolverine",
-        overview: "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
-        runtime: 128,
-        releaseDate: .now,
-        posterPath: "/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
-        backdropPath: "/9l1eZiJHmhr5jIlthMdJN5WYoff.jpg",
-        genres: [.init(id: 1, name: "Action"), .init(id: 2, name: "Hero")],
-        budget: 250000000,
-        homepageURL: URL(string: "https://www.marvel.com/movies/deadpool-and-wolverine"),
-        popularity: 2178.995,
-        voteAverage: 8.202,
-        voteCount: 141,
-        isAdult: false,
-        originCountry: ["US"],
-        status: "Released"
-    )
 }

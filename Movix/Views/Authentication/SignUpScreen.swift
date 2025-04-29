@@ -79,15 +79,6 @@ struct SignUpScreen: View {
                         }
                     }
                     .font(.hauora(size: 14))
-                    
-//                    VStack {
-//                        Text("By clicking the login button, you accept Privacy")
-//                        Text("Policy rules of our company")
-//                    }
-//                    .multilineTextAlignment(.center)
-//                    .font(.hauora(size: 12))
-//                    .foregroundStyle(.bw50)
-//                    .padding(.top, 2)
                     VStack {
                         Text("login-privacy-link-label")
                         Button {

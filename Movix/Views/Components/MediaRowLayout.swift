@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MediaRowLayout<T: MediaItemProtocol>: View {
+struct MediaRowLayout<T: MediaTMDBProtocol>: View {
     let mediaItems: [T]
     let mediaType: MediaType
 

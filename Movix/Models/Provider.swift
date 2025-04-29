@@ -27,6 +27,7 @@ struct Providers: Codable {
         let resultsContainer = try container.nestedContainer(keyedBy: CountryCodes.self, forKey: .results)
     
         let savedUserCountry = UserDefaults.standard.value(forKey: "country") as? String ?? "US"
+        
         let userCountry = CountryCodes(rawValue: savedUserCountry) ?? .US
     
         let esContainer = try? resultsContainer.nestedContainer(keyedBy: ProviderTypes.self, forKey: userCountry)

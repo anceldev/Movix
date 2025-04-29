@@ -39,7 +39,7 @@ struct FriendRow<Content:View>: View {
 
 #Preview {
     VStack {
-        FriendRow(friend: User.preview) {
+        FriendRow(friend: PreviewData.user) {
             Button {
                 print("Add friend")
             } label: {

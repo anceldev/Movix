@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FavoritesListView<T: MediaItemProtocol>: View {
+struct FavoritesListView<T: MediaTMDBProtocol>: View {
 //    let movies: [Movie]
     let mediaItems: [T]
     @Environment(UserViewModel.self) var userVM
@@ -59,7 +59,7 @@ struct FavoritesListView<T: MediaItemProtocol>: View {
 
 #Preview {
     NavigationStack {
-        FavoritesListView(mediaItems: [Movie.preview])
-            .environment(UserViewModel(user: User.preview))
+        FavoritesListView(mediaItems: [PreviewData.movie])
+            .environment(UserViewModel(user: PreviewData.user))
     }
 }

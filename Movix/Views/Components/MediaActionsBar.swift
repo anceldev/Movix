@@ -40,10 +40,11 @@ struct ActionBarButtonLabel: View {
 struct MediaActionsBar: View {
     let mediaId: Int
     let mediaType: MediaType
+    var isFavorite: Bool
     let rateAction: () -> Void
     let favoriteAction: () async -> Void
+    
     @Environment(UserViewModel.self) var userVM
-
     @Environment(NavigationManager.self) var routerDestinationManager
     
     var body: some View {
@@ -56,7 +57,9 @@ struct MediaActionsBar: View {
                 ActionBarButtonLabel(
                     label: NSLocalizedString("movie-tabbar-rate-label", comment: "Rate"),
                     imageName: "rate",
-                    isOn: mediaType == .movie ? userVM.isRatedMovie(id: mediaId) : userVM.isRatedSerie(id: mediaId)
+                    isOn: mediaType == .movie
+                    ? userVM.user.movies.contains(where: { $0.media.id == mediaId })
+                    : userVM.user.series.contains(where: { $0.media.id == mediaId })
                 )
             }
             Button {
@@ -67,7 +70,7 @@ struct MediaActionsBar: View {
                 ActionBarButtonLabel(
                     label: NSLocalizedString("movie-tabbar-favorites-label", comment: "Favorites"),
                     imageName: "heart-icon",
-                    isOn: mediaType == .movie ? userVM.isFavoriteMovie(id: mediaId) : userVM.isFavoriteSerie(id: mediaId)
+                    isOn: isFavorite
                 )
             }
             NavigationLink {
@@ -112,8 +115,8 @@ struct MediaActionsBar: View {
 }
 
 #Preview(body: {
-    MediaActionsBar(mediaId: 24, mediaType: .movie, rateAction: {}, favoriteAction: {})
-        .environment(UserViewModel(user: User.preview))
+    MediaActionsBar(mediaId: 24, mediaType: .movie, isFavorite: true, rateAction: {}, favoriteAction: {})
+        .environment(UserViewModel(user: PreviewData.user))
         .environment(NavigationManager())
         .background(.bw10)
 })

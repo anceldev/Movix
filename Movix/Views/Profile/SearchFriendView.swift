@@ -16,7 +16,7 @@ struct SearchFriendView: View {
     
     var body: some View {
         VStack {
-            SearchField(searchTerm: $query, debounceQuery: $debounceQuery)
+            SearchField(query: $query, debounceQuery: $debounceQuery)
             ScrollView(.vertical) {
                 
                 ForEach(searchFriendsVM.users) { friend in
@@ -45,12 +45,13 @@ struct SearchFriendView: View {
     }
     private func addFriend(friendId: UUID) {
         Task {
-            await searchFriendsVM.addFriend(userId: userVM.user.id, friendId: friendId)
+//            await searchFriendsVM.addFriend(userId: userVM.user.id, friendId: friendId)
+            await searchFriendsVM.sendFriendRequest(from: userVM.user.id, to: friendId)
         }
     }
 }
 
 #Preview {
     SearchFriendView()
-        .environment(UserViewModel(user: User.preview))
+        .environment(UserViewModel(user: PreviewData.user))
 }

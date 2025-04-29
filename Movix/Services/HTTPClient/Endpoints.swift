@@ -10,7 +10,7 @@ import Foundation
 fileprivate let apiKey = Bundle.main.infoDictionary?["MovixAPIKey"] as! String
 fileprivate let baseUrlPath = "https://api.themoviedb.org/3/"
 
-enum MediaType: String {
+enum MediaType: String, Decodable {
     case movie
     case tv
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TvSerie: Codable, Identifiable, MediaItemProtocol {
+struct TvSerie: Codable, Identifiable, MediaTMDBProtocol {
     var isAdult: Bool?
     var backdropPath: String?
     var releaseDate: Date? // First air date
@@ -55,7 +55,6 @@ struct TvSerie: Codable, Identifiable, MediaItemProtocol {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
-//        self.releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate)
         
         if let releasedOn = try container.decodeIfPresent(String.self, forKey: .releaseDate) {
             let dateFormatter = DateFormatter()
@@ -64,7 +63,7 @@ struct TvSerie: Codable, Identifiable, MediaItemProtocol {
         }
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
         self.genreIds = try container.decodeIfPresent([Int].self, forKey: .genreIds)
-//        self.homepage = try container.decodeIfPresent(URL.self, forKey: .homepage)
+
         if let homePageString = try container.decodeIfPresent(String.self, forKey: .homepage) {
             self.homepage = URL(string: homePageString)
         }
@@ -129,36 +128,6 @@ struct TvSerie: Codable, Identifiable, MediaItemProtocol {
         self.originCountry = originCountry
         self.status = status
     }
-}
-
-extension TvSerie {
-    static let that70show = TvSerie(
-        isAdult: false,
-        backdropPath: "/3zRUiH8erHIgNUBTj05JT00HwsS.jpg",
-        releaseDate: DateComponents(year: 1998, month: 8, day: 23).date,
-        genres: [
-            Genre(id: 35, name: "Comedy"),
-            Genre(id: 10751, name: "Family"),
-            Genre(id: 18, name: "Drama")
-        ],
-        genreIds: [35, 10751, 18],
-        homePage: URL(string: ""),
-        id: 52,
-        inProduction: false,
-        title: "That '70s Show",
-        numberOfSeasons: 8,
-        numberOfEpisodes: 200,
-        originalName: "That '70s Show",
-        overview: "Crank up the 8-track and flash back to a time when platform shoes and puka shells were all the rage in this hilarious retro-sitcom. For Eric, Kelso, Jackie, Hyde, Donna and Fez, a group of high school teens who spend most of their time hanging out in Eric’s basement, life in the ‘70s isn’t always so groovy. But between trying to figure out the meaning of life, avoiding their parents, and dealing with out-of-control hormones, they’ve learned one thing for sure: they’ll always get by with a little help from their friends.",
-        posterPath: "/laEZvTqM80UaplUaDSCCbWhlyEV.jpg",
-        seasons: [
-            TvSeason(id: 94, airDate: "1998-08-23", name: "Season 1", overview: "", posterPath: "/d3jLBFnqub6rYXifgus5fkNt2H6.jpg", seasonNumer: 1, voteAverage: 7.5, episodeCount: 25),
-            TvSeason(id: 93, airDate: "1999-09-28", name: "Season 2", overview: "", posterPath: "/6H4WTKooT5cBjFCmNIJKHAJDUEY.jpg", seasonNumer: 2, voteAverage: 7.4, episodeCount: 26),
-            TvSeason(id: 92, airDate: "2000-10-03", name: "Season 3", overview: "", posterPath: "/yskd1fDr8CKoX2T0vUKhi8ZB1mp.jpg", seasonNumer: 3, voteAverage: 7.4, episodeCount: 25),
-            TvSeason(id: 91, airDate: "2001-09-25", name: "Season 4", overview: "", posterPath: "/buXFywjr5vT4E1USc5hVoRcIaOt.jpg", seasonNumer: 4, voteAverage: 7.3, episodeCount: 25)
-        ],
-        voteAverage: 7.9
-    )
 }
 
 

@@ -17,6 +17,12 @@ struct MovieScreen: View {
 
     @State private var showIcon = false
     @Environment(NavigationManager.self) var navigationManager
+    
+    var isFavorite: Bool {
+        let media = userVM.user.movies.first { $0.media.id == movieId }
+        guard let media else { return false }
+        return media.isFavorite
+    }
 
     init(movieId: Int) {
         self.movieId = movieId
@@ -40,6 +46,7 @@ struct MovieScreen: View {
                             MediaActionsBar(
                                 mediaId: movieId,
                                 mediaType: .movie,
+                                isFavorite: isFavorite,
                                 rateAction: {
                                     selectedTab = .general
                                     proxy.scrollTo("mediaTabs")
@@ -55,8 +62,8 @@ struct MovieScreen: View {
                                     GeneralTabMovieView(
                                         id: movieVM.movie?.id ?? 0,
                                         currentRate:
-                                            userVM.getCurrentMovieRating(
-                                                movieId: movieVM.movie?.id)
+                                            userVM.getMovieRating(
+                                                movieId: movieId)
                                     )
                                     .id("mediaTabs")
                                 case .details:
@@ -106,14 +113,14 @@ struct MovieScreen: View {
     }
     private func toggleFavoriteMovie() async {
         if let movie = movieVM.movie {
-            await userVM.toggleFavoriteMovie(media: movie, mediaType: .movie)
+            await userVM.toggleFavoriteMovie(movie: movie)
         }
     }
 }
 #Preview {
     NavigationStack {
         MovieScreen(movieId: 11235)
-            .environment(UserViewModel(user: User.preview))
+            .environment(UserViewModel(user: PreviewData.user))
             .environment(NavigationManager())
     }
 }

@@ -74,7 +74,7 @@ struct SeasonScreen: View {
 }
 
 //#Preview {
-//    SeasonScreen(serieId: 52)
+//    SeasonScreen(mediaId: 52)
 //        .environment(SerieViewModel())
 //        .environment(UserViewModel(user: User.preview))
 //}

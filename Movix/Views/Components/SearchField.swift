@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SearchField: View {
-    @Binding var searchTerm: String
+    @Binding var query: String
     @Binding var debounceQuery: String
     
     var body: some View {
@@ -18,13 +18,13 @@ struct SearchField: View {
                     .padding(.leading, 12)
                     .padding(.trailing, 4)
                 
-                TextField("Search...", text: $searchTerm, prompt: Text("search-field-placeholder").foregroundStyle(.bw50))
+                TextField("Search...", text: $query, prompt: Text("search-field-placeholder").foregroundStyle(.bw50))
                     .tint(Color.bw90)
                     .submitLabel(.search)
-                    .debounced(text: $searchTerm, debouncedText: $debounceQuery)
+                    .debounced(text: $query, debouncedText: $debounceQuery)
                 
                 Button(action: {
-                    searchTerm = ""
+                    query = ""
                 }, label: {
                     Label("Clear", systemImage: "xmark.circle.fill")
                         .labelStyle(.iconOnly)

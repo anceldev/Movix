@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-// struct GridItemsView<T: MediaItemProtocol>: View {
-struct GridItemsView<T: MediaItemProtocol>: View {
+struct GridItemsView<T: MediaTMDBProtocol>: View {
     let mediaItems: [T]
     var mediaType: MediaType
     let columns: [GridItem]
@@ -17,7 +16,6 @@ struct GridItemsView<T: MediaItemProtocol>: View {
     init(mediaItems: [T], mediaType: MediaType, columns: Int) {
         self.mediaItems = mediaItems
         self.mediaType = mediaType
-//        self.columns = [GridItem(.flexible()) * columns]
         self.columns = Array<GridItem>(repeating: .init(.flexible()), count: columns)
     }
 
@@ -40,8 +38,44 @@ struct GridItemsView<T: MediaItemProtocol>: View {
     }
 }
 
+struct GridItemsView3<T:UserItemCollectionMediaProtocol>: View {
+    let mediaItems: [T]
+    var mediaType: MediaType
+    let columns: [GridItem]
+    @Environment(NavigationManager.self) var navigationManager
+    
+    init(mediaItems: [T], mediaType: MediaType, columns: Int) {
+        self.mediaItems = mediaItems
+        self.mediaType = mediaType
+        self.columns = Array<GridItem>(repeating: .init(.flexible()), count: columns)
+        print(mediaItems)
+    }
+
+    var body: some View {
+        VStack {
+            ScrollView(.vertical) {
+                LazyVGrid(columns: columns, spacing: 8) {
+                     var seenMediaIds = Set<Int>()
+                    ForEach(mediaItems.filter({ seenMediaIds.insert($0.id!).inserted })) { ratedItem in
+                         Button {
+                             navigationManager.navigate(
+                                to: mediaType == .movie
+                                ? .movieDetails(id: ratedItem.media.id)
+                                : .serieDetails(id: ratedItem.media.id)
+                             )
+                         } label: {
+                             MediaGridItem(posterPath: ratedItem.media.posterPath , userRating: ratedItem.rating)
+                         }
+                     }
+                }
+                .scrollIndicators(.hidden)
+            }
+        }
+    }
+}
+
 #Preview {
-    GridItemsView(mediaItems: [Movie.preview], mediaType: .movie, columns: 2)
+    GridItemsView(mediaItems: [PreviewData.movie], mediaType: .movie, columns: 2)
         .environment(MoviesViewModel())
         .environment(NavigationManager())
 }

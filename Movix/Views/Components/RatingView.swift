@@ -9,7 +9,6 @@ import SwiftUI
 
 struct StarView: View {
     var rating: Float
-//    var rating: Int
     var index: Float
     
     var starFillWidth: CGFloat {
@@ -38,7 +37,6 @@ struct StarView: View {
 }
 
 struct RatingView: View {
-//    @Binding var currentRate: Int
     let mediaType: String
     @Binding var currentRate: Float
     @State private var isEditing = false
