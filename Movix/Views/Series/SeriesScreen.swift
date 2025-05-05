@@ -8,53 +8,48 @@
 import SwiftUI
 
 struct SeriesScreen: View {
-    @State private var searchTerm = ""
-    @State private var showFilterSheet = false
-    
-    @State private var viewOption: ViewOption = .gridx3
-    @State private var seriesVM = SeriesViewModel()
-    @Environment(NavigationManager.self) var navigationManager
-    @Environment(UserViewModel.self) var userVM
-    
     @State private var query = ""
     @State private var debouncedQuery = ""
+    @State private var showFilterSheet = false
+    @State private var viewOption: ViewOption = .gridx3
+    @State private var seriesVM = SeriesViewModel()
+    
+    @Environment(NavigationManager.self) var navigationManager
+    @Environment(UserViewModel.self) var userVM
     
     var body: some View {
         VStack {
             VStack(spacing: 16) {
-                VStack(spacing: 8) {
-                    Text("Series")
-                        .font(.hauora(size: 22, weight: .semibold))
-                        .foregroundStyle(.white)
-                    HStack(spacing: 16) {
-                        SearchField(query: $query, debounceQuery: $debouncedQuery)
-                            .padding(.leading)
-                        SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .environment(seriesVM)
-                }
+                SearchBarView(
+                    title: NSLocalizedString("series-tab-label", comment: "movies screen"),
+                    query: $query,
+                    debounceQuery: $debouncedQuery,
+                    showFilterSheet: $showFilterSheet,
+                    viewOption: $viewOption
+                )
                 VStack {
-                    GridItemsView<TvSerie>(
-                        mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
-                        mediaType: .tv,
-                        columns: viewOption == .gridx2 ? 2 : 3
-                    )
+                    ScrollView(.vertical) {
+                        GridItemsView<TvSerie>(
+                            mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
+                            mediaType: .tv,
+                            viewOption: viewOption
+                        )
+                        VStack {
+                            Button {
+                                search(query: debouncedQuery)
+                            } label: {
+                                Image(systemName: "chevron.down")
+                                    .foregroundStyle(.white)
+                            }
+                            .disabled(seriesVM.loadFlow == .loading)
+                        }
+                        .padding(.top, 4)
+                        .padding(.bottom, 8)
+                    }
+                    .scrollIndicators(.hidden)
                 }
                 .padding(.horizontal, 16)
                 
-                VStack {
-                    Button {
-                        search(query: debouncedQuery)
-                    } label: {
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.white)
-                    }
-                    .disabled(seriesVM.loadFlow == .loading)
-                }
-                .padding(.top, 4)
-                .padding(.bottom, 8)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.bw10)

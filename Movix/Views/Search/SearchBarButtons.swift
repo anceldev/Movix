@@ -37,6 +37,5 @@ struct SearchBarButtons: View {
             .frame(width: 30)
         }
         .frame(height: 42)
-        .padding(.trailing, 16)
     }
 }

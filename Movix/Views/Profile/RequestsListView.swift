@@ -13,25 +13,29 @@ struct RequestsListView: View {
     var body: some View {
         VStack {
             ScrollView(.vertical) {
-                ForEach(requestsVM.requests) { request in
-                    FriendRow(friend: request.user) {
-                        Button {
-                            acceptRequest(id: request.id)
-                        } label: {
-                            Text("Accept")
+                ForEach(userVM.user.requestsReceived, id: \.id) { request in
+                    FriendRow(friend: request.friend) {
+                        HStack(spacing: 6) {
+                            Button {
+                                resolveRequest(id: request.id!, status: .accepted)
+                            } label: {
+                                FriendshipRequestButton(label: "Accept", image: Image(.done))
+                            }
+//                            Button {
+//                                resolveRequest(id: request.id!, status: .denied)
+//                            } label: {
+//                                FriendshipRequestButton(label: "Deny", image: Image(.close), color: .mars)
+//                            }
                         }
                     }
                 }
             }
             .scrollIndicators(.hidden)
         }
-        .task {
-            await requestsVM.getFriendRequests(userId: userVM.user.id)
-        }
     }
-    private func acceptRequest(id: Int) {
+    private func resolveRequest(id: Int, status: FriendshipStatus) {
         Task {
-            await requestsVM.acceptRequest(id: id)
+            await userVM.resolveFriendRequest(id: id, status: status)
         }
     }
 }

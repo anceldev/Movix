@@ -22,7 +22,7 @@ struct SearchFriendView: View {
                 ForEach(searchFriendsVM.users) { friend in
                     FriendRow(friend: friend) {
                         Button {
-                            addFriend(friendId: friend.id)
+                            sendRequest(to: friend.id)
                         } label: {
                             Image(.group)
                         }
@@ -43,10 +43,11 @@ struct SearchFriendView: View {
             await searchFriendsVM.getUsers(query: debounceQuery)
         }
     }
-    private func addFriend(friendId: UUID) {
+    private func sendRequest(to friendId: UUID) {
         Task {
 //            await searchFriendsVM.addFriend(userId: userVM.user.id, friendId: friendId)
-            await searchFriendsVM.sendFriendRequest(from: userVM.user.id, to: friendId)
+//            await searchFriendsVM.sendFriendRequest(from: userVM.user.id, to: friendId)
+            await userVM.sendFriendRequest(from: userVM.user.id, to: friendId)
         }
     }
 }

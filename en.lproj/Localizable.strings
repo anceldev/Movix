@@ -22,8 +22,8 @@
 "home-tab-label" = "Home";
 
 "series-tab-label" = "Series";
-
 "movies-tab-label" = "Movies";
+"custom-lists-tab-label" = "Lists";
 
 "movie-tabbar-rate-label" = "Rate";
 "movie-tabbar-favorites-label" = "Favourite";
@@ -57,6 +57,7 @@
 "account-friends-friends-tab" = "Friends";
 "account-friends-requests-tab" = "Requests";
 "account-friends-search-tab" = "Search";
+"account-friends-sended-tab" = "Sended";
 
 "account-language-label" = "Language";
 "account-language-title" = "Current language";
@@ -79,3 +80,11 @@
 "search-field-placeholder" = "Search...";
 
 "crop-title" = "Crop";
+
+"account-credits-label" = "Credits";
+"account-credits-attribution-tmdb-title" = "About TMDB";
+"account-credits-attribution-tmdb-text" = "All film-related metadata used in Movix, including actor, series, movies, synopses, release dates, reviews, and poster art is supplied by **The Movie Database (TMDB)**.\n\n
+Movix app uses the TMDB API but is not endorsed or certified by TMDB.\n\nTo add missing films or correct inaccuracies for existing films, please use TMDB’s interface (you’ll need to create an account there too).";
+"account-credits-attribution-design-title" = "Design";
+"account-credits-attribution-design-text"= "Design and UX by **Anna Akimenko**.\n\nThank you for giving the app that special touch and making it so easy and enjoyable to use!";
+"account-credits-attribution-design-link" = "Behance profile of Anna Akimenko";

@@ -11,6 +11,7 @@ import SwiftUI
 enum ListControlsMedia: String, CaseIterable, Identifiable, Hashable {
     case movies
     case series
+    
     var id: Self { self }
     var localizedTitle: String {
         switch self {
@@ -28,6 +29,7 @@ protocol Localizable {
 enum ListControls: String, CaseIterable, Identifiable, Hashable, Localizable {
     case favorites
     case rates
+    case lists
     var id: Self { self }
     
     var localizedTitle: String {
@@ -36,6 +38,8 @@ enum ListControls: String, CaseIterable, Identifiable, Hashable, Localizable {
             return NSLocalizedString("movie-list-controls-favorites", comment: "Favorites")
         case .rates:
             return NSLocalizedString("movie-list-controls-rated", comment: "Rated")
+        case  .lists:
+            return NSLocalizedString("custom-lists-tab-label", comment: "Lists")
         }
     }
 }
@@ -45,6 +49,7 @@ struct MyListsScreen: View {
     @State private var selectedList: ListControls = .favorites
     @State private var selectedMedia: ListControlsMedia = .movies
     @State private var mediaPopover = false
+    @State private var showNewList = false
     
     @Environment(NavigationManager.self) var navigationManager
     var body: some View {
@@ -54,18 +59,13 @@ struct MyListsScreen: View {
                 .foregroundStyle(.white)
             VStack(spacing: 8) {
                 HStack {
-//                    HStack {
-//                        Text("\(selectedMedia.localizedTitle)")
-//                    }
-//                    .foregroundStyle(.white)
-//                    .font(.hauora(size: 20, weight: .semibold))
                     Spacer()
                     Button {
                         mediaPopover.toggle()
                     } label: {
                         Text(selectedMedia.localizedTitle)
                             .font(.hauora(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.white) 
                             .padding(.vertical, 4)
                             .padding(.horizontal, 12)
                             .background(.bw40)
@@ -87,6 +87,15 @@ struct MyListsScreen: View {
                         }
                         .presentationCompactAdaptation(.popover)
                     }
+                    Button {
+                        showNewList.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(.white)
+                    }
+                    .padding(5)
+                    .background(.bw40)
+                    .clipShape(.circle)
                 }
             }
             Group {
@@ -106,6 +115,8 @@ struct MyListsScreen: View {
                                 mediaType: .movie,
                                 columns: 3
                             )
+                        case .lists:
+                            Text("My movies lists")
                         }
                     }
                 }
@@ -125,6 +136,8 @@ struct MyListsScreen: View {
                                 mediaType: .tv,
                                 columns: 3
                             )
+                        case .lists:
+                            Text("My series lists")
                         }
                     }
                 }
@@ -136,6 +149,10 @@ struct MyListsScreen: View {
         .background(.bw10)
         .withAppRouter()
         .environment(userVM)
+        .sheet(isPresented: $showNewList) {
+            NewListView()
+                .presentationDetents([.medium])
+        }
     }
 }
 

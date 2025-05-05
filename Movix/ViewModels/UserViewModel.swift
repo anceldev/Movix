@@ -89,27 +89,161 @@ final class UserViewModel {
         }
     }
     
+    
     func getFriends() async {
         do {
-//            let response: [FriendsRequestDTO] = try await supabase
-//                .from("friendship")
-//                .select()
-//                .eq("user_id", value: user.id)
-//                .execute()
-//                .value
-//            
-//            print(response)
-            let response = try await supabase
+            let response: [FriendshipResponseDTO] = try await supabase
                 .from("friendship")
                 .select("""
                     id,
-                    user_1(id, username, avatar_path),
-                    user_2(id, username, avatar_path)
+                    user_1(id, username, avatar_path, email, lang, country),
+                    user_2(id, username, avatar_path, email, lang, country),
                     status
                     """)
                 .or("user_1.eq.\(user.id),user_2.eq.\(user.id)")
                 .execute()
-            print(String(decoding: response.data, as: UTF8.self))
+                .value
+            
+//            let friends: [Friend] = response.compactMap { row in
+//                return Friend(
+//                    id: row.id,
+//                    friend: row.user1.id == user.id ? row.user2 : row.user1,
+//                    status: row.status
+//                )
+//            }
+//            let friends = response.filter { $0.status == .accepted }
+//            let friends = response.compactMap {
+//                if $0.status == .accepted {
+//                    return Friend(
+//                        id: $0.id,
+//                        friend: $0.user1.id == user.id ? $0.user2 : $0.user1,
+//                        status: $0.status
+//                    )
+//                }
+//                return nil
+//            }
+//            let requestsSended = response.compactMap {
+//                if $0.user1.id == user.id {
+//                    return Friend(
+//                        id: $0.id,
+//                        friend: $0.user2,
+//                        status: $0.status
+//                    )
+//                }
+//                return nil
+//            }
+//            let requestsReceived = response.compactMap {
+//                if $0.user2.id == user.id {
+//                    return Friend(
+//                        id: $0.id,
+//                        friend: $0.user1,
+//                        status: $0.status
+//                    )
+//                }
+//                return nil
+//            }
+            var friends = [Friend]()
+            var sended = [Friend]()
+            var received = [Friend]()
+            
+            for relationship in response {
+                if relationship.status == .accepted {
+                    friends.append(
+                        Friend(
+                            id: relationship.id,
+                            friend: relationship.user1.id == user.id ? relationship.user2 : relationship.user1,
+                            status: .accepted
+                        )
+                    )
+                } else {
+                    if relationship.user1.id == user.id {
+                        sended.append(
+                            Friend(
+                                id: relationship.id,
+                                friend: relationship.user2,
+                                status: relationship.status
+                            )
+                        )
+                    } else {
+                        received.append(
+                            Friend(
+                                id: relationship.id,
+                                friend: relationship.user1,
+                                status: relationship.status
+                            )
+                        )
+                    }
+                }
+            }
+            user.friends = friends
+            user.requestsSended = sended
+            user.requestsReceived = received
+            
+//            user.friends = friends
+//            user.requestsSended = requestsSended
+//            user.requestsReceived = requestsReceived
+        } catch {
+            setError(error)
+        }
+    }
+    func sendFriendRequest(from user: UUID, to friend: UUID) async {
+        do {
+            let newRequest = FriendshipRequestDTO(user1: user, user2: friend)
+            let sendRequest = try await supabase
+                .from("friendship")
+                .insert(newRequest)
+                .execute()
+            
+            print(String(decoding: sendRequest.data, as: UTF8.self))
+                
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func resolveFriendRequest(id: Int, status: FriendshipStatus) async {
+        do {
+            let response: FriendshipResponseDTO = try await supabase
+                .from("friendship")
+                .update(["status": status.rawValue])
+                .eq("id", value: id)
+                .select("""
+                    id,
+                    user_1(*),
+                    user_2(*),
+                    status
+                    """)
+                .single()
+                .execute()
+                .value
+            let friend = Friend(
+                id: response.id,
+                friend: user.id == response.user1.id ? response.user2 : response.user1,
+                status: response.status
+            )
+            user.friends.removeAll { $0.id == response.id }
+            user.friends.append(friend)
+        } catch {
+            setError(error)
+        }
+    }
+    func cancelFriendRequest(id: Int) async {
+        do {
+            let deleteRequest: FriendshipResponseDTO = try await supabase
+                .from("friendship")
+                .delete()
+                .eq("id", value: id)
+                .select("""
+                    id,
+                    user_1(*),
+                    user_2(*),
+                    status
+                    """)
+                .single()
+                .execute()
+                .value
+            
+            user.requestsSended.removeAll { $0.id == deleteRequest.id }
         } catch {
             setError(error)
         }

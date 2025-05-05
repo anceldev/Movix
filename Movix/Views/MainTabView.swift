@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+enum MainTabOption {
+    case home
+    case search
+    case movies
+    case series
+    case lists
+    case profile
+}
+
 struct MainTabView: View {
     @State private var selectedTab: MainTabOption = .series
     @Environment(UserViewModel.self) var userVM
@@ -23,7 +32,10 @@ struct MainTabView: View {
                 HomeScreen()
                     .tag(MainTabOption.home)
                     .tabItem {
-                        Label(NSLocalizedString("home-tab-label", comment: "Home") , systemImage: "house.fill")
+                        Label(
+                            NSLocalizedString("home-tab-label", comment: "Home") ,
+                            image: navigationManager.activeTab == .home ? "home-icon" : "home-icon-disabled"
+                        )
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
@@ -31,7 +43,10 @@ struct MainTabView: View {
                 SeriesScreen()
                     .tag(MainTabOption.series)
                     .tabItem {
-                        Label(NSLocalizedString("series-tab-label", comment: "Series"), systemImage: selectedTab == .series ? "tv" : "tv.fill")
+                        Label(
+                            NSLocalizedString("series-tab-label", comment: "Series"),
+                            systemImage: selectedTab == .series ? "tv" : "tv.fill"
+                        )
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
@@ -39,7 +54,10 @@ struct MainTabView: View {
                 MoviesScreen()
                     .tag(MainTabOption.movies)
                     .tabItem {
-                        Label(NSLocalizedString("movies-tab-label", comment: "Movies") , systemImage: selectedTab == .movies ? "movieclapper.fill" : "movieclapper")
+                        Label(
+                            NSLocalizedString("movies-tab-label", comment: "Movies") ,
+                            systemImage: selectedTab == .movies ? "movieclapper.fill" : "movieclapper"
+                        )
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
@@ -47,7 +65,13 @@ struct MainTabView: View {
                 MyListsScreen()
                     .tag(MainTabOption.lists)
                     .tabItem {
-                        Label(NSLocalizedString("lists-tab-label", comment: "Lists"), systemImage: "heart.fill")
+                        Label(
+                            NSLocalizedString(
+                                "lists-tab-label",
+                                comment: "Lists"
+                            ),
+                            image: navigationManager.activeTab == .lists ? "heart-icon" :"heart-icon-disabled"
+                        )
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
@@ -55,7 +79,7 @@ struct MainTabView: View {
                 ProfileScreen()
                     .tag(MainTabOption.profile)
                     .tabItem {
-                        Label(NSLocalizedString("account-tab-label", comment: "Account"), systemImage: selectedTab == .profile ? "person" : "person.fill")
+                        Label(NSLocalizedString("account-tab-label", comment: "Account"), image: navigationManager.activeTab == .profile ? "profile-icon" : "profil-icon-disabled")
                     }
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(.bw10, for: .tabBar)
@@ -64,7 +88,7 @@ struct MainTabView: View {
             .tint(.blue1)
             .background(.bw10)
             .animation(.easeOut, value: selectedTab)
-            .toolbar(.visible, for: .tabBar)
+//            .toolbar(.visible, for: .tabBar)
             .toolbarBackground(.bw10, for: .tabBar)
             .onChange(of: navigationManager.activeTab) { _, newValue in
                 navigationManager.path = []

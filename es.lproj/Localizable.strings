@@ -22,8 +22,8 @@
 "home-tab-label" = "Inicio";
 
 "series-tab-label" = "Series";
-
 "movies-tab-label" = "Películas";
+"custom-lists-tab-label" = "Listas";
 
 "movie-tabbar-rate-label" = "Valorar";
 "movie-tabbar-favorites-label" = "Favorito";
@@ -57,6 +57,7 @@
 "account-friends-friends-tab" = "Amigos";
 "account-friends-requests-tab" = "Solicitudes";
 "account-friends-search-tab" = "Buscar";
+"account-friends-sended-tab" = "Enviadas";
 
 "account-language-label" = "Idioma";
 "account-language-title" = "Idioma actual";
@@ -79,3 +80,10 @@
 "search-field-placeholder" = "Buscar...";
 
 "crop-title" = "Recortar";
+
+"account-credits-label" = "Creditos";
+"account-credits-attribution-tmdb-title" = "Sobre TMDB";
+"account-credits-attribution-tmdb-text" = "Todos los metadatos relacionados con películas que se utilizan en Movix, incluyendo actores, series, películas, sinopsis, fechas de estreno, reseñas y pósteres, son proporcionados por **The Movie Database (TMDB)**.\n\nLa ​​aplicación Movix utiliza la API de TMDB, pero no está avalada ni certificada por TMDB.\n\nPara añadir películas que faltan o corregir imprecisiones en películas existentes, utiliza la interfaz de TMDB (también deberás crear una cuenta).";
+"account-credits-attribution-design-title" = "Diseño";
+"account-credits-attribution-design-text"= "Diseño y UX por **Anna Akimenko**.\n\n¡Gracias por darle a la aplicación ese toque especial y hacerla tan fácil y agradable de usar!";
+"account-credits-attribution-design-link" = "Perfil de Behance de Anna Akimenko";

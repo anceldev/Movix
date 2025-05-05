@@ -65,15 +65,27 @@ final class FriendRequestViewModel {
             print(error.localizedDescription)
         }
     }
-    func acceptRequest(id: Int) async {
+    func resolveRequest(id: Int, status: FriendshipStatus) async {
         do {
-            let response = try await supabase
-                .from(SupabaseTables.friends.rawValue)
-                .update(["status": FriendshipStatus.accepted.rawValue])
+            let response: FriendshipResponseDTO = try await supabase
+                .from("friendship")
+                .update(["status": status.rawValue])
                 .eq("id", value: id)
+                .select("""
+                    id,
+                    user_1(*),
+                    user_2(*),
+                    status
+                    """)
+                .single()
                 .execute()
-            print(response.status)
-            print(response.response.statusCode)
+                .value
+//            let friend = Friend(
+//                id: response.id,
+//                friend: <#T##User#>,
+//                status: <#T##FriendshipStatus#>
+//            )
+//            return response
         } catch {
             setError(error)
         }

@@ -23,21 +23,15 @@ struct User: Codable, Identifiable {
     var country: String
     var avatarPath: String?
     var avatarData: Data?
-    
-    var favoriteMovies: [Movie]
-    var ratedMovies: [Movie]
-    
-    
-    var favoriteSeries: [TvSerie]
-    var ratedSeries: [TvSerie]
-    var newRatedSeries: [RatedSeriesListDTO]
-    var newRatedMovies: [RatedMoviesListDTO]
-    var newFavoriteMovies: [FavoriteSingleMovieDTO]
-    var newFavoriteSeries: [RatedSeriesListDTO]
-//    var series: [UserSerie]
+
     var series: [TestUserSerie]
-//    var movies: [UserMovie]
     var movies: [TestUserMovie]
+    
+    var friends: [Friend]
+    var requestsSended: [Friend]
+    var requestsReceived: [Friend]
+    
+    
     
     var lists: [SupList]
     
@@ -59,18 +53,15 @@ struct User: Codable, Identifiable {
         self.country = country
         self.avatarPath = avatarPath
         
-        self.favoriteMovies = favoriteMovies
-        self.ratedMovies = ratedMovies
+
         self.lists = lists
-        self.ratedSeries = ratedSeries
-        self.favoriteSeries = favoriteSeries
-        
-        self.newRatedSeries = newRatedSeries
-        self.newRatedMovies = newRatedMovies
-        self.newFavoriteMovies = []
-        self.newFavoriteSeries = []
+
+
         self.series = []
         self.movies = []
+        self.friends = []
+        self.requestsSended = []
+        self.requestsReceived = []
     }
     
     init(from decoder: any Decoder) throws {
@@ -83,18 +74,19 @@ struct User: Codable, Identifiable {
         self.country = try container.decode(String.self, forKey: .country)
         self.avatarPath = try container.decodeIfPresent(String.self, forKey: .avatarPath)
         
-        self.favoriteMovies = []
-        self.ratedMovies = []
-        self.ratedSeries = []
-        self.favoriteSeries = []
         self.lists = []
         
-        self.newRatedSeries = []
-        self.newRatedMovies = []
-        self.newFavoriteMovies = []
-        self.newFavoriteSeries = []
         self.series = []
         self.movies = []
+        self.friends = []
+        self.requestsSended = []
+        self.requestsReceived = []
     }
     
+}
+
+struct Friend {
+    var id: Int?
+    var friend: User
+    var status: FriendshipStatus
 }

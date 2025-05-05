@@ -37,7 +37,7 @@ struct FriendRow<Content:View>: View {
     }
 }
 
-#Preview {
+#Preview("Add friend") {
     VStack {
         FriendRow(friend: PreviewData.user) {
             Button {
@@ -46,6 +46,85 @@ struct FriendRow<Content:View>: View {
                 Image(.group)
             }
             .padding(.trailing, 10)
+        }
+    }
+    .padding(.horizontal, 16)
+}
+
+#Preview("Accept friend") {
+    VStack {
+        FriendRow(friend: PreviewData.user) {
+            Button {
+                print("Add friend")
+            } label: {
+                HStack(spacing: 4) {
+                    Text("Accept")
+                    Image(.done)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 16)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .font(.hauora(size: 12))
+                .foregroundStyle(.blue1)
+                .clipShape(.capsule)
+                .overlay {
+                    Capsule()
+                        .stroke(.blue1, lineWidth: 1)
+                }
+            }
+            .padding(.trailing, 10)
+        }
+    }
+    .padding(.horizontal, 16)
+}
+#Preview("Deny friend") {
+    VStack {
+        FriendRow(friend: PreviewData.user) {
+            HStack(spacing: 6) {
+                Button {
+                    print("Add friend")
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("Accept")
+                        Image(.done)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 16)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .font(.hauora(size: 12))
+                    .foregroundStyle(.blue1)
+                    .clipShape(.capsule)
+                    .overlay {
+                        Capsule()
+                            .stroke(.blue1, lineWidth: 1)
+                    }
+                }
+                Button {
+                    print("deny friend")
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("Deny")
+                            .fontWeight(.bold)
+                        Image(.close)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 16)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .font(.hauora(size: 12))
+                    .foregroundStyle(.marsA)
+                    .clipShape(.capsule)
+                    .overlay {
+                        Capsule()
+                            .stroke(.marsA, lineWidth: 1)
+                    }
+                }
+            }
         }
     }
     .padding(.horizontal, 16)

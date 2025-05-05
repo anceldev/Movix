@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum FriendsTabs: String, CaseIterable, Identifiable, Hashable, Localizable {
-    case friends, requests, search
+    case friends, requests, sended
     
     var id: Self { self }
     
@@ -18,8 +18,10 @@ enum FriendsTabs: String, CaseIterable, Identifiable, Hashable, Localizable {
             return NSLocalizedString("account-friends-friends-tab", comment: "friends")
         case .requests:
             return NSLocalizedString("account-friends-requests-tab", comment: "requests")
-        case .search:
-            return NSLocalizedString("account-friends-search-tab", comment: "search")
+        case .sended:
+            return NSLocalizedString("account-friends-sended-tab", comment: "sended")
+//        case .search:
+//            return NSLocalizedString("account-friends-search-tab", comment: "search")
         }
     }
 }
@@ -33,32 +35,39 @@ struct FriendsScreen: View {
                 CustomSegmentedControl(state: $selectedTab, horizontalPadding: 24)
                 switch selectedTab {
                 case .friends:
-                    Text("Friends view")
+                    FriendsListView()
+                        .environment(userVM)
                 case .requests:
                     RequestsListView()
                         .environment(userVM)
-                case .search:
-                    SearchFriendView()
+                case .sended:
+                    SendedRequestListView()
+                        .environment(userVM)
+                    
+//                case .search:
+//                    SearchFriendView()
                 }
             }
             
-            ForEach(userVM.friends) { friend in
-                FriendRow(friend: friend) {
-                    Button {
-                        print("Add friend")
-                    } label: {
-                        Image(.group)
-                    }
-                    .padding(.trailing, 10)
-                }
-            }
+//            ForEach(userVM.friends) { friend in
+//                FriendRow(friend: friend) {
+//                    Button {
+//                        print("Add friend")
+//                    } label: {
+//                        Image(.group)
+//                    }
+//                    .padding(.trailing, 10)
+//                }
+//            }
             Spacer()
         }
         .padding(16)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.bw10)
-        .task {
-            await userVM.getFriends()
+        .onAppear {
+            Task {
+                await userVM.getFriends()
+            }
         }
     }
 }

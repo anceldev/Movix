@@ -33,24 +33,29 @@ struct LanguageScreen: View {
                         .font(.hauora(size: 20, weight: .black))
                 }
                 .foregroundStyle(.white)
+                .padding(.horizontal)
                 VStack(alignment: .leading, spacing: 8) {
                     Text("account-language-sub-title")
                         .font(.hauora(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
+                        .padding(.horizontal)
                     HStack(spacing: 16) {
                         SearchField(query: $searchTerm, debounceQuery: $debounceQuery)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
+                    .padding(.horizontal)
                     ScrollView(.vertical) {
-                        ForEach(languages, id: \.iso6391) { lang in
-                            LanguageRow(lang)
-                                .onTapGesture {
-                                    withAnimation(.easeIn) {
-                                        selectedLan = lang.iso6391
+                        VStack(spacing: 0) {
+                            ForEach(languages, id: \.iso6391) { lang in
+                                LanguageRow(lang)
+                                    .onTapGesture {
+                                        withAnimation(.easeIn) {
+                                            selectedLan = lang.iso6391
+                                        }
                                     }
-                                }
-                            Divider()
+                                //                            Divider()
+                            }
                         }
                     }
                     .scrollIndicators(.hidden)
@@ -63,12 +68,13 @@ struct LanguageScreen: View {
                             .font(.hauora(size: 20, weight: .medium))
                     }
                     .buttonStyle(.capsuleButton)
-                    
+                    .padding(.horizontal)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .swipeToDismiss()
             }
-            .padding([.horizontal, .bottom], 16)
+//            .padding([.horizontal, .bottom], 16)
+            .padding(.bottom, 16)
         }
         .popView(isPresented: $showConfirmation, onDismiss: {
             showConfirmation.toggle()
@@ -115,7 +121,9 @@ struct LanguageScreen: View {
                     .clipShape(.circle)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.horizontal)
+        .padding(.vertical, 12)
+        .background(selectedLan == lang.iso6391 ? .filtersBackground : .bw10)
     }
 }
 

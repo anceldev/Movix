@@ -11,28 +11,24 @@ struct GridItemsView<T: MediaTMDBProtocol>: View {
     let mediaItems: [T]
     var mediaType: MediaType
     let columns: [GridItem]
+//    let columns: ViewOption
     @Environment(NavigationManager.self) var navigationManager
     
-    init(mediaItems: [T], mediaType: MediaType, columns: Int) {
+    init(mediaItems: [T], mediaType: MediaType, viewOption: ViewOption) {
         self.mediaItems = mediaItems
         self.mediaType = mediaType
-        self.columns = Array<GridItem>(repeating: .init(.flexible()), count: columns)
+        self.columns = Array<GridItem>(repeating: .init(.flexible()), count: viewOption == .gridx3 ? 3 : 2)
     }
-
+    
     var body: some View {
-        VStack {
-            ScrollView(.vertical) {
-                LazyVGrid(columns: columns, spacing: 8) {
-                     var seenMovieIDs = Set<Int>()
-                     ForEach(mediaItems.filter { seenMovieIDs.insert($0.id).inserted }) { media in
-                         Button {
-                             navigationManager.navigate(to: mediaType == .movie ? .movieDetails(id: media.id) : .serieDetails(id: media.id))
-                         } label: {
-                             MediaGridItem(posterPath: media.posterPath, voteAverage: media.voteAverage)
-                         }
-                     }
+        LazyVGrid(columns: columns, spacing: 8) {
+            var seenMovieIDs = Set<Int>()
+            ForEach(mediaItems.filter { seenMovieIDs.insert($0.id).inserted }) { media in
+                Button {
+                    navigationManager.navigate(to: mediaType == .movie ? .movieDetails(id: media.id) : .serieDetails(id: media.id))
+                } label: {
+                    MediaGridItem(posterPath: media.posterPath, voteAverage: media.voteAverage)
                 }
-                .scrollIndicators(.hidden)
             }
         }
     }
@@ -75,7 +71,7 @@ struct GridItemsView3<T:UserItemCollectionMediaProtocol>: View {
 }
 
 #Preview {
-    GridItemsView(mediaItems: [PreviewData.movie], mediaType: .movie, columns: 2)
+    GridItemsView(mediaItems: [PreviewData.movie], mediaType: .movie, viewOption: .gridx2)
         .environment(MoviesViewModel())
         .environment(NavigationManager())
 }

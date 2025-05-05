@@ -49,24 +49,12 @@ struct SearchScreen: View {
                 Text("Search")
                     .font(.hauora(size: 22, weight: .semibold))
                     .foregroundStyle(.white)
-                SearchBar(
-                    searchTerm: $searchTerm,
-                    viewOption: $viewOption,
-                    showFilter: $showFilterSheet
-                ) {
-                    searchMovies()
-                }
                 VStack(spacing: 0) {
                     CustomSegmentedControl(state: $selectedTab)
                     switch selectedTab {
                     case .all:
                         Text("This is all")
                     case .movies, .tv:
-//                        MediaItemsView(
-//                            searchTerm: $searchTerm,
-//                            viewOption: viewOption,
-//                            mediaType: mediaType
-//                        )
                         Text("This is movies or tv")
                     }
                 }

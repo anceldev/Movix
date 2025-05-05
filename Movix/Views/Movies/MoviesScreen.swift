@@ -14,48 +14,45 @@ enum MediaNavigation: Equatable {
 
 struct MoviesScreen: View {
     @State private var query = ""
-    @State private var debounceQuery = ""
-    
+    @State private var debouncedQuery = ""
     @State private var showFilterSheet = false
     @State private var viewOption: ViewOption = .gridx3
-    //    @Environment(MoviesViewModel.self) var moviesVM
     @State var moviesVM = MoviesViewModel()
+
     @Environment(NavigationManager.self) var navigationManager
     @Environment(UserViewModel.self) var userVM
     
     var body: some View {
         VStack {
             VStack(spacing: 16) {
-                VStack(spacing: 8) {
-                    Text("movies-tab-label")
-                        .font(.hauora(size: 22, weight: .semibold))
-                        .foregroundStyle(.white)
-                    HStack(spacing: 16) {
-                        SearchField(query: $query, debounceQuery: $debounceQuery)
-                            .padding(.leading)
-                        SearchBarButtons(showFilterSheet: $showFilterSheet, viewOption: $viewOption)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                }
+                SearchBarView(
+                    title: NSLocalizedString("movies-tab-label", comment: "movies screen"),
+                    query: $query,
+                    debounceQuery: $debouncedQuery,
+                    showFilterSheet: $showFilterSheet,
+                    viewOption: $viewOption
+                )
                 VStack {
-                    GridItemsView<Movie>(
-                        mediaItems: debounceQuery.isEmpty ? moviesVM.trending : moviesVM.movies,
-                        mediaType: .movie,
-                        columns: viewOption == .gridx2 ? 2 : 3
-                    )
+                    ScrollView(.vertical) {
+                        GridItemsView<Movie>(
+                            mediaItems: debouncedQuery.isEmpty ? moviesVM.trending : moviesVM.movies,
+                            mediaType: .movie,
+                            viewOption: viewOption
+                        )
+                        VStack {
+                            Button {
+                                search(query: debouncedQuery)
+                            } label: {
+                                Image(systemName: "chevron.down")
+                                    .foregroundStyle(.white)
+                            }
+                        }
+                        .padding(.top, 8)
+                        .padding(.bottom, 16)
+                    }
+                    .scrollIndicators(.hidden)
                 }
                 .padding(.horizontal)
-                
-                VStack {
-                    Button {
-                        search(query: debounceQuery)
-                    } label: {
-                        Image(systemName: "chevron.down")
-                    }
-                }
-                .padding(.top, 4)
-                .padding(.bottom, 8)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.bw10)
@@ -67,7 +64,7 @@ struct MoviesScreen: View {
         .sheet(isPresented: $showFilterSheet) {
             Text("Filter screen")
         }
-        .onChange(of: debounceQuery) { _, newValue in
+        .onChange(of: debouncedQuery) { _, newValue in
             search(query: newValue)
         }
         .environment(navigationManager)
@@ -75,7 +72,7 @@ struct MoviesScreen: View {
     private func search(query: String) {
         Task {
             if query != "" {
-                await moviesVM.searchMovies(searchTerm: debounceQuery)
+                await moviesVM.searchMovies(searchTerm: debouncedQuery)
             } else {
                 await moviesVM.loadTrending()
             }
@@ -85,5 +82,4 @@ struct MoviesScreen: View {
 
 #Preview {
     MoviesScreen()
-    //        .environment(NavigationManager())
 }

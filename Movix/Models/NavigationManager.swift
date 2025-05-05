@@ -24,6 +24,7 @@ enum RouterDestination: Hashable {
     case support
     case personalDetails
     case friends
+    case appCredits
 }
 
 
@@ -88,6 +89,8 @@ final class NavigationManager: Observable {
                  FriendsScreen()
              case .aboutTMDB:
                  AboutTMDB()
+             case .appCredits:
+                 AppCredits()
              }
          }
      }

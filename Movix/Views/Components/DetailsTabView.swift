@@ -76,7 +76,7 @@ struct DetailsTabView<T: MediaTMDBProtocol>: View {
                         GridItemsView(
                             mediaItems: similarMedia,
                             mediaType: type(of: T.self) == type(of: Movie.self) ? .movie : .tv,
-                            columns: 3
+                            viewOption: .gridx3
                         )
                     }
                 }
