@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SupabaseMedia: Decodable, MediaSupabaseProtocol {
+struct SupabaseMedia: Decodable, MediaSupabaseProtocol, Hashable {
     var id: Int
     var posterPath: String?
     
@@ -31,5 +31,14 @@ struct SupabaseMedia: Decodable, MediaSupabaseProtocol {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(posterPath, forKey: .posterPath)
+    }
+    
+    static func == (lhs: SupabaseMedia, rhs: SupabaseMedia) -> Bool {
+        lhs.id == rhs.id && lhs.posterPath == rhs.posterPath
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(posterPath)
     }
 }

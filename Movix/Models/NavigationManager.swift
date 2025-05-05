@@ -25,6 +25,8 @@ enum RouterDestination: Hashable {
     case personalDetails
     case friends
     case appCredits
+    case list(list: MediaList)
+    case listSelector(mediaId: Int,mediaType: MediaType)
 }
 
 
@@ -91,6 +93,10 @@ final class NavigationManager: Observable {
                  AboutTMDB()
              case .appCredits:
                  AppCredits()
+             case .list(let list):
+                 ListScreen(list)
+             case .listSelector(let mediaId, let mediaType):
+                 ListSelectorScreen(mediaId: mediaId, mediaType: mediaType)
              }
          }
      }

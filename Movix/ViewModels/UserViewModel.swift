@@ -47,6 +47,7 @@ final class UserViewModel {
             await getAvatar()
             await getUserSeries()
             await getUserMovies()
+            await getLists()
         }
     }
     
@@ -681,6 +682,50 @@ final class UserViewModel {
             throw error
         }
     }
+    
+    private func getLists() async {
+        do {
+            let lists: [MediaList] = try await supabase
+                .from("lists")
+                .select("""
+                    id,
+                    name,
+                    description,
+                    list_type,
+                    owner_id(*),
+                    is_public
+                    """)
+                .execute()
+                .value
+            user.lists = lists
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func createList(name: String, description: String? = nil, isPublic: Bool, listType: ListType) async {
+        do {
+            let list = MediaList(name: name, description: description, listType: listType, owner: user, isPublic: isPublic)
+            let newList: MediaList = try await supabase
+                .from("lists")
+                .insert(list)
+                .select("""
+                    id,
+                    name,
+                    description,
+                    list_type,
+                    owner_id(*),
+                    is_public
+                    """)
+                .single()
+                .execute()
+                .value
+            user.lists.append(newList)
+        } catch {
+            setError(error)
+        }
+    }
+    
     
     func getLanguages() async {
         do {

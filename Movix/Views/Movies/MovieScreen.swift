@@ -10,13 +10,14 @@ import SwiftUI
 struct MovieScreen: View {
 
     let movieId: Int
+    
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
+    @Environment(NavigationManager.self) var navigationManager
+
     @State private var movieVM = MovieViewModel()
     @State private var selectedTab: MediaTab = .general
-
     @State private var showIcon = false
-    @Environment(NavigationManager.self) var navigationManager
     
     var isFavorite: Bool {
         let media = userVM.user.movies.first { $0.media.id == movieId }

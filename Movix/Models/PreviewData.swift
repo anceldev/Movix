@@ -121,4 +121,7 @@ struct PreviewData {
         popularity:  172.40,
         profilePath: URL(string: "https://image.tmdb.org/t/p/w185/2Orm6l3z3zukF1q0AgIOUqvwLeB.jpg")
     )
+    static var movieLists: [MediaList] = [
+        .init(name: "Marvel", description: "Marvel favorite movies", listType: .movie, owner: Self.user, isPublic: false)
+    ]
 }

@@ -31,9 +31,7 @@ struct User: Codable, Identifiable {
     var requestsSended: [Friend]
     var requestsReceived: [Friend]
     
-    
-    
-    var lists: [SupList]
+    var lists: [MediaList]
     
     var avatarPathURl: URL {
         return URL(string: "https://image.tmdb.org/t/p/w500\(avatarPath ?? "")")!
@@ -44,7 +42,7 @@ struct User: Codable, Identifiable {
         case avatarPath = "avatar_path"
     }
     
-    init(id: UUID, name: String? = nil, username: String, email: String, lang: String = "en", country: String = "US", avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [SupList] = [], ratedSeries: [TvSerie] = [], favoriteSeries: [TvSerie] = [], newRatedSeries: [RatedSeriesListDTO] = [], newRatedMovies: [RatedMoviesListDTO] = []) {
+    init(id: UUID, name: String? = nil, username: String, email: String, lang: String = "en", country: String = "US", avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [MediaList] = [], ratedSeries: [TvSerie] = [], favoriteSeries: [TvSerie] = [], newRatedSeries: [RatedSeriesListDTO] = [], newRatedMovies: [RatedMoviesListDTO] = []) {
         self.id = id
         self.fullname = name
         self.username = username

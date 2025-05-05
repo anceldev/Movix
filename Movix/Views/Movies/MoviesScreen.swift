@@ -82,4 +82,6 @@ struct MoviesScreen: View {
 
 #Preview {
     MoviesScreen()
+        .environment(UserViewModel(user: PreviewData.user))
+        .environment(NavigationManager())
 }

@@ -46,6 +46,7 @@ struct MediaActionsBar: View {
     
     @Environment(UserViewModel.self) var userVM
     @Environment(NavigationManager.self) var routerDestinationManager
+    @State private var showListSelector = false
     
     var body: some View {
         HStack(spacing: 0) {
@@ -73,8 +74,8 @@ struct MediaActionsBar: View {
                     isOn: isFavorite
                 )
             }
-            NavigationLink {
-                Text("Lists Screen")
+            Button {
+                showListSelector.toggle()
             } label: {
                 ActionBarButtonLabel(
                     label: NSLocalizedString("lists-tab-label", comment: "Lists"),
@@ -106,6 +107,10 @@ struct MediaActionsBar: View {
             }
         }
         .padding(.vertical, 32)
+        .sheet(isPresented: $showListSelector) {
+            ListSelectorScreen(mediaId: mediaId, mediaType: mediaType)
+                .environment(userVM)
+        }
     }
     private func toggleFavoriteMedia() {
         Task {

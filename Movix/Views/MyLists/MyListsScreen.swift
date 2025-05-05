@@ -116,7 +116,7 @@ struct MyListsScreen: View {
                                 columns: 3
                             )
                         case .lists:
-                            Text("My movies lists")
+                            CustomMediaListsView(list: userVM.user.lists.filter({ $0.listType == .movie }))
                         }
                     }
                 }
@@ -152,6 +152,7 @@ struct MyListsScreen: View {
         .sheet(isPresented: $showNewList) {
             NewListView()
                 .presentationDetents([.medium])
+//                .environment(userVM)
         }
     }
 }
