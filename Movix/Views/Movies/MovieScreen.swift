@@ -117,7 +117,7 @@ struct MovieScreen: View {
     }
     private func toggleFavoriteMovie() async {
         if let movie = movieVM.movie {
-            await userVM.toggleFavoriteMovie(movie: movie)
+            await userVM.toggleFavoriteMedia(media: movie, mediaType: .movie)
         }
     }
 }

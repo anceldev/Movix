@@ -99,8 +99,7 @@ struct SerieScreen: View {
     }
     private func toggleFavoriteSerie() async {
         if let serie = serieVM.serie {
-//            await userVM.toggleFavoriteMovie(media: serie, mediaType: .serie)
-            await userVM.toggleFavoriteSerie(serie: serie)
+            await userVM.toggleFavoriteMedia(media: serie, mediaType: .serie)
         }
     }
 }

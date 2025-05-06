@@ -45,46 +45,33 @@ final class UserViewModel {
         self.user = user
         Task {
             await getAvatar()
-            await getUserSeries()
-            await getUserMovies()
+            await getUserSeries(.serie)
+            await getUserSeries(.movie)
             await getLists()
         }
     }
     
-    private func getUserSeries() async {
+    private func getUserSeries(_ mediaType: MediaType) async {
         do {
-            let series: [TestUserSerie] = try await supabase
-                .from("user_series")
+            let tableName = "user_\(mediaType.rawValue)s"
+            let series: [TestUserMedia] = try await supabase
+                .from(tableName)
                 .select("""
                 id,
-                user_id,
-                series(*),
+                \(mediaType.rawValue)_id(*),
                 is_favorite,
                 rating
                 """)
                 .eq("user_id", value: user.id)
                 .execute()
                 .value
-            user.series = series
-        } catch {
-            setError(error)
-        }
-    }
-    private func getUserMovies() async {
-        do {
-            let movies: [TestUserMovie] = try await supabase
-                .from("user_movies")
-                .select("""
-                id,
-                user_id,
-                movies(*),
-                is_favorite,
-                rating
-                """)
-                .eq("user_id", value: user.id)
-                .execute()
-                .value
-            user.movies = movies
+            print(series)
+            if mediaType == .serie {
+                user.series = series
+            } else {
+                user.movies = series
+            }
+            
         } catch {
             setError(error)
         }
@@ -104,45 +91,7 @@ final class UserViewModel {
                 .or("user_1.eq.\(user.id),user_2.eq.\(user.id)")
                 .execute()
                 .value
-            
-//            let friends: [Friend] = response.compactMap { row in
-//                return Friend(
-//                    id: row.id,
-//                    friend: row.user1.id == user.id ? row.user2 : row.user1,
-//                    status: row.status
-//                )
-//            }
-//            let friends = response.filter { $0.status == .accepted }
-//            let friends = response.compactMap {
-//                if $0.status == .accepted {
-//                    return Friend(
-//                        id: $0.id,
-//                        friend: $0.user1.id == user.id ? $0.user2 : $0.user1,
-//                        status: $0.status
-//                    )
-//                }
-//                return nil
-//            }
-//            let requestsSended = response.compactMap {
-//                if $0.user1.id == user.id {
-//                    return Friend(
-//                        id: $0.id,
-//                        friend: $0.user2,
-//                        status: $0.status
-//                    )
-//                }
-//                return nil
-//            }
-//            let requestsReceived = response.compactMap {
-//                if $0.user2.id == user.id {
-//                    return Friend(
-//                        id: $0.id,
-//                        friend: $0.user1,
-//                        status: $0.status
-//                    )
-//                }
-//                return nil
-//            }
+
             var friends = [Friend]()
             var sended = [Friend]()
             var received = [Friend]()
@@ -180,9 +129,6 @@ final class UserViewModel {
             user.requestsSended = sended
             user.requestsReceived = received
             
-//            user.friends = friends
-//            user.requestsSended = requestsSended
-//            user.requestsReceived = requestsReceived
         } catch {
             setError(error)
         }
@@ -357,208 +303,137 @@ final class UserViewModel {
         }
     }
     
-    func toggleFavoriteMovie(movie: Movie) async {
+    func toggleFavoriteMedia<T: MediaTMDBProtocol>(media: T, mediaType: MediaType) async {
+        let relationshipTable = "user_\(mediaType.rawValue)s"
+        let mediaTable = "\(mediaType.rawValue)s"
         do {
-            let existingFavorite = user.movies.first(where: { $0.media.id == movie.id })
-            if existingFavorite != nil {
-                let updatedMovie: TestUserMovie = try await supabase
-                    .from("user_movies")
-                    .update(["is_favorite": !existingFavorite!.isFavorite])
-                    .eq("id", value: existingFavorite!.id)
+            let existingFavorite = mediaType == .movie
+            ? user.movies.first(where: { $0.media.id == media.id })
+            : user.series.first(where: { $0.media.id == media.id })
+            
+            if let existingFavorite {
+                /// Si existe entre las series o peliculas del usuario, actualizo
+                let updatedMedia: TestUserMedia = try await supabase
+                    .from(relationshipTable)
+                    .update(["is_favorite": !existingFavorite.isFavorite])
+                    .eq("id", value: existingFavorite.id)
                     .select("""
                         id,
-                        user_id,
-                        movies(*),
+                        \(mediaType.rawValue)_id(*),
                         is_favorite,
                         rating
                         """)
                     .single()
                     .execute()
                     .value
-
-                print(updatedMovie)
-                user.movies.removeAll { $0.id == updatedMovie.id }
-                if updatedMovie.isFavorite {
-                    user.movies.append(updatedMovie)
+                if mediaType == .movie {
+                    user.movies.removeAll { $0.id == updatedMedia.id }
+                } else {
+                    user.series.removeAll { $0.id == updatedMedia.id }
+                }
+                if updatedMedia.isFavorite {
+                    if mediaType == .movie {
+                        user.movies.append(updatedMedia)
+                    } else {
+                        user.series.append(updatedMedia)
+                    }
                 }
             } else {
+                /// Si no existe, lo añado a su tabla correspondiente y despues añado también la relación
+                let movie = SupabaseMedia(id: media.id, posterPath: media.posterPath)
                 let existingMovie: SupabaseMedia = try await supabase
-                    .from("movies" )
-                    .select()
-                    .eq("id", value: movie.id)
+                    .from(mediaTable)
+                    .upsert(movie)
                     .single()
                     .execute()
                     .value
                 
-                let newUserMovie = UserMovieRsponseDTO(userId: user.id, movieId: movie.id, isFavorite: true)
-                let addedMovie: TestUserMovie = try await supabase
-                    .from("user_movies")
-                    .insert(newUserMovie)
+                let addedMovie: TestUserMedia = try await supabase
+                    .from(relationshipTable)
+                    .insert([
+                        "user_id": user.id.uuidString,
+                        "\(mediaType.rawValue)_id": "\(existingMovie.id)",
+                        "is_favorite": "true"
+                    ])
                     .select("""
                         id,
-                        user_id,
-                        movies(*),
+                        "\(mediaType.rawValue)_id"(*),
                         is_favorite,
                         rating
                         """)
                     .single()
                     .execute()
                     .value
-                
-                user.movies.append(addedMovie)
-            }
-        } catch let error as PostgrestError {
-            if error.code == "PGRST116" {
-                do {
-                    try await addMovie(serieId: movie.id, posterPath: movie.posterPath)
-                    let newMovie: UserMovieRsponseDTO = .init(userId: user.id, movieId: movie.id, isFavorite: true)
-                    
-                    let response: TestUserMovie = try await supabase
-                        .from("user_movies")
-                        .insert(newMovie)
-                        .select("""
-                            id,
-                            user_id,
-                            movies(*),
-                            is_favorite,
-                            rating
-                            """)
-                        .single()
-                        .execute()
-                        .value
-                    user.movies.append(response)
-                } catch {
-                    setError(error)
+                if mediaType == .movie {
+                    user.movies.append(addedMovie)
+                } else {
+                    user.series.append(addedMovie)
                 }
             }
         } catch {
             setError(error)
-        }
-    }
-    func toggleFavoriteSerie(serie: TvSerie) async {
-        do {
-            let existingFavorite = user.series.first(where: { $0.media.id == serie.id })
-            if existingFavorite != nil {
-                let updatedSerie: TestUserSerie = try await supabase
-                    .from("user_series")
-                    .update(["is_favorite": !existingFavorite!.isFavorite])
-                    .eq("id", value: existingFavorite!.id)
-                    .select("""
-                        id,
-                        user_id,
-                        series(*),
-                        is_favorite,
-                        rating
-                        """)
-                    .single()
-                    .execute()
-                    .value
-
-                print(updatedSerie)
-                user.series.removeAll { $0.id == updatedSerie.id }
-                if updatedSerie.isFavorite {
-                    user.series.append(updatedSerie)
-                }
-            } else {
-                let existingSerie: SupabaseMedia = try await supabase
-                    .from( "series" )
-                    .select()
-                    .eq("id", value: serie.id)
-                    .single()
-                    .execute()
-                    .value
-                
-                let newUserSerie = UserSerieResponseDTO(userId: user.id, serieId: serie.id, isFavorite: true)
-                let addedSerie: TestUserSerie = try await supabase
-                    .from("user_series")
-                    .insert(newUserSerie)
-                    .select("""
-                        id,
-                        user_id,
-                        series(*),
-                        is_favorite,
-                        rating
-                        """)
-                    .single()
-                    .execute()
-                    .value
-                
-                user.series.append(addedSerie)
-            }
-        } catch let error as PostgrestError {
-            if error.code == "PGRST116" {
-                do {
-                    try await addSerie(serieId: serie.id, posterPath: serie.posterPath)
-                    let newSerie: UserSerieResponseDTO = .init(userId: user.id, serieId: serie.id, isFavorite: true)
-                    
-                    let response: TestUserSerie = try await supabase
-                        .from("user_series")
-                        .insert(newSerie)
-                        .select("""
-                            id,
-                            user_id,
-                            series(*),
-                            is_favorite,
-                            rating
-                            """)
-                        .single()
-                        .execute()
-                        .value
-                    user.series.append(response)
-                } catch {
-                    setError(error)
-                }
-            }
-        } catch {
-            setError(error)
-        }
-    }
-
-    private func addSerie(serieId: Int, posterPath: String?) async throws {
-        do {
-            let _ = try await supabase
-                .from("series")
-                .insert(["id": "\(serieId)", "poster_path": posterPath])
-                .execute()
-        } catch {
-            throw error
-        }
-    }
-    private func addMovie(serieId: Int, posterPath: String?) async throws {
-        do {
-            let _ = try await supabase
-                .from("movies")
-                .insert(["id": "\(serieId)", "poster_path": posterPath])
-                .execute()
-        } catch {
-            throw error
         }
     }
     
-    func rateSerie(serie: TvSerie, rating: Int) async {
+    func rateMedia<T: MediaTMDBProtocol>(media: T, rating: Int, mediaType: MediaType) async {
+        let relationshipTable = "user_\(mediaType.rawValue)s"
+        let tableName = "\(mediaType.rawValue)s"
+        
         do {
-            let existingUserSerie = user.series.first { $0.media.id == serie.id }
-            if let existingUserSerie {
-                let updatedSerie: TestUserSerie = try await updateRating(rowId: existingUserSerie.id!, rating: rating, table: "series")
-                user.series.removeAll { $0.id == updatedSerie.id }
-                user.series.append(updatedSerie)
+            let existingMedia = mediaType == .movie
+            ? user.movies.first { $0.media.id == media.id }
+            : user.series.first { $0.media.id == media.id }
+            
+            if let existingMedia {
+                let updatedMedia: TestUserMedia = try await supabase
+                    .from(relationshipTable)
+                    .update([
+                        "user_id": "\(user.id.uuidString)",
+                        "\(mediaType.rawValue)_id": "\(media.id)",
+                        "is_favorite": existingMedia.isFavorite ? "true" : "false",
+                        "rating": "\(rating)"
+                    ])
+                    .eq("id", value: existingMedia.id)
+                    .select("""
+                        id,
+                        \(mediaType.rawValue)_id(*),
+                        is_favorite,
+                        rating
+                        """)
+                    .single()
+                    .execute()
+                    .value
+                if mediaType == .movie {
+                    let index = user.movies.firstIndex { $0.id == updatedMedia.id }
+                    user.movies[index!].rating = rating
+                } else {
+                    let index = user.series.firstIndex { $0.id == updatedMedia.id }
+                    user.series[index!].rating = rating
+                }
+                
             } else {
-                let _: SupabaseMedia = try await supabase
-                    .from("series")
+                let adddedMedia: SupabaseMedia = try await supabase
+                    .from(tableName)
+                    .upsert([
+                        "id": "\(media.id)",
+                        "poster_path": media.posterPath
+                    ])
                     .select()
-                    .eq("id", value: serie.id)
                     .single()
                     .execute()
                     .value
                 
-                let newRatedSerie = UserSerieResponseDTO(userId: user.id, serieId: serie.id, rating: rating)
-                let addedSerie: TestUserSerie = try await supabase
-                    .from("user_series")
-                    .insert(newRatedSerie)
+                let addRelationship: TestUserMedia = try await supabase
+                    .from(relationshipTable)
+                    .insert([
+                        "user_id": "\(user.id.uuidString)",
+                        "\(mediaType.rawValue)_id": "\(media.id)",
+                        "is_favorite": "false",
+                        "rating": "\(rating)"
+                    ])
                     .select("""
                         id,
-                        user_id,
-                        series(*),
+                        \(mediaType.rawValue)_id(*),
                         is_favorite,
                         rating
                         """)
@@ -566,95 +441,18 @@ final class UserViewModel {
                     .execute()
                     .value
                 
-                user.series.append(addedSerie)
-            }
-        } catch let error as PostgrestError {
-            if error.code == "PGRST116" {
-                do {
-                    try await addMovie(serieId: serie.id, posterPath: serie.posterPath)
-                    let newRatedMovie: UserSerieResponseDTO = .init(userId: user.id, serieId: serie.id, rating: rating)
-                    let addedSerie: TestUserSerie = try await supabase
-                        .from("user_series")
-                        .insert(newRatedMovie)
-                        .select("""
-                            id,
-                            user_id,
-                            series(*),
-                            is_favorite,
-                            rating
-                            """)
-                        .single()
-                        .execute()
-                        .value
-                    user.series.append(addedSerie)
-                } catch {
-                    setError(error)
+                if mediaType == .movie {
+                    user.movies.append(addRelationship)
+                } else {
+                    user.series.append(addRelationship)
                 }
             }
         } catch {
             setError(error)
         }
     }
-    func rateMovie(movie: Movie, rating: Int) async {
-        do {
-            let existingUserMovie = user.movies.first { $0.media.id == movie.id }
-            if let existingUserMovie {
-                let updatedMovie: TestUserMovie = try await updateRating(rowId: existingUserMovie.id!, rating: rating, table: "movies")
-                user.movies.removeAll { $0.id == updatedMovie.id }
-                user.movies.append(updatedMovie)
-            } else {
-                let _: SupabaseMedia = try await supabase
-                    .from("movies")
-                    .select()
-                    .eq("id", value: movie.id)
-                    .single()
-                    .execute()
-                    .value
-                
-                let newRatedMovie = UserMovieRsponseDTO(userId: user.id, movieId: movie.id, rating: rating)
-                let addedMovie: TestUserMovie = try await supabase
-                    .from("user_movies")
-                    .insert(newRatedMovie)
-                    .select("""
-                        id,
-                        user_id,
-                        movies(*),
-                        is_favorite,
-                        rating
-                        """)
-                    .single()
-                    .execute()
-                    .value
-                
-                user.movies.append(addedMovie)
-            }
-        } catch let error as PostgrestError {
-            if error.code == "PGRST116" {
-                do {
-                    try await addMovie(serieId: movie.id, posterPath: movie.posterPath)
-                    let newRatedMovie: UserMovieRsponseDTO = .init(userId: user.id, movieId: movie.id, rating: rating)
-                    let addedMovie: TestUserMovie = try await supabase
-                        .from("user_movies")
-                        .insert(newRatedMovie)
-                        .select("""
-                            id,
-                            user_id,
-                            movies(*),
-                            is_favorite,
-                            rating
-                            """)
-                        .single()
-                        .execute()
-                        .value
-                    user.movies.append(addedMovie)
-                } catch {
-                    setError(error)
-                }
-            }
-        } catch {
-            setError(error)
-        }
-    }
+    
+    
     func getMovieRating(movieId: Int) -> Int? {
         return user.movies.first { $0.media.id == movieId }?.rating
     }
@@ -686,7 +484,6 @@ final class UserViewModel {
     private func getLists() async {
         do {
             let lists: [MediaList] = try await supabase
-//            let lists = try await supabase
                 .from("lists")
                 .select("""
                     id,
@@ -708,29 +505,10 @@ final class UserViewModel {
                         )
                     )
                     """)
+                .eq("owner_id", value: user.id.uuidString)
                 .execute()
                 .value
             user.lists = lists
-//            print(String(decoding: lists.data, as: UTF8.self))
-        } catch {
-            setError(error)
-        }
-    }
-    
-    func getListItems(listId: Int, mediaType: MediaType) async {
-        let table = "\(mediaType.rawValue)s_list"
-        
-        do {
-            let response = try await supabase
-                .from(table)
-                .select("""
-                    movies(*)
-                    """)
-                .eq("list_id", value: listId)
-                .execute()
-            
-            print(String(decoding: response.data, as: UTF8.self))
-            
         } catch {
             setError(error)
         }
@@ -769,10 +547,39 @@ final class UserViewModel {
                 .single()
                 .execute()
                 .value
-            let addedMedia = try await supabase
-                .from(table)
-                .insert(["list_id":"\(listId)", "\(mediaType.rawValue)_id":"\(addNewMedia.id)", "added_by": "\(user.id.uuidString)"])
-                .execute()
+            if mediaType == .movie {
+                let addedMedia: MovieListRelation  = try await supabase
+                    .from(table)
+                    .insert(["list_id":"\(listId)", "\(mediaType.rawValue)_id":"\(addNewMedia.id)", "added_by": "\(user.id.uuidString)"])
+                    .select("""
+                          movies(
+                              id,
+                              poster_path
+                          )
+                        """
+                    )
+                    .single()
+                    .execute()
+                    .value
+                let listIndex = user.lists.firstIndex { $0.id == listId }
+                user.lists[listIndex!].items.append(addedMedia.movies)
+            } else {
+                let addedMedia: SeriesListRelation  = try await supabase
+                    .from(table)
+                    .insert(["list_id":"\(listId)", "\(mediaType.rawValue)_id":"\(addNewMedia.id)", "added_by": "\(user.id.uuidString)"])
+                    .select("""
+                      series(
+                          id,
+                          poster_path
+                      )
+                    """
+                    )
+                    .single()
+                    .execute()
+                    .value
+                let listIndex = user.lists.firstIndex { $0.id == listId }
+                user.lists[listIndex!].items.append(addedMedia.series)
+            }
         } catch {
             setError(error)
         }
@@ -781,12 +588,15 @@ final class UserViewModel {
         let table = "\(mediaType.rawValue)s_list"
         
         do {
-            let addedMedia = try await supabase
+            let deletedMedia = try await supabase
                 .from(table)
-                .insert(["list_id":"\(listId)", "\(mediaType.rawValue)_id":"\(mediaId)", "added_by": "\(user.id.uuidString)"])
+                .delete()
+                .eq("\(mediaType.rawValue)_id", value: mediaId)
+                .eq("list_id", value: listId)
                 .execute()
             
-            print(String(decoding: addedMedia.data, as: UTF8.self))
+            let listIndex = user.lists.firstIndex { $0.id == listId }
+            user.lists[listIndex!].items.removeAll { $0.id == mediaId }
         } catch {
             setError(error)
         }

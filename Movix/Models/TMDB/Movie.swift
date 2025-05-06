@@ -85,7 +85,6 @@ struct Movie: Codable, Identifiable, Hashable, MediaTMDBProtocol {
         self.posterPathUrl = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath ?? "")")
         
         self.backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
-        //        self.backdropPath = URL(string: "https://image.tmdb.org/t/p/w780\(backdropPath ?? "")")
         
         self.budget = try container.decodeIfPresent(Double.self, forKey: .budget)
         if let homePageString = try container.decodeIfPresent(String.self, forKey: .homepageURL) {
@@ -94,8 +93,7 @@ struct Movie: Codable, Identifiable, Hashable, MediaTMDBProtocol {
         else {
             self.homepage = nil
         }
-        //        self.homepage = try container.decodeIfPresent(URL.self, forKey: .homepage)
-        //        self.homepage = nil
+
         self.popularity = try container.decodeIfPresent(Double.self, forKey: .popularity)
         self.voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage)
         self.voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount)
@@ -103,7 +101,6 @@ struct Movie: Codable, Identifiable, Hashable, MediaTMDBProtocol {
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
         self.genreIds = try container.decodeIfPresent([Int].self, forKey: .genreIds)
         self.rating = try container.decodeIfPresent(Int.self, forKey: .rating)
-        //        self.genreIds = try container.decode([Int].self, forKey: .genreIds)
         
         let originCountry = try container.decodeIfPresent([String].self, forKey: .originCountry)
         self.originCountry = originCountry != nil ? originCountry! : []

@@ -56,6 +56,7 @@ struct ListRow: View {
         Task {
             if isIncluded {
                 /// Call to add to list function
+                await userVM.removeMediaFromList(mediaId: media.id, listId: list.id!, mediaType: type)
             } else {
                 /// Call to delete from list function
                 await userVM.addMediaToList(media: media, listId: list.id!, mediaType: type)

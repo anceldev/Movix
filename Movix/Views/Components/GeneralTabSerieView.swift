@@ -36,7 +36,8 @@ struct GeneralTabSerieView: View {
         Task {
             guard let serie = serieVM.serie else { return }
 //            await userVM.addSerieRating(serie: serie, rating: Int(currentRate))
-            await userVM.rateSerie(serie: serie, rating: Int(currentRate))
+//            await userVM.rateSerie(serie: serie, rating: Int(currentRate))
+            await userVM.rateMedia(media: serie, rating: Int(currentRate), mediaType: .serie)
         }
     }
 }

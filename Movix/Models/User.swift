@@ -24,8 +24,8 @@ struct User: Codable, Identifiable {
     var avatarPath: String?
     var avatarData: Data?
 
-    var series: [TestUserSerie]
-    var movies: [TestUserMovie]
+    var series: [TestUserMedia]
+    var movies: [TestUserMedia]
     
     var friends: [Friend]
     var requestsSended: [Friend]
@@ -42,7 +42,7 @@ struct User: Codable, Identifiable {
         case avatarPath = "avatar_path"
     }
     
-    init(id: UUID, name: String? = nil, username: String, email: String, lang: String = "en", country: String = "US", avatarPath: String?, favoriteMovies: [Movie] = [], ratedMovies: [Movie] = [], lists: [MediaList] = [], ratedSeries: [TvSerie] = [], favoriteSeries: [TvSerie] = [], newRatedSeries: [RatedSeriesListDTO] = [], newRatedMovies: [RatedMoviesListDTO] = []) {
+    init(id: UUID, name: String? = nil, username: String, email: String, lang: String = "en", country: String = "US", avatarPath: String?, lists: [MediaList] = []) {
         self.id = id
         self.fullname = name
         self.username = username

@@ -104,13 +104,18 @@ struct MyListsScreen: View {
                         CustomSegmentedControl(state: $selectedList)
                         switch selectedList {
                         case .favorites:
-                            GridItemsView3<TestUserMovie>(
+//                            GridItemsView3<TestUserMovie>(
+//                                mediaItems: userVM.user.movies.filter({ $0.isFavorite }),
+//                                mediaType: .movie,
+//                                columns: 3
+//                            )
+                            GridItemsView4(
                                 mediaItems: userVM.user.movies.filter({ $0.isFavorite }),
                                 mediaType: .movie,
                                 columns: 3
                             )
                         case .rates:
-                            GridItemsView3<TestUserMovie>(
+                            GridItemsView4(
                                 mediaItems: userVM.user.movies.filter({ $0.rating != nil }),
                                 mediaType: .movie,
                                 columns: 3
@@ -125,13 +130,23 @@ struct MyListsScreen: View {
                         CustomSegmentedControl(state: $selectedList)
                         switch selectedList {
                         case .favorites:
-                            GridItemsView3<TestUserSerie>(
+//                            GridItemsView3<TestUserSerie>(
+//                                mediaItems: userVM.user.series.filter({ $0.isFavorite }),
+//                                mediaType: .serie,
+//                                columns: 3
+//                            )
+                            GridItemsView4(
                                 mediaItems: userVM.user.series.filter({ $0.isFavorite }),
                                 mediaType: .serie,
                                 columns: 3
                             )
                         case .rates:
-                            GridItemsView3<TestUserSerie>(
+//                            GridItemsView3<TestUserSerie>(
+//                                mediaItems: userVM.user.series.filter({ $0.rating != nil }),
+//                                mediaType: .serie,
+//                                columns: 3
+//                            )
+                            GridItemsView4(
                                 mediaItems: userVM.user.series.filter({ $0.rating != nil }),
                                 mediaType: .serie,
                                 columns: 3
