@@ -13,7 +13,7 @@ struct NewListView: View {
     @State private var newList: MediaList?
     @State private var name = ""
     @State private var description = ""
-    @State private var listType: ListType = .movie
+    @State private var listType: MediaType = .movie
     @State private var isPublic = false
     
     var body: some View {
@@ -23,7 +23,7 @@ struct NewListView: View {
             TextField("Name", text: $name)
             TextField("Description", text: $description)
             Picker("List type", selection: $listType) {
-                ForEach(ListType.allCases, id:\.rawValue) { type in
+                ForEach(MediaType.allCases, id:\.rawValue) { type in
                     Text(type.rawValue)
                         .tag(type)
                 }
@@ -32,7 +32,6 @@ struct NewListView: View {
 
             Toggle("Is public", isOn: $isPublic)
             Button {
-                
                 createList()
             } label: {
                 Text("Create")

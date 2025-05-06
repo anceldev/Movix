@@ -12,7 +12,7 @@ fileprivate let baseUrlPath = "https://api.themoviedb.org/3/"
 
 enum MediaType: String, Decodable, CaseIterable, Hashable {
     case movie
-    case tv
+    case serie
 }
 enum TimeWindow: String {
     case day
@@ -162,7 +162,7 @@ enum Endpoints {
         case .validateTokenWithLogin: return "authentication/token/validate_with_login"
         case .createSession: return "authentication/session/"
         case .getProviders(.movie): return ""
-        case .getProviders(.tv): return ""
+        case .getProviders(.serie): return ""
         }
     }
     
@@ -193,7 +193,7 @@ enum Endpoints {
             return URL(string: Self.baseUrlPath + "movie/\(id)/watch/providers?api_key=\(Self.apiKey)")!
             
         case .ratedMedia(let accountId, let mediaType):
-            return URL(string: Self.baseUrlPath + "account/\(accountId)/rated/\(mediaType == .tv ? mediaType.rawValue : "\(mediaType)s")")!
+            return URL(string: Self.baseUrlPath + "account/\(accountId)/rated/\(mediaType == .serie ? mediaType.rawValue : "\(mediaType)s")")!
             
         case .getAccount(let sessionId):
             return URL(string: Self.baseUrlPath + self.endpoint + "?api_key=\(Self.apiKey)&session_id=\(sessionId)")!

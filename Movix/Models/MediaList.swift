@@ -18,7 +18,7 @@ struct MediaList: Codable, Identifiable, Hashable {
     var description: String?
     var owner: User?
     var isPublic: Bool
-    var listType: ListType
+    var listType: MediaType
     var items: [SupabaseMedia]
     
     enum CodingKeys: String, CodingKey {
@@ -26,9 +26,11 @@ struct MediaList: Codable, Identifiable, Hashable {
         case listType = "list_type"
         case owner = "owner_id"
         case isPublic = "is_public"
+        case moviesList = "movies_list"
+        case seriesList = "series_list"
     }
     
-    init(id: Int? = nil, name: String, description: String? = nil, listType: ListType, owner: User?, isPublic: Bool) {
+    init(id: Int? = nil, name: String, description: String? = nil, listType: MediaType, owner: User?, isPublic: Bool) {
         self.id = id
         self.name = name
         self.description = description
@@ -36,6 +38,8 @@ struct MediaList: Codable, Identifiable, Hashable {
         self.owner = owner
         self.isPublic = isPublic
         self.items = []
+//        self.moviesList = nil
+//        self.seriesList = nil
     }
     
     init(from decoder: any Decoder) throws {
@@ -43,10 +47,27 @@ struct MediaList: Codable, Identifiable, Hashable {
         self.id = try container.decode(Int.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
-        self.listType = try container.decode(ListType.self, forKey: .listType)
+        self.listType = try container.decode(MediaType.self, forKey: .listType)
         self.owner = try container.decodeIfPresent(User.self, forKey: .owner)
         self.isPublic = try container.decode(Bool.self, forKey: .isPublic)
-        self.items = []
+        
+        // Decodificar las relaciones
+        let moviesRelation = try container.decodeIfPresent([MovieListRelation].self, forKey: .moviesList)
+        let seriesRelation = try container.decodeIfPresent([SeriesListRelation].self, forKey: .seriesList)
+        
+        if listType == .movie {
+            if let moviesRelation {
+                self.items = moviesRelation.compactMap(\.movies)
+            } else {
+                self.items = []
+            }
+        } else {
+            if let seriesRelation {
+                self.items = seriesRelation.compactMap(\.series)
+            } else {
+                self.items = []
+            }
+        }
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -76,5 +97,22 @@ struct MediaList: Codable, Identifiable, Hashable {
         hasher.combine(isPublic)
         hasher.combine(listType)
         hasher.combine(items)
+    }
+}
+
+// Estructuras para manejar las relaciones
+struct MovieListRelation: Codable {
+    let movies: SupabaseMedia
+    
+    enum CodingKeys: String, CodingKey {
+        case movies
+    }
+}
+
+struct SeriesListRelation: Codable {
+    let series: SupabaseMedia
+    
+    enum CodingKeys: String, CodingKey {
+        case series
     }
 }

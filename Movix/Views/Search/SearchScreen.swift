@@ -36,7 +36,7 @@ struct SearchScreen: View {
     @State private var viewOption: ViewOption = .gridx2
     @State private var searchTerm = ""
     @State private var selectedTab: SearchTab = .tv
-    @State private var mediaType: MediaType = .tv
+    @State private var mediaType: MediaType = .serie
     
     @Environment(MoviesViewModel.self) private var moviesVM
     @Environment(SeriesViewModel.self) private var seriesVM
@@ -72,7 +72,7 @@ struct SearchScreen: View {
                 mediaType = .movie
             }
             else if newValue == .tv {
-                mediaType = .tv
+                mediaType = .serie
             }
         })
         .environment(moviesVM)

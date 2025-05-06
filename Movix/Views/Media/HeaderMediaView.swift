@@ -18,7 +18,7 @@ struct HeaderMediaView: View {
     
     @State private var posterImage: Image?
 
-    init(posterPath: String? = nil, duration: String, isAdult: Bool? = nil, releaseDate: String? = nil, genres: [Genre]? = nil, mediaType: MediaType = .tv){
+    init(posterPath: String? = nil, duration: String, isAdult: Bool? = nil, releaseDate: String? = nil, genres: [Genre]? = nil, mediaType: MediaType = .serie){
         self.posterPath = posterPath
         self.duration = duration
         self.isAdult = isAdult

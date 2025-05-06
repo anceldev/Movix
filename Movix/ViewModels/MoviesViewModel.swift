@@ -31,7 +31,7 @@ final class MoviesViewModel {
     
     init() {
         Task {
-            self.tvGenre = await getGenres(lang: lang, mediaType: .tv)
+            self.tvGenre = await getGenres(lang: lang, mediaType: .serie)
             await loadTrending()
         }
     }

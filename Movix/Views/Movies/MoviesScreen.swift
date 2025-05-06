@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum MediaNavigation: Equatable {
-    case movie
-    case tv
-}
-
 struct MoviesScreen: View {
     @State private var query = ""
     @State private var debouncedQuery = ""

@@ -45,14 +45,16 @@ struct MovieScreen: View {
                             )
 
                             MediaActionsBar(
-                                mediaId: movieId,
+                                media: .init(id: movie.id, posterPath: movie.posterPath),
                                 mediaType: .movie,
                                 isFavorite: isFavorite,
                                 rateAction: {
                                     selectedTab = .general
                                     proxy.scrollTo("mediaTabs")
                                 },
-                                favoriteAction: toggleFavoriteMovie)
+                                favoriteAction: toggleFavoriteMovie
+                            )
+                            
                             OverviewView(
                                 title: movieVM.movie?.title,
                                 overview: movie.overview)
@@ -101,7 +103,8 @@ struct MovieScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-                    BackButton(label: NSLocalizedString("movies-tab-label", comment: "Movies tab label"))
+//                    BackButton(label: NSLocalizedString("movies-tab-label", comment: "Movies tab label"))
+                    BackButton()
                 }
             }
         }

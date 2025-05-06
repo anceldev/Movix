@@ -27,7 +27,7 @@ struct ListItemsView<T: MediaTMDBProtocol>: View {
                         switch mediaType {
                         case .movie:
                             Text("Movies")
-                        case .tv:
+                        case .serie:
                             SerieScreen(serieId: media.id)
                                 .navigationBarBackButtonHidden()
                         }

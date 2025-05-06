@@ -75,7 +75,7 @@ struct DetailsTabView<T: MediaTMDBProtocol>: View {
                     if !similarMedia.isEmpty {
                         GridItemsView(
                             mediaItems: similarMedia,
-                            mediaType: type(of: T.self) == type(of: Movie.self) ? .movie : .tv,
+                            mediaType: type(of: T.self) == type(of: Movie.self) ? .movie : .serie,
                             viewOption: .gridx3
                         )
                     }

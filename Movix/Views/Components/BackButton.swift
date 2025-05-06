@@ -10,6 +10,10 @@ import SwiftUI
 struct BackButton: View {
     
     let label: String?
+    
+    init(label: String? = nil) {
+        self.label = label
+    }
     var body: some View {
         HStack {
             Image(systemName: "chevron.left")

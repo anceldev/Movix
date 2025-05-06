@@ -127,17 +127,17 @@ struct MyListsScreen: View {
                         case .favorites:
                             GridItemsView3<TestUserSerie>(
                                 mediaItems: userVM.user.series.filter({ $0.isFavorite }),
-                                mediaType: .tv,
+                                mediaType: .serie,
                                 columns: 3
                             )
                         case .rates:
                             GridItemsView3<TestUserSerie>(
                                 mediaItems: userVM.user.series.filter({ $0.rating != nil }),
-                                mediaType: .tv,
+                                mediaType: .serie,
                                 columns: 3
                             )
                         case .lists:
-                            Text("My series lists")
+                            CustomMediaListsView(list: userVM.user.lists.filter({ $0.listType == .serie }))
                         }
                     }
                 }
@@ -151,6 +151,7 @@ struct MyListsScreen: View {
         .environment(userVM)
         .sheet(isPresented: $showNewList) {
             NewListView()
+                .presentationDragIndicator(.visible)
                 .presentationDetents([.medium])
 //                .environment(userVM)
         }

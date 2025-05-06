@@ -31,7 +31,7 @@ struct SeriesScreen: View {
                     ScrollView(.vertical) {
                         GridItemsView<TvSerie>(
                             mediaItems: debouncedQuery.isEmpty ? seriesVM.trendingSeries : seriesVM.series,
-                            mediaType: .tv,
+                            mediaType: .serie,
                             viewOption: viewOption
                         )
                         VStack {

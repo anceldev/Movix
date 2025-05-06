@@ -42,8 +42,8 @@ struct SerieScreen: View {
                                 genres: serie.genres
                             )
                             MediaActionsBar(
-                                mediaId: serieId,
-                                mediaType: .tv,
+                                media: .init(id: serie.id, posterPath: serie.posterPath),
+                                mediaType: .serie,
                                 isFavorite: isFavorite,
                                 rateAction: {
                                     selectedTab = .general
@@ -59,7 +59,7 @@ struct SerieScreen: View {
                                 case .details:
                                     DetailsTabView<TvSerie>(media: serieVM.serie!, similarAction: getSimilarSeries)
                                 case .reviews:
-                                    ReviewsList(id: serie.id, title: serie.title, mediaType: .tv)
+                                    ReviewsList(id: serie.id, title: serie.title, mediaType: .serie)
                                 }
                             }
                             .padding()
@@ -99,7 +99,7 @@ struct SerieScreen: View {
     }
     private func toggleFavoriteSerie() async {
         if let serie = serieVM.serie {
-//            await userVM.toggleFavoriteMovie(media: serie, mediaType: .tv)
+//            await userVM.toggleFavoriteMovie(media: serie, mediaType: .serie)
             await userVM.toggleFavoriteSerie(serie: serie)
         }
     }

@@ -686,6 +686,7 @@ final class UserViewModel {
     private func getLists() async {
         do {
             let lists: [MediaList] = try await supabase
+//            let lists = try await supabase
                 .from("lists")
                 .select("""
                     id,
@@ -693,17 +694,49 @@ final class UserViewModel {
                     description,
                     list_type,
                     owner_id(*),
-                    is_public
+                    is_public,
+                    movies_list(
+                        movies(
+                            id,
+                            poster_path
+                        )
+                    ),
+                    series_list(
+                        series(
+                            id,
+                            poster_path
+                        )
+                    )
                     """)
                 .execute()
                 .value
             user.lists = lists
+//            print(String(decoding: lists.data, as: UTF8.self))
         } catch {
             setError(error)
         }
     }
     
-    func createList(name: String, description: String? = nil, isPublic: Bool, listType: ListType) async {
+    func getListItems(listId: Int, mediaType: MediaType) async {
+        let table = "\(mediaType.rawValue)s_list"
+        
+        do {
+            let response = try await supabase
+                .from(table)
+                .select("""
+                    movies(*)
+                    """)
+                .eq("list_id", value: listId)
+                .execute()
+            
+            print(String(decoding: response.data, as: UTF8.self))
+            
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func createList(name: String, description: String? = nil, isPublic: Bool, listType: MediaType) async {
         do {
             let list = MediaList(name: name, description: description, listType: listType, owner: user, isPublic: isPublic)
             let newList: MediaList = try await supabase
@@ -721,6 +754,39 @@ final class UserViewModel {
                 .execute()
                 .value
             user.lists.append(newList)
+        } catch {
+            setError(error)
+        }
+    }
+    
+    func addMediaToList(media: SupabaseMedia, listId: Int, mediaType: MediaType) async {
+        let table = "\(mediaType.rawValue)s_list"
+        
+        do {
+            let addNewMedia: SupabaseMedia = try await supabase
+                .from("\(mediaType.rawValue)s")
+                .upsert(media)
+                .single()
+                .execute()
+                .value
+            let addedMedia = try await supabase
+                .from(table)
+                .insert(["list_id":"\(listId)", "\(mediaType.rawValue)_id":"\(addNewMedia.id)", "added_by": "\(user.id.uuidString)"])
+                .execute()
+        } catch {
+            setError(error)
+        }
+    }
+    func removeMediaFromList(mediaId: Int, listId: Int, mediaType: MediaType) async {
+        let table = "\(mediaType.rawValue)s_list"
+        
+        do {
+            let addedMedia = try await supabase
+                .from(table)
+                .insert(["list_id":"\(listId)", "\(mediaType.rawValue)_id":"\(mediaId)", "added_by": "\(user.id.uuidString)"])
+                .execute()
+            
+            print(String(decoding: addedMedia.data, as: UTF8.self))
         } catch {
             setError(error)
         }

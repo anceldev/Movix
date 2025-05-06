@@ -25,7 +25,7 @@ struct ListScreen: View {
             ScrollView(.vertical) {
                 GridItemsView2(
                     mediaItems: list.items,
-                    mediaType: list.listType == .movie ? .movie : .tv,
+                    mediaType: list.listType == .movie ? .movie : .serie,
                     columns: 3
                 )
             }
