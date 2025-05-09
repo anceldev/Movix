@@ -48,7 +48,8 @@ struct ProvidersScreen: View {
                 Button {
                     routerDestination.navigateBack()
                 } label: {
-                    BackButton(label: mediaType == .movie ? "Movie" : "Serie")
+//                    BackButton(label: mediaType == .movie ? "Movie" : "Serie")
+                    BackButton()
                 }
             }
         }
@@ -64,20 +65,20 @@ struct ProvidersScreen: View {
                 FlowLayout(spacing: 24) {
                     ForEach(providers) { provider in
                         ZStack {
-                            AsyncImage(url: provider.logoPath) { phase in
+                            AsyncImage(url: provider.logoPath, transaction: .init(animation: .smooth)) { phase in
                                 switch phase {
                                 case .empty:
-                                    Color.gray
+                                    LinearGradient(colors: [.bw20, .bw40], startPoint: .top, endPoint: .bottom)
                                 case .success(let image):
                                     image
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 75, height: 75, alignment: .top)
                                 case .failure:
-                                    Image(systemName: "photo")
-                                        .font(.largeTitle)
+                                    LinearGradient(colors: [.bw20, .bw40], startPoint: .top, endPoint: .bottom)
                                 @unknown default:
                                     ProgressView()
+                                        .tint(.marsA)
                                 }
                             }
                         }
@@ -91,12 +92,6 @@ struct ProvidersScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .scrollIndicators(.hidden)
             }
-//            } else {
-//                Text("No available \(title.lowercased()) providers in your region")
-//                    .foregroundStyle(.white)
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .padding(.vertical, 16)
-//            }
         }
         .frame(maxWidth: .infinity)
     }

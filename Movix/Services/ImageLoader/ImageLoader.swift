@@ -36,33 +36,6 @@ final class ImageLoader {
         }
     }
     
-    private func getBackgropImage(for path: String?) async -> Image? {
-        guard let path else {
-            return nil
-        }
-        do {
-            var url = URL(string: "https://image.tmdb.org/t/p/w780\(path)")!
-            let (dataW780, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW780) {
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/w1280\(path)")!
-            let (dataW1280, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW1280) {
-                return Image(uiImage: uiImage)
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/original\(path)")!
-            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataOriginal) {
-                return Image(uiImage: uiImage)
-            }
-            return nil
-        } catch {
-            setError(error)
-            return nil
-        }
-    }
-    
     private func getPosterImage(for path: String?) async -> Image? {
         guard let path else {
             return nil
@@ -87,22 +60,17 @@ final class ImageLoader {
     
     private func getPosterUIImage(for path: String?) async throws -> UIImage? {
         guard let path else { return nil }
-        do {
-            var url = URL(string: "https://image.tmdb.org/t/p/original\(path)")!
-            let (dataOriginal, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataOriginal) {
-                return uiImage
-            }
-            url = URL(string: "https://image.tmdb.org/t/p/w780\(path)")!
-            let (dataW780, _) = try await URLSession.shared.data(from: url)
-            if let uiImage = UIImage(data: dataW780) {
-                return uiImage
-            }
-            throw ImageLoaderError.posterError
-        } catch {
-            setError(error)
-            throw error
+        var url = URL(string: "https://image.tmdb.org/t/p/original\(path)")!
+        let (dataOriginal, _) = try await URLSession.shared.data(from: url)
+        if let uiImage = UIImage(data: dataOriginal) {
+            return uiImage
         }
+        url = URL(string: "https://image.tmdb.org/t/p/w780\(path)")!
+        let (dataW780, _) = try await URLSession.shared.data(from: url)
+        if let uiImage = UIImage(data: dataW780) {
+            return uiImage
+        }
+        throw ImageLoaderError.posterError
     }
     
     private func setError(_ error: Error) {

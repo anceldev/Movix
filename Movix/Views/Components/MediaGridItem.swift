@@ -23,7 +23,7 @@ struct MediaGridItem: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.bw50, .bw90], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [.bw20, .bw40], startPoint: .top, endPoint: .bottom)
             Group {
                 if let poster {
                     VStack {

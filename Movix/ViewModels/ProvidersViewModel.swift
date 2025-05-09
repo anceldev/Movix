@@ -27,21 +27,18 @@ final class ProvidersViewModel {
             let resource = Resource(
                 url: endpoint,
                 method: .get([
-//                    URLQueryItem(name: "language", value: lang)
                     URLQueryItem(name: "language", value: "en-US")
-//                    URLQueryItem(name: "region", value: "US")
                 ]),
                 modelType: Providers.self
             )
             let response = try await httpClient.load(resource)
-            print(response.buyProviders)
             self.providers.buyProviders = response.buyProviders
             self.providers.rentProviders = response.rentProviders
             self.providers.streamProviders = response.streamProviders
+            print(providers)
         } catch {
             print(error)
             print(error.localizedDescription)
-            
         }
     }
 }

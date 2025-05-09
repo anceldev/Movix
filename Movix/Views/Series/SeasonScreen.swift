@@ -26,9 +26,15 @@ struct SeasonScreen: View {
                     duration: "\(episodes) Ep.",
                     releaseDate: seasonVM.season?.airDate?.releaseDate()
                 )
-                VStack {
-                    if let seasonOverview = seasonVM.season?.overview, !seasonOverview.isEmpty {
-                        OverviewView(title: seasonVM.season?.name, overview: seasonVM.season?.overview)
+                VStack(spacing: 32) {
+                    VStack(spacing: 16) {
+                        if let seasonName = seasonVM.season?.name {
+                            Text(seasonName)
+                                .font(.hauora(size: 24, weight: .semibold))
+                        }
+                        if let seasonOverview = seasonVM.season?.overview, !seasonOverview.isEmpty {
+                            OverviewView(seasonVM.season?.overview)
+                        }
                     }
                     if let episodes = seasonVM.season?.episodes {
                         LazyVStack(spacing: 32) {
@@ -43,6 +49,7 @@ struct SeasonScreen: View {
             }
             .scrollIndicators(.hidden)
         }
+        .padding(.top, 24)
         .background(.bw10)
         .ignoresSafeArea(.container, edges: .top)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -63,4 +70,15 @@ struct SeasonScreen: View {
             )
         }
     }
+}
+
+#Preview {
+    SeasonScreen(
+        seasonNumber: PreviewData.seasonPreview.seasonNumer,
+        posterPath: PreviewData.seasonPreview.posterPath,
+        episodes: PreviewData.seasonPreview.episodes?.count ?? 0,
+        releaseDate: PreviewData.seasonPreview.airDate,
+        serieId: PreviewData.seasonPreview.id
+    )
+    .environment(NavigationManager())
 }

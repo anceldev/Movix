@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct OverviewView: View {
-    let title: String?
     let overview: String?
     @State var viewMore: Int? = 3
+    
+    init(_ overview: String? = nil) {
+        self.overview = overview
+        self.viewMore = viewMore
+    }
     
     var body: some View {
         VStack {
             VStack(spacing: 12) {
-                if let title {
-                    Text(title)
-                        .font(.hauora(size: 20, weight: .semibold))
-                }
                 VStack(alignment: .leading) {
                     if let overview {
                         Text(overview)

@@ -32,6 +32,7 @@
 "series-tab-label" = "Series";
 "movies-tab-label" = "Películas";
 "custom-lists-tab-label" = "Listas";
+"overview-title" = "Sinopsis";
 
 "movie-tabbar-rate-label" = "Valorar";
 "movie-tabbar-favorites-label" = "Favorito";

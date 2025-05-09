@@ -29,12 +29,16 @@ struct PosterMediaView: View {
 
     var body: some View {
         ZStack {
-            Color.gray
-                .aspectRatio(27/40, contentMode: .fill)
-            if let poster = posterImage {
-                poster
-                    .resizable()
-                    .aspectRatio(27/40, contentMode: .fill)
+            LinearGradient(colors: [.bw20, .bw40], startPoint: .top, endPoint: .bottom)
+            if let posterPath {
+                if let poster = posterImage {
+                    poster
+                        .resizable()
+                        .aspectRatio(27/40, contentMode: .fill)
+                } else {
+                    LinearGradient(colors: [.bw20, .bw40], startPoint: .top, endPoint: .bottom)
+                        .aspectRatio(27/40, contentMode: .fill)
+                }
             }
             else {
                 TimeoutProgressView()
@@ -48,8 +52,23 @@ struct PosterMediaView: View {
                 startPoint: .bottom,
                 endPoint: .top
             )
-            VStack {
+            VStack(spacing: 0) {
                 Spacer()
+//                Button {
+//                    
+//                } label: {
+//                    HStack(spacing: 8) {
+//                        Image(systemName: "play.fill")
+//                        Text("Providers")
+//                            .font(.hauora(size: 20))
+//                    }
+//                    .padding(.horizontal, 16)
+//                    .frame(height: 44)
+//                    .background(.marsA)
+//                    .clipShape(.capsule)
+//                }
+//                .buttonStyle(.capsuleButton)
+                
                 VStack(spacing: 8) {
                     if let genres = genres, !genres.isEmpty {
                         HStack(spacing: 8) {
@@ -77,10 +96,12 @@ struct PosterMediaView: View {
         }
         .frame(maxWidth: .infinity)
         .task {
-            if self.posterImage == nil {
-                let poster = await ImageLoader.shared.loadImage(for: posterPath, size: .poster)
-                withAnimation(.easeIn) {
-                    self.posterImage = poster
+            if let posterPath {
+                if self.posterImage == nil {
+                    let poster = await ImageLoader.shared.loadImage(for: posterPath, size: .poster)
+                    withAnimation(.easeIn) {
+                        self.posterImage = poster
+                    }
                 }
             }
         }

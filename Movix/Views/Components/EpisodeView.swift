@@ -12,31 +12,38 @@ struct EpisodeView: View {
     let overview: String?
     let stillPath: String?
     
-    @State private var stillImage: Image?
-//    @Environment(SerieViewModel.self) var serieVM
     var body: some View {
         VStack {
-            if let stillImage {
-                stillImage
-                    .resizable()
-                    .aspectRatio(16/9, contentMode: .fit)
+            if let stillPath {
+                AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/original\(stillPath)")!, transaction: Transaction(animation: .smooth)) { phase in
+                    switch phase {
+                    case .empty:
+                        Color.bw40
+                            .aspectRatio(16/9, contentMode: .fit)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(16/9, contentMode: .fit)
+                    case .failure(let error):
+                        Text(error.localizedDescription)
+                    @unknown default:
+                        Color.bw40
+                            .aspectRatio(16/9, contentMode: .fit)
+                    }
+                }
             }
-            if let overview {
-                OverviewView(title: name, overview: overview)
+            VStack {
+                Text(name)
+                    .font(.hauora(size: 18, weight: .semibold))
+                if let overview {
+                    OverviewView(overview)
+                }
             }
         }
         .padding(.bottom, 16)
         .padding(.top, stillPath == nil ? 16 : 0)
         .background(.bw40)
         .clipShape(RoundedRectangle(cornerRadius: 10))
-        .task {
-            if stillImage == nil {
-                let image = await ImageLoader.shared.loadImage(for: stillPath, size: .poster)
-                withAnimation(.easeIn) {
-                    self.stillImage = image
-                }
-            }
-        }
     }
 }
 

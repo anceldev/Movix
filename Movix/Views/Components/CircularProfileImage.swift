@@ -11,11 +11,12 @@ struct CircularProfileImage: View {
     
     var body: some View {
         if let url = imageURL {
-            AsyncImage(url: url) { phase in
+            AsyncImage(url: url, transaction: .init(animation: .smooth)) { phase in
                 switch phase {
                 case .empty:
                     ProgressView()
                         .frame(width: size, height: size)
+                        .tint(.marsA)
                 case .success(let image):
                     image
                         .resizable()

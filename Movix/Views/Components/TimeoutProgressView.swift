@@ -17,7 +17,7 @@ struct TimeoutProgressView: View {
                     .tint(.marsA)
             } else {
                 ZStack {
-                    Color.gray
+                    Color.bw20
                         .opacity(0.3)
                     Image(systemName: "photo")
                         .foregroundStyle(.marsA)

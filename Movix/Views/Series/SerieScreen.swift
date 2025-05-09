@@ -67,7 +67,26 @@ struct SerieScreen: View {
                                         proxy.scrollTo( "mediaTabs")
                                     },
                                     favoriteAction: toggleFavoriteSerie)
-                                OverviewView(title: serieVM.serie?.title, overview: serie.overview)
+//                            VStack(alignment: .leading) {
+//                                Text("overview-title")
+//                                    .font(.system(size: 22, weight: .medium))
+//                                    .padding(.leading)
+//                                OverviewView(serie.overview)
+//                            }
+//                            
+                            VStack(spacing: 16) {
+                                Text(serie.title)
+                                    .font(.hauora(size: 28, weight: .semibold))
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .multilineTextAlignment(.center)
+                                
+                                VStack(alignment: .leading) {
+                                    Text("overview-title")
+                                        .font(.system(size: 22, weight: .medium))
+                                        .padding(.leading)
+                                    OverviewView(serie.overview)
+                                }
+                            }
                             VStack {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {
@@ -97,7 +116,7 @@ struct SerieScreen: View {
         .background(.bw10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.container, edges: .top)
-//        .swipeToDismiss()
+        .swipeToDismiss()
         .task {
             await serieVM.getSerieDetails(id: serieId)
         }

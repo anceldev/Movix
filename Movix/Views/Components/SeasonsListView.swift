@@ -30,7 +30,6 @@ struct SeasonsListView: View {
                                     .scaleEffect(animatedIndices.contains(index) ? 1 : 0.5)
                                     .animation(.easeInOut(duration: 0.7), value: animatedIndices.contains(index))
                             }
-                            
                         }
                     }
                 }

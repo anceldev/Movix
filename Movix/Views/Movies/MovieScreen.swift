@@ -54,10 +54,19 @@ struct MovieScreen: View {
                                 },
                                 favoriteAction: toggleFavoriteMovie
                             )
-                            
-                            OverviewView(
-                                title: movieVM.movie?.title,
-                                overview: movie.overview)
+                            VStack(spacing: 16) {
+                                Text(movie.title)
+                                    .font(.hauora(size: 28, weight: .semibold))
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .multilineTextAlignment(.center)
+                                
+                                VStack(alignment: .leading) {
+                                    Text("overview-title")
+                                        .font(.system(size: 22, weight: .medium))
+                                        .padding(.leading)
+                                    OverviewView(movie.overview)
+                                }
+                            }
                             VStack {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {

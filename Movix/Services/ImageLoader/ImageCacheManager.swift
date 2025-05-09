@@ -35,6 +35,7 @@ class ImageCacheManager {
             }
         } catch {
             print(error)
+            print(error.localizedDescription)
         }
         return nil
     }
