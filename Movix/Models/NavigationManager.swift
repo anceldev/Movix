@@ -27,6 +27,7 @@ enum RouterDestination: Hashable {
     case appCredits
     case list(list: MediaList)
     case listSelector(media: SupabaseMedia, mediaType: MediaType)
+    case mediaCastList([Cast])
 }
 
 
@@ -97,6 +98,8 @@ final class NavigationManager: Observable {
                  ListScreen(list)
              case .listSelector(let media, let mediaType):
                  ListSelectorScreen(media: media, mediaType: mediaType)
+             case .mediaCastList(cast: let cast):
+                 MediaCastListScreen(cast: cast)
              }
          }
      }

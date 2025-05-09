@@ -18,19 +18,18 @@ struct ProvidersScreen: View {
         self.mediaType = mediaType
         self._providersVM = State(initialValue: ProvidersViewModel(mediaType: mediaType, mediaId: mediaId))
     }
-    //    var providers: Providers?
     
     var body: some View {
         VStack {
             ScrollView(.vertical) {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text("Providers")
+                    Text("providers-title")
                         .font(.hauora(size: 32, weight: .medium))
-                    ProvidersList(title: "Stream", providers: providersVM.providers.streamProviders)
+                    ProvidersList(title: NSLocalizedString("providers-stream-label", comment: "Stream"), providers: providersVM.providers.streamProviders)
                         .background(.clear)
-                    ProvidersList(title: "Rent", providers: providersVM.providers.rentProviders)
+                    ProvidersList(title: NSLocalizedString("providers-rent-label", comment: "Rent"), providers: providersVM.providers.rentProviders)
                         .background(.clear)
-                    ProvidersList(title: "Buy", providers: providersVM.providers.buyProviders)
+                    ProvidersList(title: NSLocalizedString("providers-buy-label", comment: "buy"), providers: providersVM.providers.buyProviders)
                         .background(.clear)
                     Spacer()
                 }
@@ -60,6 +59,7 @@ struct ProvidersScreen: View {
             Text(title)
                 .font(.hauora(size: 20, weight: .medium))
                 .foregroundStyle(.bw50)
+                .frame(maxWidth: .infinity, alignment: .leading)
             if providers.count > 0 {
                 FlowLayout(spacing: 24) {
                     ForEach(providers) { provider in
@@ -90,12 +90,14 @@ struct ProvidersScreen: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .scrollIndicators(.hidden)
-            } else {
-                Text("No available \(title.lowercased()) providers in your region")
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 16)
             }
+//            } else {
+//                Text("No available \(title.lowercased()) providers in your region")
+//                    .foregroundStyle(.white)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.vertical, 16)
+//            }
         }
+        .frame(maxWidth: .infinity)
     }
 }

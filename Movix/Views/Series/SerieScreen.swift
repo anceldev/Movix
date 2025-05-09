@@ -7,6 +7,23 @@
 
 import SwiftUI
 
+enum MediaTab: String, CaseIterable, Identifiable, Hashable, Localizable {
+    case general, details, reviews
+    
+    var id: Self { self }
+    
+    var localizedTitle: String {
+        switch self {
+        case .general:
+            return NSLocalizedString("movie-tabs-general", comment: "General")
+        case .details:
+            return NSLocalizedString("movie-tabs-details", comment: "Details")
+        case .reviews:
+            return NSLocalizedString("movie-tabs-reviews", comment: "Reviews")
+        }
+    }
+}
+
 struct SerieScreen: View {
     
     let serieId: Int
@@ -33,24 +50,24 @@ struct SerieScreen: View {
             if let serie = serieVM.serie {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical) {
-                        LazyVStack(spacing: 0) {
-                            HeaderMediaView(
-                                posterPath: serie.posterPath,
-                                duration: "\(serie.numberOfSeasons ?? 0) Se.",
-                                isAdult: serie.isAdult,
-                                releaseDate: serie.releaseDate?.releaseDate(),
-                                genres: serie.genres
-                            )
-                            MediaActionsBar(
-                                media: .init(id: serie.id, posterPath: serie.posterPath),
-                                mediaType: .serie,
-                                isFavorite: isFavorite,
-                                rateAction: {
-                                    selectedTab = .general
-                                    proxy.scrollTo( "mediaTabs")
-                                },
-                                favoriteAction: toggleFavoriteSerie)
-                            OverviewView(title: serieVM.serie?.title, overview: serie.overview)
+                        VStack(spacing: 0) {
+                                PosterMediaView(
+                                    posterPath: serie.posterPath,
+                                    duration: "\(serie.numberOfSeasons ?? 0) Se.",
+                                    isAdult: serie.isAdult,
+                                    releaseDate: serie.releaseDate?.releaseDate(),
+                                    genres: serie.genres
+                                )
+                                MediaActionsBar(
+                                    media: .init(id: serie.id, posterPath: serie.posterPath),
+                                    mediaType: .serie,
+                                    isFavorite: isFavorite,
+                                    rateAction: {
+                                        selectedTab = .general
+                                        proxy.scrollTo( "mediaTabs")
+                                    },
+                                    favoriteAction: toggleFavoriteSerie)
+                                OverviewView(title: serieVM.serie?.title, overview: serie.overview)
                             VStack {
                                 CustomSegmentedControl(state: $selectedTab)
                                 switch selectedTab {
@@ -80,7 +97,7 @@ struct SerieScreen: View {
         .background(.bw10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.container, edges: .top)
-        .swipeToDismiss()
+//        .swipeToDismiss()
         .task {
             await serieVM.getSerieDetails(id: serieId)
         }

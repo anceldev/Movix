@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SeasonScreen: View {
-//    let season: TvSeason
     let seasonNumber: Int
     let posterPath: String?
     let episodes: Int
@@ -22,16 +21,12 @@ struct SeasonScreen: View {
     var body: some View {
         VStack {
             ScrollView(.vertical) {
-                HeaderMediaView(
+                PosterMediaView(
                     posterPath: posterPath,
                     duration: "\(episodes) Ep.",
                     releaseDate: seasonVM.season?.airDate?.releaseDate()
                 )
                 VStack {
-//                    Text("Season \(seasonVM.season?.seasonNumer ?? 0)")
-//                        .font(.hauora(size: 20, weight: .semibold))
-//                        .foregroundStyle(.white)
-//                        .padding(.top)
                     if let seasonOverview = seasonVM.season?.overview, !seasonOverview.isEmpty {
                         OverviewView(title: seasonVM.season?.name, overview: seasonVM.season?.overview)
                     }
@@ -58,9 +53,6 @@ struct SeasonScreen: View {
                     navigationManager.navigateBack()
                 } label: {
                     BackButton(label: "Serie")
-//                    BackButton {
-//                        Text("Serie")
-//                    }
                 }
             }
         }
@@ -72,9 +64,3 @@ struct SeasonScreen: View {
         }
     }
 }
-
-//#Preview {
-//    SeasonScreen(mediaId: 52)
-//        .environment(SerieViewModel())
-//        .environment(UserViewModel(user: User.preview))
-//}

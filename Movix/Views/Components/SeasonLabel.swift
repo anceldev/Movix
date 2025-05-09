@@ -28,7 +28,6 @@ struct SeasonLabel: View {
         }
         .task {
             if self.posterImage == nil {
-//                self.posterImage = await serieVM.loadPosterImage(imagePath: season.posterPath)
                 self.posterImage = await ImageLoader.shared.loadImage(for: season.posterPath, size: .poster)
             }
         }

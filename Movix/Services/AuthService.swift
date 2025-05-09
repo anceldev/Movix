@@ -165,6 +165,7 @@ enum AuthError: LocalizedError {
     case resetPasswordFailed(String)
     case deleteAccountFailed(String)
     case userNotFound
+    case avatarFileURLNotFound
     
     var errorDescription: String? {
         switch self {
@@ -180,6 +181,8 @@ enum AuthError: LocalizedError {
             return "Delete account failed: \(message)"
         case .userNotFound:
             return "User not found"
+        case .avatarFileURLNotFound:
+            return "Avatar file URL cannot be found"
         }
     }
 }

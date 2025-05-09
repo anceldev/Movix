@@ -7,10 +7,12 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 enum AuthState {
     case authenticated
     case authenticating
+    case preferences
     case unauthenticated
 }
 
@@ -31,6 +33,7 @@ enum AuthenticationError: Error {
 enum AuthFlow {
     case signIn
     case signUp
+    case preferences
 }
 
 @Observable
@@ -65,8 +68,7 @@ final class AuthViewModel {
         do {
             let session = try await supabase.auth.session
             user = try await getUser(userId: session.user.id)
-            UserDefaults.standard.set(user?.country, forKey: "country")
-            UserDefaults.standard.set(user?.lang, forKey: "lang")
+            setUserSettings(user!)
             state = .authenticated
         } catch {
             print(error)
@@ -79,48 +81,21 @@ final class AuthViewModel {
         defer { resetValues() }
         state = .authenticating
         do {
-            let authSession = try await supabase.auth.signUp(
-                email: email,
-                password: password
-            )
-            
-            let user = User(
-                id: authSession.user.id,
-                name: nil,
-                username: username,
-                email: email,
-                lang: language,
-                country: country,
-                avatarPath: nil
-            )
-            
-            let response = try await supabase
-                .from(SupabaseTables.users.rawValue)
-                .insert(user)
-                .execute()
-            
-            if response.status == 201 {
-                self.user = user
-                UserDefaults.standard.set(user.country, forKey: "country")
-                UserDefaults.standard.set(user.lang, forKey: "lang")
-                state = .authenticated
-                return
-            }
-            throw AuthenticationError.userNotInserted
+            self.user = try await signUpUser()
+            setUserSettings(user!)
+            self.username = (user?.email.components(separatedBy: "@").first)!
+            state = .preferences
         } catch {
             setError(error)
             state = .unauthenticated
         }
     }
-    
     func signIn() async {
         defer { resetValues() }
         state = .authenticating
         do {
-            let authSession = try await supabase.auth.signIn(email: email, password: password)
-            user = try await getUser(userId: authSession.user.id)
-            UserDefaults.standard.set(user?.country, forKey: "country")
-            UserDefaults.standard.set(user?.lang, forKey: "lang")
+            self.user = try await signInUser()
+            setUserSettings(user!)
             state = .authenticated
         } catch {
             setError(error)
@@ -128,17 +103,88 @@ final class AuthViewModel {
         }
     }
     
-    private func getUser(userId: UUID) async throws -> User {
+    func setUserPreferences(avatarImage: UIImage?, lang: String?, country: String?) async {
+        defer { resetValues() }
         do {
-            let response = try await supabase
-                .from(SupabaseTables.users.rawValue)
-                .select("*")
-                .eq("id", value: userId)
+            var newData: [String:String?] = ["username":self.username]
+
+            if let avatarImage {
+                let (path, imageData) = try await SupClient.shared.uploadAvatar(userId: user!.id, uiImage: avatarImage)
+                user?.avatarPath = path
+                user?.avatarData = imageData
+                newData["avatar_path"] = path
+            }
+            if let lang { newData["lang"] = lang }
+            if let country { newData["country"] = country }
+            
+            print(newData)
+            
+            let _ = try await supabase
+                .from("users")
+                .update(newData)
+                .eq("id", value: "\(user!.id.uuidString)")
                 .execute()
-            return try JSONDecoder().decode([User].self, from: response.data)[0]
+            
+            state = .authenticated
         } catch {
-            throw error
+            setError(error)
         }
+    }
+    
+    private func signInUser() async throws -> User {
+        let session = try await supabase.auth.signIn(
+            email: self.email,
+            password: self.password
+        )
+        return try await getUser(userId: session.user.id)
+    }
+    private func signUpUser() async throws -> User {
+        let session = try await supabase.auth.signUp(
+            email: self.email,
+            password: self.password
+        )
+        return try await getUser(userId: session.user.id)
+    }
+    private func setUserSettings(_ user: User) {
+        UserDefaults.standard.set(user.country, forKey: "country")
+        UserDefaults.standard.set(user.lang, forKey: "lang")
+    }
+    
+    func setUserLanguage(lang: String?) async {
+        guard let lang = lang, user != nil else { return }
+        do {
+            let _ = try await supabase
+                .from("users")
+                .update(["lang": lang])
+                .eq("id", value: user!.id)
+                .execute()
+            user?.lang = lang
+        } catch {
+            setError(error)
+        }
+    }
+    func setUserCountry(country: String?) async {
+        guard let country = country, user != nil else { return }
+        do {
+            let _ = try await supabase
+                .from("users")
+                .update(["country": country])
+                .eq("id", value: user!.id)
+                .execute()
+            user?.country = country
+        } catch {
+            setError(error)
+        }
+    }
+    
+    private func getUser(userId: UUID) async throws -> User {
+        try await supabase
+            .from("users")
+            .select("*")
+            .eq("id", value: userId)
+            .single()
+            .execute()
+            .value
     }
     
     func signOut() async {

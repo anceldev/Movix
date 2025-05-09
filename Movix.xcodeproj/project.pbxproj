@@ -10,6 +10,8 @@
 		B41449332D8330230099E201 /* FlagsKit in Frameworks */ = {isa = PBXBuildFile; productRef = B41449322D8330230099E201 /* FlagsKit */; };
 		B432A5AF2D8F8C4E009D5400 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = B432A5AE2D8F8C4E009D5400 /* Inject */; };
 		B43A796C2D94662F00B71CEE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B43A796A2D94662F00B71CEE /* Localizable.strings */; };
+		B478EFC52DCCF8AB0003C293 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B478EFC42DCCF8AB0003C293 /* GoogleSignIn */; };
+		B478EFC72DCCF8AB0003C293 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B478EFC62DCCF8AB0003C293 /* GoogleSignInSwift */; };
 		B4C2E55B2D707D5B00A6CE99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C2E55A2D707D5B00A6CE99 /* LaunchScreen.storyboard */; };
 		B4D3C0752DAE6A0800B0D3A2 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = B4D3C0742DAE6A0800B0D3A2 /* Auth */; };
 		B4D3C0772DAE6A0800B0D3A2 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = B4D3C0762DAE6A0800B0D3A2 /* Functions */; };
@@ -57,9 +59,11 @@
 				B4D3C07D2DAE6A0800B0D3A2 /* Storage in Frameworks */,
 				B4D3C0772DAE6A0800B0D3A2 /* Functions in Frameworks */,
 				B4D3C07F2DAE6A0800B0D3A2 /* Supabase in Frameworks */,
+				B478EFC72DCCF8AB0003C293 /* GoogleSignInSwift in Frameworks */,
 				B4D3C07B2DAE6A0800B0D3A2 /* Realtime in Frameworks */,
 				B4D3C0752DAE6A0800B0D3A2 /* Auth in Frameworks */,
 				B4D3C0792DAE6A0800B0D3A2 /* PostgREST in Frameworks */,
+				B478EFC52DCCF8AB0003C293 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +124,8 @@
 				B4D3C07A2DAE6A0800B0D3A2 /* Realtime */,
 				B4D3C07C2DAE6A0800B0D3A2 /* Storage */,
 				B4D3C07E2DAE6A0800B0D3A2 /* Supabase */,
+				B478EFC42DCCF8AB0003C293 /* GoogleSignIn */,
+				B478EFC62DCCF8AB0003C293 /* GoogleSignInSwift */,
 			);
 			productName = Movix;
 			productReference = B43A86F02D562D9500E4EC34 /* Movix.app */;
@@ -154,6 +160,7 @@
 				B41449312D8330230099E201 /* XCRemoteSwiftPackageReference "FlagsKit" */,
 				B432A5AD2D8F8C4E009D5400 /* XCRemoteSwiftPackageReference "Inject" */,
 				B4D3C0732DAE6A0800B0D3A2 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				B478EFC32DCCF8AB0003C293 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B43A86F12D562D9500E4EC34 /* Products */;
@@ -440,6 +447,14 @@
 				minimumVersion = 1.5.2;
 			};
 		};
+		B478EFC32DCCF8AB0003C293 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		B4D3C0732DAE6A0800B0D3A2 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase/supabase-swift.git";
@@ -460,6 +475,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B432A5AD2D8F8C4E009D5400 /* XCRemoteSwiftPackageReference "Inject" */;
 			productName = Inject;
+		};
+		B478EFC42DCCF8AB0003C293 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B478EFC32DCCF8AB0003C293 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		B478EFC62DCCF8AB0003C293 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B478EFC32DCCF8AB0003C293 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		B4D3C0742DAE6A0800B0D3A2 /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;

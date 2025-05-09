@@ -1,5 +1,5 @@
 //
-//  HeaderMediaView.swift
+//  PosterMediaView.swift
 //  Movix
 //
 //  Created by Ancel Dev account on 7/2/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HeaderMediaView: View {
+struct PosterMediaView: View {
     
     let posterPath: String?
     let duration: String

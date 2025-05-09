@@ -12,6 +12,7 @@ import Supabase
 enum UserViewModelError: Error {
     case avatarUploadError
     case avatarCompressionError
+    case avatarLocalSaveError
 }
 
 @Observable
@@ -19,22 +20,15 @@ final class UserViewModel {
     
     typealias Client = SupClient
     let supabase = Client.shared.supabase
-    
+     
     var user: User
     var languages = [Language]()
     var countries = [Country]()
     var friends = [User]()
     
     var errorMessage: String?
-    private var favoritesPage = 1
-    private var ratedMoviesPage = 1
-    private var favoriteSeriesPage = 1
-    private var ratedSeriesPage = 1
-    
-    private var httpClient = HTTPClient()
-    private var sessionId = UserDefaults.standard.string(forKey: "session_id") ?? ""
-
     private let fileManager = FileManager.default
+    
     private var avatarFileURL: URL? {
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
         guard let _ = user.avatarPath else { return nil }
@@ -48,6 +42,8 @@ final class UserViewModel {
             await getUserSeries(.serie)
             await getUserSeries(.movie)
             await getLists()
+            await getLanguages()
+            await getCountries()
         }
     }
     
@@ -65,18 +61,15 @@ final class UserViewModel {
                 .eq("user_id", value: user.id)
                 .execute()
                 .value
-            print(series)
             if mediaType == .serie {
                 user.series = series
             } else {
                 user.movies = series
             }
-            
         } catch {
             setError(error)
         }
     }
-    
     
     func getFriends() async {
         do {
@@ -140,14 +133,10 @@ final class UserViewModel {
                 .from("friendship")
                 .insert(newRequest)
                 .execute()
-            
-            print(String(decoding: sendRequest.data, as: UTF8.self))
-                
         } catch {
             setError(error)
         }
     }
-    
     func resolveFriendRequest(id: Int, status: FriendshipStatus) async {
         do {
             let response: FriendshipResponseDTO = try await supabase
@@ -207,7 +196,7 @@ final class UserViewModel {
                 .from("avatars")
                 .download(path: path)
             user.avatarData = avatarData
-            saveAvatarToDisk(avatarData)
+            try saveAvatarToDisk(avatarData)
         } catch {
             setError(error)
         }
@@ -217,7 +206,7 @@ final class UserViewModel {
         do {
             let path = try await uploadAvatar(uiImage: uiImage)
             let _ = try await supabase
-                .from(SupabaseTables.users.rawValue)
+                .from("users")
                 .update(["avatar_path": path])
                 .eq("id", value: user.id)
                 .execute()
@@ -230,7 +219,10 @@ final class UserViewModel {
         do {
             guard let resizedImage = uiImage.resizeTo(to: 150),
                   let imageData = resizedImage.jpegData(compressionQuality: 0.8)
-            else { throw UserViewModelError.avatarCompressionError }
+            else {
+                throw UserViewModelError.avatarCompressionError
+            }
+            
             let response = try await supabase.storage
                 .from("avatars")
                 .update(
@@ -242,7 +234,7 @@ final class UserViewModel {
                         upsert: false
                     )
                 )
-            saveAvatarToDisk(imageData)
+            try saveAvatarToDisk(imageData)
             return response.path
         } catch {
             print(error.localizedDescription)
@@ -259,12 +251,13 @@ final class UserViewModel {
             return nil
         }
     }
-    private func saveAvatarToDisk(_ data: Data) {
+    private func saveAvatarToDisk(_ data: Data) throws {
         guard let fileURL = avatarFileURL else { return }
         do {
             try data.write(to: fileURL)
         } catch {
             setError(error)
+            throw error
         }
     }
     private func clearStoreAvatar() {
@@ -280,10 +273,11 @@ final class UserViewModel {
         guard let lang, lang != user.lang else { return }
         do {
             let _ = try await supabase
-                .from(SupabaseTables.users.rawValue)
+                .from("users")
                 .update(["lang": lang])
                 .eq("id", value: user.id)
                 .execute()
+            UserDefaults.standard.set(lang, forKey: "lang")
             user.lang = lang
         } catch {
             setError(error)
@@ -293,10 +287,11 @@ final class UserViewModel {
         guard let country, country != user.country else { return }
         do {
             let _ = try await supabase
-                .from(SupabaseTables.users.rawValue)
+                .from("users")
                 .update(["country": country])
                 .eq("id", value: user.id)
                 .execute()
+            UserDefaults.standard.set(country, forKey: "country")
             user.country = country
         } catch {
             setError(error)
@@ -374,7 +369,6 @@ final class UserViewModel {
             setError(error)
         }
     }
-    
     func rateMedia<T: MediaTMDBProtocol>(media: T, rating: Int, mediaType: MediaType) async {
         let relationshipTable = "user_\(mediaType.rawValue)s"
         let tableName = "\(mediaType.rawValue)s"
@@ -412,7 +406,7 @@ final class UserViewModel {
                 }
                 
             } else {
-                let adddedMedia: SupabaseMedia = try await supabase
+                let addedMedia: SupabaseMedia = try await supabase
                     .from(tableName)
                     .upsert([
                         "id": "\(media.id)",
@@ -427,7 +421,7 @@ final class UserViewModel {
                     .from(relationshipTable)
                     .insert([
                         "user_id": "\(user.id.uuidString)",
-                        "\(mediaType.rawValue)_id": "\(media.id)",
+                        "\(mediaType.rawValue)_id": "\(addedMedia.id)",
                         "is_favorite": "false",
                         "rating": "\(rating)"
                     ])
@@ -458,27 +452,6 @@ final class UserViewModel {
     }
     func getSerieRating(serieId: Int) -> Int? {
         return user.series.first { $0.media.id == serieId }?.rating
-    }
-    private func updateRating<T:UserItemCollectionMediaProtocol>(rowId: Int, rating: Int, table: String) async throws -> T {
-        do {
-            let updatedMedia: T = try await supabase
-                .from("user_\(table)")
-                .update(["rating": "\(rating)"])
-                .eq("id", value: rowId)
-                .select("""
-                    id,
-                    user_id,
-                    \(table)(*),
-                    is_favorite,
-                    rating
-                    """)
-                .single()
-                .execute()
-                .value
-            return updatedMedia
-        } catch {
-            throw error
-        }
     }
     
     private func getLists() async {
@@ -513,7 +486,6 @@ final class UserViewModel {
             setError(error)
         }
     }
-    
     func createList(name: String, description: String? = nil, isPublic: Bool, listType: MediaType) async {
         do {
             let list = MediaList(name: name, description: description, listType: listType, owner: user, isPublic: isPublic)
@@ -536,7 +508,6 @@ final class UserViewModel {
             setError(error)
         }
     }
-    
     func addMediaToList(media: SupabaseMedia, listId: Int, mediaType: MediaType) async {
         let table = "\(mediaType.rawValue)s_list"
         
@@ -586,9 +557,8 @@ final class UserViewModel {
     }
     func removeMediaFromList(mediaId: Int, listId: Int, mediaType: MediaType) async {
         let table = "\(mediaType.rawValue)s_list"
-        
         do {
-            let deletedMedia = try await supabase
+            let _ = try await supabase
                 .from(table)
                 .delete()
                 .eq("\(mediaType.rawValue)_id", value: mediaId)

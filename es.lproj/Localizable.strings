@@ -10,8 +10,16 @@
 "login-password-label" = "Contraseña";
 "login-signin-title" = "Iniciar sesión";
 "login-signup-title" = "Registrarse";
+"login-signup-profile-title" = "Perfil";
+"login-signup-complete-title" = "Bienvenido a Movix";
+
 "login-submit-button-label" = "Iniciar sesión";
 "login-privacy-link-label" = "Dando al boton de iniciar sesión, aceptas nuetra ";
+
+"signup-title" = "Registrarse";
+"signup-profile-title" = "Perfil";
+"signup-profile-button" = "Completar";
+
 "login-privacy-link" = "política de privacidad.";
 "login-question-signin" = "¿Todavía no tienes cuenta?";
 "login-question-signup" = "¿Ya tienes cuenta?";
@@ -40,6 +48,11 @@
 "movie-tabs-details-recommendations-title" = "Recomendaciones";
 "movie-list-controls-favorites" = "Favoritos";
 "movie-list-controls-rated" = "Valoradas";
+
+"providers-title" = "Proveedores";
+"providers-stream-label" = "Streaming";
+"providers-rent-label" = "Alquiler";
+"providers-buy-label" = "Compra";
 
 "all-tab-label" = "Todo";
 "series-tab-label" = "Series";
@@ -76,7 +89,7 @@
 "save-button-label" = "Guardar";
 "signout-button-label" = "Cerrar sesión";
 "view-more-button-label" = "Ver más";
-"view-all-button-label" = "Ver todo";
+"view-all-button-label" = "Ver todos";
 "search-field-placeholder" = "Buscar...";
 
 "crop-title" = "Recortar";

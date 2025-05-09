@@ -27,6 +27,7 @@ final class TMDBService {
             )
             
             let response = try await HTTPClient.shared.load(resource)
+            self.countries = response
             return response
         } catch {
             throw error
@@ -41,6 +42,7 @@ final class TMDBService {
                 modelType: [Language].self
             )
             let response = try await HTTPClient.shared.load(resource)
+            self.languages = response
             return response
         } catch {
             throw error

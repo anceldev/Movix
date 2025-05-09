@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AuthenticatedScreen: View {
     @State var authVM = AuthViewModel()
+//    @Environment(NavigationManager.self) var navigationManager
     var body: some View {
         VStack {
             switch authVM.state {
@@ -19,6 +20,10 @@ struct AuthenticatedScreen: View {
             case .authenticating:
                 ProgressView()
                     .tint(.marsB)
+            case .preferences:
+                ProfileForm()
+                    .environment(authVM)
+//                    .environment(navigationManager)
             case .unauthenticated:
                 AuthenticationScreen()
                     .environment(authVM)
@@ -29,4 +34,5 @@ struct AuthenticatedScreen: View {
 
 #Preview {
     AuthenticatedScreen()
+        .environment(NavigationManager())
 }

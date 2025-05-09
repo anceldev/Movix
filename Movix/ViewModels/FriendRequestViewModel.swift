@@ -80,12 +80,7 @@ final class FriendRequestViewModel {
                 .single()
                 .execute()
                 .value
-//            let friend = Friend(
-//                id: response.id,
-//                friend: <#T##User#>,
-//                status: <#T##FriendshipStatus#>
-//            )
-//            return response
+
         } catch {
             setError(error)
         }

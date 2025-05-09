@@ -19,7 +19,7 @@ struct GeneralTabSerieView: View {
         VStack(spacing: 20) {
             if let seasons = serieVM.serie?.seasons, seasons.count > 0,
                seasons.count > 0 {
-                SeasonsView(seasons: seasons, serieId: serieVM.serie?.id ?? 0)
+                SeasonsListView(seasons: seasons, serieId: serieVM.serie?.id ?? 0)
             }
             if serieVM.cast.count > 0 {
                 CastView(cast: serieVM.cast)
@@ -35,8 +35,6 @@ struct GeneralTabSerieView: View {
     private func rateSerie() {
         Task {
             guard let serie = serieVM.serie else { return }
-//            await userVM.addSerieRating(serie: serie, rating: Int(currentRate))
-//            await userVM.rateSerie(serie: serie, rating: Int(currentRate))
             await userVM.rateMedia(media: serie, rating: Int(currentRate), mediaType: .serie)
         }
     }

@@ -26,9 +26,6 @@ struct GeneralTabMovieView: View {
             }
             RatingView(mediaType: "movie", currentRate: $currentRate, action: rateMovie)
         }
-        .onChange(of: currentRate) {
-            print(Int(currentRate))
-        }
     }
     private func rateMovie() {
         Task {

@@ -21,6 +21,7 @@ struct BackButton: View {
                 Text(label)
             }
         }
-        .foregroundStyle(.blue1)
+//        .foregroundStyle(.blue1)
+        .foregroundStyle(.white)
     }
 }

@@ -35,7 +35,7 @@ struct MovieScreen: View {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical) {
                         VStack(spacing: 0) {
-                            HeaderMediaView(
+                            PosterMediaView(
                                 posterPath: movie.posterPath,
                                 duration: movie.duration,
                                 isAdult: movie.isAdult,
@@ -103,7 +103,6 @@ struct MovieScreen: View {
                 Button {
                     navigationManager.navigateBack()
                 } label: {
-//                    BackButton(label: NSLocalizedString("movies-tab-label", comment: "Movies tab label"))
                     BackButton()
                 }
             }

@@ -65,7 +65,8 @@ struct RatingView: View {
                             }
                             .tint(.mars)
                         }
-                                            .padding(.horizontal, 44)
+                        .padding(.horizontal, 44)
+                        
                         Button {
                             action()
                         } label: {

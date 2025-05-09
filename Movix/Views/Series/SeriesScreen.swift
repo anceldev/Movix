@@ -49,9 +49,8 @@ struct SeriesScreen: View {
                     .scrollIndicators(.hidden)
                 }
                 .padding(.horizontal, 16)
-                
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.bw10)
             .withAppRouter()
         }

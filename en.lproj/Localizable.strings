@@ -10,7 +10,15 @@
 "login-password-label" = "Password";
 "login-signin-title" = "Sign in";
 "login-signup-title" = "Sign up";
+"login-signup-profile-title" = "Profile";
+"login-signup-complete-title" = "Welcome to Movix";
+
 "login-submit-button-label" = "Sign In";
+
+"signup-title" = "Sign up";
+"signup-profile-title" = "Profile";
+"signup-profile-button" = "Complete";
+
 "login-privacy-link-label" = "By clicking the login button, you accept";
 "login-privacy-link" = "privacy policy rules.";
 "login-question-signin" = "Don't have an account?";
@@ -40,6 +48,11 @@
 "movie-tabs-details-recommendations-title" = "Recommendations";
 "movie-list-controls-favorites" = "Favorites";
 "movie-list-controls-rated" = "Rated";
+
+"providers-title" = "Providers";
+"providers-stream-label" = "Stream";
+"providers-rent-label" = "Rent";
+"providers-buy-label" = "Buy";
 
 "all-tab-label" = "All";
 "series-tab-label" = "Series";

@@ -11,6 +11,7 @@ struct GridItemsView2: View {
     let mediaItems: [SupabaseMedia]
     var mediaType: MediaType
     let columns: [GridItem]
+    
     @Environment(NavigationManager.self) var navigationManager
     
     init(mediaItems: [SupabaseMedia], mediaType: MediaType, columns: Int) {

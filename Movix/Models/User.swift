@@ -68,8 +68,12 @@ struct User: Codable, Identifiable {
         self.fullname = try container.decodeIfPresent(String.self, forKey: .fullname)
         self.username = try container.decode(String.self, forKey: .username)
         self.email = try container.decode(String.self, forKey: .email)
-        self.lang = try container.decode(String.self, forKey: .lang)
-        self.country = try container.decode(String.self, forKey: .country)
+        
+        let userLang = try container.decodeIfPresent(String.self, forKey: .lang)
+        self.lang = userLang ?? "en"
+        let userCountry = try container.decodeIfPresent(String.self, forKey: .country)
+        self.country = userCountry ?? "US"
+        
         self.avatarPath = try container.decodeIfPresent(String.self, forKey: .avatarPath)
         
         self.lists = []

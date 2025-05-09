@@ -1,5 +1,5 @@
 //
-//  SeasonsView.swift
+//  SeasonsListView.swift
 //  Movix
 //
 //  Created by Ancel Dev account on 3/3/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SeasonsView: View {
+struct SeasonsListView: View {
     let seasons: [TvSeason]
     let serieId: Int
     //    @Environment(SerieViewModel.self) var serieVM
@@ -51,16 +51,3 @@ struct SeasonsView: View {
         }
     }
 }
-
-
-
-//#Preview {
-//    SeasonsView(
-//        [
-//            TvSerie.that70show.seasons![0],
-//            TvSerie.that70show.seasons![1],
-//            TvSerie.that70show.seasons![2],
-//            TvSerie.that70show.seasons![3],
-//        ]
-//    )
-//}

@@ -29,9 +29,7 @@ final class MovieViewModel {
             let providers = try await httpClient.load(resource)
             self.providers = providers
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
     }
     func getMovieDetails(id: Int) async {
@@ -44,8 +42,7 @@ final class MovieViewModel {
             let movie = try await httpClient.load(resource)
             self.movie = movie
         } catch{
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
     }
     func getMovieCast(id: Int) async throws {
@@ -58,9 +55,7 @@ final class MovieViewModel {
             let movieCredits = try await httpClient.load(resource)
             self.cast = movieCredits.cast
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
             throw error
         }
     }
@@ -79,9 +74,7 @@ final class MovieViewModel {
             return similarMovies.results
             
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
             return []
         }
     }
@@ -100,9 +93,13 @@ final class MovieViewModel {
             self.reviews = reviews.results
             
         } catch {
-            print(error)
-            print(error.localizedDescription)
-            self.errorMessage = error.localizedDescription
+            setError(error)
         }
+    }
+    
+    private func setError(_ error: Error) {
+        print(error)
+        print(error.localizedDescription)
+        self.errorMessage = error.localizedDescription
     }
 }

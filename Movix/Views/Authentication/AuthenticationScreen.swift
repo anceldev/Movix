@@ -13,9 +13,11 @@ struct AuthenticationScreen: View {
         VStack {
             switch authVM.flow {
             case .signIn:
-                SignInScreen()
+                SignInForm()
             case .signUp:
-                SignUpScreen()
+                SignUpForm()
+            case .preferences:
+                ProfileForm()
             }
         }
         .environment(authVM)

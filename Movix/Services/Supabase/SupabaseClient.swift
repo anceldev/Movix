@@ -7,6 +7,7 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 enum SupabaseTables: String {
     case users
@@ -32,6 +33,34 @@ class SupClient {
         supabaseURL: URL(string: SupabaseConfig.projectUrl.rawValue)!,
         supabaseKey: SupabaseConfig.anonKey.rawValue
     )
+    
+    func uploadAvatar(userId: UUID, uiImage: UIImage) async throws -> (String, Data) {
+        var avatarFileURL: URL? {
+            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+            return documentsDirectory.appendingPathComponent("\(userId.uuidString).jpg")
+        }
+
+        guard let resizedImage = uiImage.resizeTo(to: 150),
+              let imageData = resizedImage.jpegData(compressionQuality: 0.8)
+        else { throw UserViewModelError.avatarCompressionError }
+        
+        let response = try await supabase.storage
+            .from("avatars")
+            .update(
+                "avatars/\(userId.uuidString)",
+                data: imageData,
+                options: FileOptions(
+                    cacheControl: "3600",
+                    contentType: "image/jpeg",
+                    upsert: false
+                )
+            )
+        
+        guard let fileURL = avatarFileURL else { throw UserViewModelError.avatarLocalSaveError }
+        try imageData.write(to: fileURL)
+    
+        return (response.path, imageData)
+    }
 }
 
 extension SupClient {

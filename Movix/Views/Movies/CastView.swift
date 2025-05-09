@@ -35,18 +35,25 @@ struct CastView: View {
                         }
                     }
                     if showLoadAllButton && !animationInProgress {
-                        VStack {
-                            NavigationLink {
-                                ActorsList(showAllActorsButton: $showLoadAllButton)
+                        VStack(alignment: .center) {
+                            Button {
+                                navigationManager.navigate(to: .mediaCastList(cast))
                             } label: {
-                                Text("view-all-button-label")
-                                    .foregroundStyle(.white)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .font(.hauora(size: 12))
-                                    .frame(maxWidth: .infinity, alignment: .center)
+//                                HStack(spacing: 0) {
+                                    Text("view-all-button-label")
+                                        .foregroundStyle(.white)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .font(.hauora(size: 12, weight: .semibold))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+//                                    Image(systemName: "chevron.right")
+//                                        .foregroundStyle(.white)
+//                                        .font(.system(size: 12))
+//                                }
                             }
                         }
                         .transition(.opacity)
+//                        .frame(maxWidth: 80)
+                        .frame(width: 80)
                     }
                     
                 }
@@ -57,49 +64,49 @@ struct CastView: View {
             loadInitialActors()
         }
     }
-    @ViewBuilder
-    func ActorLink(imageUrl: URL?, name: String) -> some View {
-        VStack(alignment: .center, spacing: 10) {
-            ZStack {
-                AsyncImage(url: imageUrl) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                            .tint(.marsB)
-                    case .success(let image):
-                        VStack {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .offset(y: 8)
-                                .frame(width: 76, height: 76)
-                        }
-                        .clipped()
-                    case .failure(_):
-                        Image(systemName: "photo")
-                    @unknown default:
-                        ProgressView()
-                    }
-                }
-            }
-            .frame(width: 76, height: 76)
-            .background(.bw50)
-            .clipShape(.circle)
-            VStack {
-                Text(name)
-                    .foregroundStyle(.white)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(height: 30)
-            }
-        }
-        .font(.hauora(size: 12))
-        .frame(maxWidth: 80)
-    }
+//    @ViewBuilder
+//    func ActorLink(imageUrl: URL?, name: String) -> some View {
+//        VStack(alignment: .center, spacing: 10) {
+//            ZStack {
+//                AsyncImage(url: imageUrl) { phase in
+//                    switch phase {
+//                    case .empty:
+//                        ProgressView()
+//                            .tint(.marsB)
+//                    case .success(let image):
+//                        VStack {
+//                            image
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                                .offset(y: 8)
+//                                .frame(width: 76, height: 76)
+//                        }
+//                        .clipped()
+//                    case .failure(_):
+//                        Image(systemName: "photo")
+//                    @unknown default:
+//                        ProgressView()
+//                    }
+//                }
+//            }
+//            .frame(width: 76, height: 76)
+//            .background(.bw50)
+//            .clipShape(.circle)
+//            VStack {
+//                Text(name)
+//                    .foregroundStyle(.white)
+//                    .fixedSize(horizontal: false, vertical: true)
+//                    .lineLimit(2)
+//                    .frame(maxWidth: .infinity, alignment: .center)
+//                    .frame(height: 30)
+//            }
+//        }
+//        .font(.hauora(size: 12))
+//        .frame(maxWidth: 80)
+//    }
     private func loadInitialActors() {
         actors = []
-        let initialCount = min(5, cast.count)
+        let initialCount = min(4, cast.count)
         animationInProgress = true
         func addNextActor(at index: Int) {
             guard index < initialCount else {
@@ -126,6 +133,6 @@ struct CastView: View {
 }
 
 #Preview {
-    CastView(cast: [])
+    CastView(cast: PreviewData.cast)
         .environment(NavigationManager())
 }

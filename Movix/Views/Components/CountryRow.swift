@@ -38,6 +38,8 @@ struct CountryRow: View {
                     .clipShape(.circle)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.horizontal)
+        .padding(.vertical, 12)
+        .background(selectedCountry == country.iso31661 ? .filtersBackground : .bw10)
     }
 }
