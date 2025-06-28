@@ -11,7 +11,7 @@ import Supabase
 
 
 struct StorageKey: EnvironmentKey {
-    static let defaultValue: SupabaseStorageClient = SupClient.shared.supabase.storage
+    static let defaultValue: SupabaseStorageClient = MovixClient.shared.supabase.storage
 }
 
 extension EnvironmentValues {

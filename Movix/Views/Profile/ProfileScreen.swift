@@ -9,7 +9,7 @@ import SwiftUI
 import FlagsKit
 
 struct ProfileScreen: View {
-    @Environment(AuthViewModel.self) var authVM
+    @Environment(Auth.self) var authVM
     @Environment(UserViewModel.self) var userVM
     @Environment(NavigationManager.self) var navigationManager
     
@@ -68,7 +68,7 @@ struct ProfileScreen: View {
     @Previewable @State var navManager = NavigationManager()
     NavigationStack(path: $navManager.path) {
         ProfileScreen()
-            .environment(AuthViewModel())
+            .environment(Auth())
             .environment(UserViewModel(user: PreviewData.user))
             .environment(navManager)
     }

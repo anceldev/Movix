@@ -30,19 +30,19 @@ struct AccountSettingsSection: View {
         }
         .listRowBackground(Color.bw20)
         
-        Button {
-            navigationManager.navigate(to: .friends)
-        } label: {
-            HStack {
-                Image(.friends)
-                Text("account-friends-label")
-                    .font(.hauora(size: 16, weight: .medium))
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.bw50)
-            }
-        }
-        .listRowBackground(Color.bw20)
+//        Button {
+//            navigationManager.navigate(to: .friends)
+//        } label: {
+//            HStack {
+//                Image(.friends)
+//                Text("account-friends-label")
+//                    .font(.hauora(size: 16, weight: .medium))
+//                Spacer()
+//                Image(systemName: "chevron.right")
+//                    .foregroundStyle(.bw50)
+//            }
+//        }
+//        .listRowBackground(Color.bw20)
         
         Button {
             navigationManager.navigate(to: .languages)

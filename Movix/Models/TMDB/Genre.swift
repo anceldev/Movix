@@ -8,6 +8,10 @@
 import Foundation
 struct Genres: Codable {
     var genres: [Genre]
+    
+    init(genres: [Genre] = []) {
+        self.genres = genres
+    }
 }
 struct Genre: Identifiable, Codable, Hashable {
     var id: Int

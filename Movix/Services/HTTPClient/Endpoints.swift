@@ -34,6 +34,7 @@ enum SerieEndpoint {
     case favorites(Int)
     case reviews(Int)
     case recommended(Int)
+    case genres
     
     var url: URL {
         switch self {
@@ -65,6 +66,8 @@ enum SerieEndpoint {
             return URL(string: baseUrlPath + "tv/\(serieId)/reviews")!
         case .recommended(let serieId):
             return URL(string: baseUrlPath + "tv/\(serieId)/recommendations")!
+        case .genres:
+            return URL(string: baseUrlPath + "genre/tv/list")!
         }
     }
 }
@@ -77,6 +80,7 @@ enum MovieEndpoint {
     case providers(Int)
     case reviews(Int)
     case popular
+    case genres
     
     var url: URL {
         switch self {
@@ -94,6 +98,8 @@ enum MovieEndpoint {
             return URL(string: baseUrlPath + "movie/\(movieId)/reviews")!
         case .popular:
             return URL(string: baseUrlPath + "movie/popular")!
+        case .genres:
+            return URL(string: baseUrlPath + "genre/movie/list")!
         }
     }
 }

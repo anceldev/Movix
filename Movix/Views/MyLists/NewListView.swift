@@ -10,31 +10,28 @@ import SwiftUI
 struct NewListView: View {
     @Environment(UserViewModel.self) var userVM
     @Environment(\.dismiss) private var dismiss
+    
+    let listType: ListControlsMedia
+
     @State private var newList: MediaList?
     @State private var name = ""
     @State private var description = ""
-    @State private var listType: MediaType = .movie
     @State private var isPublic = false
     
     var body: some View {
         VStack(spacing: 16) {
-            Text("New List View")
-                .font(.hauora(size: 22, weight: .semibold))
-            TextField("Name", text: $name)
-            TextField("Description", text: $description)
-            Picker("List type", selection: $listType) {
-                ForEach(MediaType.allCases, id:\.rawValue) { type in
-                    Text(type.rawValue)
-                        .tag(type)
-                }
-            }
-            .pickerStyle(.segmented)
-
-            Toggle("Is public", isOn: $isPublic)
+            Text("media-list-title")
+                .font(.hauora(size: 20, weight: .semibold))
+            TextField(NSLocalizedString("media-list-name-placeholder", comment: "name"), text: $name)
+                .customCapsule(.bw50, input: true, bg: .bw40)
+            
+            TextField(NSLocalizedString("media-list-description-placeholder", comment: "description"), text: $description)
+                .customCapsule(.bw50, input: true, bg: .bw40)
+            Spacer()
             Button {
                 createList()
             } label: {
-                Text("Create")
+                Text("media-list-btn-label")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.capsuleButton(name.isBlank ? .gray : .orangeGradient))
@@ -42,18 +39,13 @@ struct NewListView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.bw10)
+        .background(.bwg)
+        .enableInjection()
     }
     private func createList() {
-        print("Create")
         Task {
             await userVM.createList(name: name, description: description, isPublic: isPublic, listType: listType)
             dismiss()
         }
     }
-}
-
-#Preview {
-    NewListView()
-        .environment(UserViewModel(user: PreviewData.user))
 }

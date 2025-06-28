@@ -28,11 +28,13 @@
 "login-question-link-signup" = "Sign up.";
 
 "home-tab-label" = "Home";
-
+"search-tab-label" = "Search";
 "series-tab-label" = "Series";
 "movies-tab-label" = "Movies";
 "custom-lists-tab-label" = "Lists";
 "overview-title" = "Overview";
+
+"search-tab-title" = "Catalog";
 
 "movie-tabbar-rate-label" = "Rate";
 "movie-tabbar-favorites-label" = "Favourite";
@@ -49,6 +51,25 @@
 "movie-tabs-details-recommendations-title" = "Recommendations";
 "movie-list-controls-favorites" = "Favorites";
 "movie-list-controls-rated" = "Rated";
+
+"media-filter-title" = "Filter";
+"media-filter-rating" = "Rating";
+"media-filter-genre" = "Genre";
+"media-filter-release" = "Release year";
+"media-filter-sort-label" = "Sort by:";
+"media-filter-sort-airdate" = "First air date";
+"media-filter-sort-name" = "Name";
+"media-filter-sort-popularity" = "Popularity";
+"media-filter-sort-vote" = "Vote average";
+"media-filter-order" = "Order:";
+"media-filter-btn-search" = "Search";
+
+"media-list-title" = "New list";
+"media-list-name-placeholder" = "List name";
+"media-list-description-placeholder" = "Description";
+"media-list-ispublic-label" = "Is public:";
+"media-list-btn-label" = "Create";
+"media-list-type" = "List type";
 
 "providers-title" = "Providers";
 "providers-stream-label" = "Stream";

@@ -10,7 +10,7 @@ import Observation
 
 @Observable
 final class SearchFriendsViewModel {
-    typealias Client = SupClient
+    typealias Client = MovixClient
     let supabase = Client.shared.supabase
     
     var users = [User]()

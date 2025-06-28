@@ -6,89 +6,97 @@
 //
 
 import SwiftUI
+import Inject
 
 enum SearchTab: String, CaseIterable, Identifiable, Hashable, Localizable {
-    case all
     case movies
     case tv
     var id: Self { self }
     
     var localizedTitle: String {
         switch self {
-        case .all:
-            return NSLocalizedString("all-tab-label", comment: "All")
         case .movies:
-            return NSLocalizedString("movie-tabs-label", comment: "Details")
+            return NSLocalizedString("movies-tab-label", comment: "Details")
         case .tv:
-            return NSLocalizedString("series-tabs-label", comment: "Reviews")
+            return NSLocalizedString("series-tab-label", comment: "Reviews")
         }
     }
 }
-//enum SearchFlow {
-//    case searching
-//    case success
-//    case error(Error)
-//}
 
 struct SearchScreen: View {
+    @State private var query = ""
+    @State private var debouncedQuery = ""
+    @State private var showFilterSheet = false
+    @State private var viewOption: ViewOption = .gridx3
+    @State private var selectedTab: SearchTab = .movies
     
-    @State private var showFilterSheet: Bool = false
-    @State private var viewOption: ViewOption = .gridx2
-    @State private var searchTerm = ""
-    @State private var selectedTab: SearchTab = .tv
-    @State private var mediaType: MediaType = .serie
-    
-    @Environment(MoviesViewModel.self) private var moviesVM
-    @Environment(SeriesViewModel.self) private var seriesVM
-    @Environment(UserViewModel.self) private var userVM
-    
+    @Environment(SeriesViewModel.self) var series
+    @Environment(MoviesViewModel.self) var movies
+
+    @ObserveInjection var forceRedraw
+
     var body: some View {
-        @Bindable var moviesVM = moviesVM
-        NavigationStack {
+        VStack {
+            SearchBarView(
+                title: NSLocalizedString("search-tab-title", comment: "search screen"),
+                query: $query,
+                debounceQuery: $debouncedQuery,
+                showFilterSheet: $showFilterSheet,
+                viewOption: $viewOption
+            )
             VStack {
-                Text("Search")
-                    .font(.hauora(size: 22, weight: .semibold))
-                    .foregroundStyle(.white)
-                VStack(spacing: 0) {
-                    CustomSegmentedControl(state: $selectedTab)
-                    switch selectedTab {
-                    case .all:
-                        Text("This is all")
-                    case .movies, .tv:
-                        Text("This is movies or tv")
-                    }
+                CustomSegmentedControl(state: $selectedTab)
+                switch selectedTab {
+                case .movies:
+                    MoviesScreen(query: debouncedQuery)
+                case .tv:
+                    SeriesScreen(query: debouncedQuery)
                 }
-                Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.bw10)
-            .sheet(isPresented: $showFilterSheet) {
-                Text("Filter screen")
+            VStack {
+                Button {
+                    search(query: debouncedQuery)
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .foregroundStyle(.white)
+                }
+//                .disabled(seriesVM.loadFlow == .loading)
+            }
+            .padding(.top, 4)
+            .padding(.bottom, 8)
+        }
+        .background(.bw10)
+        // Text("search-tab-title")
+        //     .font(.hauora(size: 22, weight: .semibold))
+        //     .foregroundStyle(.white)
+        //     .frame(maxWidth: .infinity, maxHeight: .infinity)
+        //     .background(.bw10)
+        .enableInjection()
+        .onChange(of: debouncedQuery) { _, newValue in
+            if newValue != "" {
+                search(query: newValue)
             }
         }
-        .onChange(of: selectedTab, { oldValue, newValue in
-            searchTerm = ""
-            if newValue == .movies {
-                mediaType = .movie
-            }
-            else if newValue == .tv {
-                mediaType = .serie
-            }
-        })
-        .environment(moviesVM)
-        .environment(userVM)
-        .environment(seriesVM)
     }
-    private func searchMovies() {
+    private func search(query: String) {
         Task {
-            await moviesVM.loadTrending()
+            if selectedTab == .movies {
+                if query != "" {
+                    await movies.searchMovies(searchTerm: debouncedQuery)
+                } else {
+                    await movies.loadTrending()
+                }
+            } else {
+                if query != "" {
+                    await series.searchSeries(searchTerm: debouncedQuery)
+                } else {
+                    await series.loadTrending()
+                }
+            }
         }
     }
 }
 
 #Preview {
     SearchScreen()
-        .environment(MoviesViewModel())
-        .environment(SeriesViewModel())
-        .environment(UserViewModel(user: PreviewData.user))
 }

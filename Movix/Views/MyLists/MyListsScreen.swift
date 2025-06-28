@@ -150,7 +150,7 @@ struct MyListsScreen: View {
         .withAppRouter()
         .environment(userVM)
         .sheet(isPresented: $showNewList) {
-            NewListView()
+            NewListView(listType: selectedMedia)
                 .presentationDragIndicator(.visible)
                 .presentationDetents([.medium])
 //                .environment(userVM)

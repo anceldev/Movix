@@ -28,11 +28,13 @@
 "login-question-link-signup" = "Registrarse.";
 
 "home-tab-label" = "Inicio";
-
+"search-tab-label" = "Buscar";
 "series-tab-label" = "Series";
 "movies-tab-label" = "Películas";
 "custom-lists-tab-label" = "Listas";
 "overview-title" = "Sinopsis";
+
+"search-tab-title" = "Catálogo";
 
 "movie-tabbar-rate-label" = "Valorar";
 "movie-tabbar-favorites-label" = "Favorito";
@@ -49,6 +51,25 @@
 "movie-tabs-details-recommendations-title" = "Recomendaciones";
 "movie-list-controls-favorites" = "Favoritos";
 "movie-list-controls-rated" = "Valoradas";
+
+"media-filter-title" = "Filtrar";
+"media-filter-rating" = "Valoración";
+"media-filter-genre" = "Género";
+"media-filter-release" = "Año de estreno";
+"media-filter-sort-label" = "Ordenar por:";
+"media-filter-sort-airdate" = "Año";
+"media-filter-sort-name" = "Nombre";
+"media-filter-sort-popularity" = "Popularidad";
+"media-filter-sort-vote" = "Valoración media";
+"media-filter-order" = "Orden:";
+"media-filter-btn-search" = "Buscar";
+
+"media-list-title" = "Nueva lista";
+"media-list-name-placeholder" = "Nombre de lista";
+"media-list-description-placeholder" = "Descripcion";
+"media-list-ispublic-label" = "Pública:";
+"media-list-btn-label" = "Crear";
+"media-list-type" = "Tipo de lista";
 
 "providers-title" = "Proveedores";
 "providers-stream-label" = "Streaming";

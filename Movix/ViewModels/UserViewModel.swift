@@ -18,8 +18,7 @@ enum UserViewModelError: Error {
 @Observable
 final class UserViewModel {
     
-    typealias Client = SupClient
-    let supabase = Client.shared.supabase
+    let supabase = MovixClient.shared.supabase
      
     var user: User
     var languages = [Language]()
@@ -188,7 +187,11 @@ final class UserViewModel {
     func getAvatar() async {
         guard let path = user.avatarPath else { return }
         do {
-            if let avatarData = loadAvatarFromDisk() {
+//            if let avatarData = loadAvatarFromDisk() {
+//                user.avatarData = avatarData
+//                return
+//            }
+            if let avatarData = try MovixClient.shared.getLocalAvatar(userId: user.id) {
                 user.avatarData = avatarData
                 return
             }
@@ -196,7 +199,8 @@ final class UserViewModel {
                 .from("avatars")
                 .download(path: path)
             user.avatarData = avatarData
-            try saveAvatarToDisk(avatarData)
+//            try saveAvatarToDisk(avatarData)
+            try MovixClient.shared.saveLocalAvatar(userId: user.id, avatarData: avatarData)
         } catch {
             setError(error)
         }
@@ -260,6 +264,7 @@ final class UserViewModel {
             throw error
         }
     }
+    
     private func clearStoreAvatar() {
         guard let fileURL = avatarFileURL else { return }
         do {
@@ -486,9 +491,15 @@ final class UserViewModel {
             setError(error)
         }
     }
-    func createList(name: String, description: String? = nil, isPublic: Bool, listType: MediaType) async {
+    func createList(name: String, description: String? = nil, isPublic: Bool, listType: ListControlsMedia) async {
         do {
-            let list = MediaList(name: name, description: description, listType: listType, owner: user, isPublic: isPublic)
+            let list = MediaList(
+                name: name,
+                description: description,
+                listType: listType == .movies ? MediaType.movie : MediaType.serie,
+                owner: user,
+                isPublic: isPublic
+            )
             let newList: MediaList = try await supabase
                 .from("lists")
                 .insert(list)

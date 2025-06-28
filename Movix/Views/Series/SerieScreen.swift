@@ -125,7 +125,7 @@ struct SerieScreen: View {
                 Button {
                     routerDestination.navigateBack()
                 } label: {
-                    BackButton(label: NSLocalizedString("series-tab-label", comment: "Series"))
+                    BackButton()
                 }
             }
         }

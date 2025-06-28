@@ -12,44 +12,45 @@ struct SignUpForm: View {
         case username, email, password
     }
     
-    @Environment(AuthViewModel.self) var authVM
+    @Environment(Auth.self) var authVM
     @FocusState private var focusedField: FocusedField?
     @State private var showPrivacyRules = false
+    
+    @Binding var flow: AuthFlow
+    @State private var email = ""
+    @State private var password = ""
+    
+    let action: (String, String) async -> Void
     
     var body: some View {
         @Bindable var authVM = authVM
         VStack(spacing: 28) {
-            Title()
-                .padding(.top, 44)
             VStack(spacing: 16) {
-                TextField("Email", text: $authVM.email)
+                TextField("Email", text: $email)
                     .keyboardType(.emailAddress)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
-                    .customCapsule(focusedField == .email || authVM.email != "" ? .white : .bw50, input: true)
-                    .foregroundStyle(authVM.email != "" ? .white : .bw50)
+                    .customCapsule(focusedField == .email || email != "" ? .white : .bw50, input: true)
+                    .foregroundStyle(email != "" ? .white : .bw50)
                     .focused($focusedField, equals: .email).animation(.easeInOut, value: focusedField)
-                    .onSubmit {
-                        focusedField = .password
-                    }
+                    .onSubmit { focusedField = .password }
                     .submitLabel(.next)
                 
-                SecureField("Password", text: $authVM.password)
-                    .customCapsule(focusedField == .password || authVM.password != "" ? .white : .bw50, input: true)
+                SecureField("Password", text: $password)
+                    .customCapsule(focusedField == .password || password != "" ? .white : .bw50, input: true)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .focused($focusedField, equals: .password).animation(.easeInOut, value: focusedField)
-                    .onSubmit {
-                        focusedField = nil
-                        signUp()
-                    }
+                    .onSubmit { focusedField = nil }
                     .submitLabel(.go)
                 
                 Button {
-                    print("Sign up...")
-                    signUp()
+                    focusedField = nil
+                    Task {
+                        await action(email, password)
+                    }
                 } label: {
-                    Text("Sign up")
+                    Text("login-signup-title")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.capsuleButton(.orangeGradient))
@@ -59,7 +60,7 @@ struct SignUpForm: View {
                         .foregroundStyle(.white)
                     Button {
                         withAnimation(.easeIn) {
-                            authVM.flow = .signIn
+                            flow = .signIn
                         }
                     } label: {
                         Text("login-question-link-signin")
@@ -117,27 +118,9 @@ struct SignUpForm: View {
         }
         .padding(.horizontal, 27)
         .background(.bw10)
-    }
-    @ViewBuilder
-    private func Title() -> some View {
-        VStack {
-            VStack(spacing: 36) {
-                Text("login-signup-title")
-                    .font(.hauora(size: 34))
-                VStack(spacing: 12) {
-                    Image("profileDefault")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 80)
-                }
-            }
-            .foregroundStyle(.white)
-        }
-    }
-    private func signUp() {
-        Task {
-            authVM.errorMessage = nil
-            await authVM.signUp()
+        .sheet(isPresented: $showPrivacyRules) {
+            PrivacyScreen()
+                .presentationDetents([.height(.infinity)])
         }
     }
 }

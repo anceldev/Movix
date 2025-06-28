@@ -13,72 +13,30 @@ struct ProfileForm: View {
         case username
     }
     
-    @Environment(AuthViewModel.self) var authVM
-//    @Environment(NavigationManager.self) var navigationManager
+    @Environment(Auth.self) var authVM
     
     @FocusState private var focusedField: FocusedField?
     
     @State private var showLanguageSelector = false
     @State private var showCountrySelector = false
     @State private var showAvatarPicker = false
-    @State private var avatarImage: UIImage?
-    
+//    @State private var avatarImage: UIImage?
+    @Binding var avatar: UIImage?
     
     @State private var selectedLang: String? = "en"
     @State private var selectedCountry: String? = "US"
+    @State private var username: String = ""
+    let action: (UIImage?, String, String?, String?) async -> Void
     
     var body: some View {
-        @Bindable var authVM = authVM
+//        @Bindable var authVM = authVM
         VStack(spacing: 28) {
-            VStack {
-                VStack(spacing: 36) {
-                    Text(NSLocalizedString("signup-profile-title", comment: "Perfil"))
-                        .font(.hauora(size: 34))
-                    VStack {
-                        if let avatarImage {
-                            Image(uiImage: avatarImage)
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .clipShape(.circle)
-                                .overlay {
-                                    Circle().stroke(LinearGradient(colors: [.marsA, .marsB], startPoint: .leading, endPoint: .trailing), lineWidth: 3)
-                                }
-                        } else {
-                            VStack(spacing: 12) {
-                                Image("profileDefault")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 80)
-                            }
-                        }
-                    }
-                    .overlay(alignment: .bottomTrailing) {
-                        Button {
-                            showAvatarPicker.toggle()
-                        } label: {
-                            Image(systemName: "photo")
-                                .font(.system(size: 10))
-                                .padding(6)
-                                .background(.bw10)
-                                .clipShape(.circle)
-                                .foregroundStyle(.white)
-                                .overlay {
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 1)
-                                }
-                        }
-
-                    }
-                }
-                .foregroundStyle(.white)
-            }
-            .frame(maxWidth: .infinity)
             VStack(spacing: 16) {
-                TextField("Username", text: $authVM.username)
+                TextField("Username", text: $username)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
-                    .customCapsule(focusedField == .username || authVM.username != "" ? .white : .bw50, input: true)
-                    .foregroundStyle(authVM.username != "" ? .white : .bw50)
+                    .customCapsule(focusedField == .username || username != "" ? .white : .bw50, input: true)
+                    .foregroundStyle(username != "" ? .white : .bw50)
                     .focused($focusedField, equals: .username).animation(.easeInOut, value: focusedField)
                     .onSubmit {
                         focusedField = nil
@@ -112,8 +70,9 @@ struct ProfileForm: View {
                 }
                 .frame(maxWidth: .infinity)
                 Button {
-                    print("Sign up...")
-                    updateProfile()
+                    Task {
+                        await action(avatar, username, selectedLang, selectedCountry)
+                    }
                 } label: {
                     Text("signup-profile-button")
                         .frame(maxWidth: .infinity)
@@ -135,10 +94,7 @@ struct ProfileForm: View {
             .padding(.vertical, 32)
             .background(.bw10)
             .environment(authVM)
-//            .environment(navigationManager)
-            
         }
-        .cropImagePicker(show: $showAvatarPicker, croppedImage: $avatarImage)
         .sheet(isPresented: $showCountrySelector) {
             VStack {
                 CountryForm(
@@ -151,7 +107,6 @@ struct ProfileForm: View {
             .padding(.vertical, 32)
             .background(.bw10)
             .environment(authVM)
-//            .environment(navigationManager)
         }
         .onAppear {
             Task {
@@ -164,18 +119,11 @@ struct ProfileForm: View {
             }
         }
     }
-    
-    private func updateProfile() {
-        Task {
-            await authVM.setUserPreferences(avatarImage: avatarImage, lang: selectedLang, country: selectedCountry)
-        }
-    }
 }
 
 #Preview {
-    ProfileForm()
-        .environment(AuthViewModel())
-//        .environment(NavigationManager())
+    ProfileForm(avatar: .constant(nil), action: {_,_,_,_ in })
+        .environment(Auth())
         .background(.bw10)
 }
 

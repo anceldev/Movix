@@ -35,7 +35,7 @@ enum RouterDestination: Hashable {
 @Observable
 final class NavigationManager: Observable {
     var path: [RouterDestination] = []
-    var activeTab: MainTabOption = .movies
+    var activeTab: MainTabOption = .search
     
     func navigate(to destination: RouterDestination) {
         path.append(destination)

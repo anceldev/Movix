@@ -55,5 +55,5 @@ struct OverviewView: View {
 }
 //#Preview(body: {
 //    MediaScreen(mediaId: Movie.preview.id, mediaType: .movie)
-////        .environment(AuthViewModel())
+////        .environment(Auth())
 //})

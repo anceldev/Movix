@@ -11,7 +11,7 @@ import Supabase
 
 @Observable
 final class FriendRequestViewModel {
-    typealias Client = SupClient
+    typealias Client = MovixClient
     let supabase = Client.shared.supabase
     
     var requests = [FriendsRequestDTO]()

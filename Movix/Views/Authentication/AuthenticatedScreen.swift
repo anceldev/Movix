@@ -6,28 +6,36 @@
 //
 
 import SwiftUI
+@_exported import Inject
 
 struct AuthenticatedScreen: View {
-    @State var authVM = AuthViewModel()
-//    @Environment(NavigationManager.self) var navigationManager
+    
+    @Environment(Auth.self) var auth
+    @State private var authState: AuthState = .unauthenticated
+    
+    @ObserveInjection var forceRedraw
+    
     var body: some View {
         VStack {
-            switch authVM.state {
+            switch authState {
             case .authenticated:
-                MainTabView()
-                    .environment(authVM)
-                    .environment(UserViewModel(user: authVM.user!))
+//                Text("Main Tab view")
+                MainTabView(user: auth.user!)
             case .authenticating:
                 ProgressView()
                     .tint(.marsB)
-            case .preferences:
-                ProfileForm()
-                    .environment(authVM)
-//                    .environment(navigationManager)
+                    .progressViewStyle(.circular)
             case .unauthenticated:
-                AuthenticationScreen()
-                    .environment(authVM)
+                AuthenticationScreen(authState: $authState)
+                    .environment(auth)
             }
+        }
+        .enableInjection()
+//        .onAppear {
+//            authState = authVM.user != nil ? .authenticated : .unauthenticated
+//        }
+        .onChange(of: auth.state) { _, newValue in
+            authState = newValue == .authenticated ? .authenticated : .unauthenticated
         }
     }
 }

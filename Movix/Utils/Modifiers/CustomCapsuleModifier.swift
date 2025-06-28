@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomCapsuleViewModifier: ViewModifier {
     let stroke: Color
     let input: Bool
+    let bg: Color
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, alignment: input ? .leading : .center)
@@ -17,7 +18,7 @@ struct CustomCapsuleViewModifier: ViewModifier {
             .frame(height: 56)
             .foregroundStyle(.white)
             .font(.system(size: input ? 17 : 20, weight: input ? .regular : .medium))
-            .background(.black)
+            .background(bg)
             .clipShape(Capsule())
             .overlay {
                 Capsule()
@@ -28,7 +29,7 @@ struct CustomCapsuleViewModifier: ViewModifier {
 
 
 extension View {
-    func customCapsule(_ stroke: Color, input: Bool = false) -> some View {
-        modifier(CustomCapsuleViewModifier(stroke: stroke, input: input))
+    func customCapsule(_ stroke: Color, input: Bool = false, bg: Color = .black) -> some View {
+        modifier(CustomCapsuleViewModifier(stroke: stroke, input: input, bg: bg))
     }
 }
